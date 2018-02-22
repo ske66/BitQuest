@@ -1,6 +1,7 @@
 #pragma once
 
-#include "entity.h"
+#include "ecm.h"
+#include "System_Renderer.h"
 #include <memory>
 
 class Scene {

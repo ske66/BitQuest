@@ -1,15 +1,28 @@
 #include "ecm.h"
 
-class Component {
-protected:
-	Entity *const _parent;
-	bool _fordeletion; //should be removed
-	explicit Component(Entity *const p);
+using namespace std;
+using namespace sf;
 
-public:
-	Component() = delete;
-	bool is_fordeletion() const;
-	virtual void update(float dt) = 0;
-	virtual void render() = 0;
-	virtual ~Component();
-};
+const Vector2f Entity::getPosition() { return _position; }
+
+void Entity::setPosition(const Vector2f &pos) { _position = pos; }
+
+void Entity::move(const Vector2f &pos) { _position += pos; }
+
+void Entity::update(const float dt) {
+	_shape->setPosition(_position);
+}
+
+Entity::Entity(unique_ptr<Shape> s) : _shape(std::move(s)) {}
+
+void EntityManager::update(const float dt) {
+	for (auto e : list) {
+		e->update(dt);
+	}
+}
+
+void EntityManager::render(RenderWindow &window) {
+	for (auto e : list) {
+		e->render(window);
+	}
+}

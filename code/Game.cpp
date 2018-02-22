@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "Entity.h"
 #include "Player.h"
 #include "Enemy.h"
 
@@ -15,7 +14,7 @@ void MenuScene::update(float dt) {
 
 void MenuScene::render() {
 	Scene::render();
-	//Renderer::queue(&text); apparently this doesn't go here but the text wont render on the screen!?
+	Renderer::queue(&text); //apparently this doesn't go here but the text wont render on the screen!?
 }
 
 void MenuScene::load() {

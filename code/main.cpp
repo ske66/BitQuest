@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "System_Renderer.h"
-#include "Entity.h"
+#include "ecm.h"
 #include "Scene.h"
 
 #include "SFML\Graphics.hpp"

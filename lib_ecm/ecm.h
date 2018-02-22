@@ -1,37 +1,28 @@
 #pragma once
-#include "maths.h"
-#include <algorithm>
-#include <memory>
-#include <typeindex>
-#include <vector>
 
-class Component; //forward declare
+#include <SFML/Graphics.hpp>
+#include <memory>
 
 class Entity {
-
 protected:
-	std::vector<std::shared_ptr<Component>> _components;
+	std::unique_ptr<sf::Shape> _shape;
 	sf::Vector2f _position;
-	float _rotation;
-	bool _alive;	   //Should be updated
-	bool _visible;     //Should be rendered
-	bool _fordeletion; //Should be deleted
+	Entity(std::unique_ptr<sf::Shape> shp);
 
 public:
-	Entity();
-	virtual ~Entity();
-	virtual void update(float dt);
-	virtual void render();
+	Entity() = delete;
+	virtual ~Entity() = default;
 
-	const sf::Vector2f &getPosition() const;
+	virtual void update(const float dt);
+	virtual void render(sf::RenderWindow &window) const = 0;
 
-	void setPosition(const sf::Vector2f &_position);
-	bool is_fordeletion() const;
-	float getRotation() const;
-	void setRotation(float _rotation);
-	bool isAlive() const;
-	void setAlive(bool _alive);
-	void setForDelete();
-	bool isVisible() const;
-	void setVisible(bool _visible);
+	const sf::Vector2f getPosition();
+	void setPosition(const sf::Vector2f &pos);
+	void move(const sf::Vector2f &pos);
+};
+
+struct EntityManager {
+	std::vector<std::shared_ptr<Entity>> list;
+	void update(float dt);
+	void render(sf::RenderWindow &window);
 };

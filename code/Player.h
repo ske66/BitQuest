@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "ecm.h"
 
 using namespace sf;
 
