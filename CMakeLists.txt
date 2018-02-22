@@ -23,6 +23,23 @@ add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} -E copy_directory 
 file (GLOB_RECURSE SOURCES Code/*.cpp Code/*.h)
 add_executable(Bitquest ${SOURCES})
 target_include_directories(Bitquest SYSTEM PRIVATE ${SFML_INCS})
-target_link_libraries(Bitquest sfml-graphics)
+target_link_libraries(Bitquest lib_tile_level_loader lib_ecm lib_maths sfml-graphics )
 add_dependencies(Bitquest copy_resources)
 set_target_properties(Bitquest PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration))
+
+#### Tile loader lib ####
+file(GLOB_RECURSE SOURCE_FILES lib_tile_level_loader/*.cpp lib_tile_level_loader/*.h)
+add_library(lib_tile_level_loader STATIC ${SOURCE_FILES})
+target_include_directories(lib_tile_level_loader INTERFACE "${CMAKE_SOURCE_DIR}/lib_tile_level_loader/" PRIVATE ${SFML_INCS})
+target_link_libraries(lib_tile_level_loader lib_maths sfml-graphics)
+
+#### Maths lib ####
+add_library(lib_maths INTERFACE)
+target_sources(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths/maths.h")
+target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" SYSTEM INTERFACE ${SFML_INCS})
+
+#### ECM Library ####
+file(GLOB_RECURSE SOURCE_FILES lib_ecm/*.cpp lib_ecm/*.h)
+add_library(lib_ecm STATIC ${SOURCE_FILES})
+target_include_directories(lib_ecm INTERFACE "${CMAKE_SOURCE_DIR}/lib_ecm")
+target_link_libraries(lib_ecm PRIVATE lib_maths)

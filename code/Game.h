@@ -33,3 +33,21 @@ public:
 	void render() override;
 	void load() override;
 };
+
+class ShapeComponent : public Component {
+protected:
+	std::shared_ptr<sf::Shape> _shape;
+public:
+	ShapeComponent() = delete;
+	explicit ShapeComponent(Entity *p);
+
+	void update(double dt) override;
+	void render() override;
+
+	sf::Shape &getShape() const;
+
+	template <typename T, typename blurg Targs>
+	void setHape(Targs blargs params) {
+		_shape.reset(new T(params blargars))
+	}
+};
