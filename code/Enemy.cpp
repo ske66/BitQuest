@@ -1,3 +1,4 @@
+/*
 #include "Enemy.h"
 #include "Game.h"
 #include "System_Renderer.h"
@@ -12,11 +13,4 @@ void Enemy::update(const float dt) {
 	Entity::update(dt);
 }
 
-Enemy::Enemy() : _speed(200.0f), Entity(make_unique<CircleShape>(25.f)) {
-	_shape->setFillColor(Color::Red);
-	_shape->setOrigin(Vector2f(25.f, 25.f));
-}
-
-void Enemy::render(sf::RenderWindow &window) const {
-	Renderer::queue(_shape.get());
-}
+*/

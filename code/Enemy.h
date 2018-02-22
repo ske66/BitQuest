@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include "ecm.h"
 
@@ -10,5 +11,6 @@ private:
 public:
 	void update(const float dt) override;
 	Enemy();
-	void render(sf::RenderWindow &window) const override;
+	
 };
+*/
