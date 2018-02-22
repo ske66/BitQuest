@@ -26,7 +26,7 @@ void Load()
 void Update(RenderWindow &window)
 {
 	static Clock clock;
-	const float dt = clock.restart().asSeconds();
+	float dt = clock.restart().asSeconds();
 	activeScene->update(dt);
 	
 	Event event;
@@ -49,7 +49,7 @@ void Render(RenderWindow &window)
 	Renderer::render();
 }
 
-int Main()
+int main()
 {
 	RenderWindow window(VideoMode(gameWidth, gameHeight), "BitQuest");
 

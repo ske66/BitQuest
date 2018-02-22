@@ -11,17 +11,22 @@ void MenuScene::update(float dt) {
 		activeScene = gameScene;
 	}
 	Scene::update(dt);
-	text.setString("Almost Pacman");
 }
 
 void MenuScene::render() {
 	Scene::render();
+	//Renderer::queue(&text); apparently this doesn't go here but the text wont render on the screen!?
 }
 
 void MenuScene::load() {
 	Font font;
 	font.loadFromFile("res/fonts/RobotoMono-Regular.ttf");
-	text.setString("Bitquest!");
+	text.setFont(font);
+	text.setCharacterSize(24);
+	text.setString("Almost Pacman");
+	text.setColor(Color::White);
+	text.setPosition((gameWidth * 0.5f) - (text.getLocalBounds().width * 0.5f), 0);
+
 }
 
 void GameScene::update(float dt) {
