@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "Player.h"
 #include "ecm.h"
 #include "cmp_player_movement.h"
 #include "cmp_enemy_AI.h"
@@ -62,13 +61,13 @@ void GameScene::load()
 		s->setShape<sf::CircleShape>(12.f);
 		s->getShape().setFillColor(Color::Yellow);
 		s->getShape().setOrigin(Vector2f(12.f, 12.f));
-		player->setPosition(Vector2f(gameWidth * 0.5f, gameHeight * 0.5f));
+		player->setPosition(Vector2f(gameWidth * 0.5f, gameHeight * 0.8f));
 		player->addComponent<PlayerMovementComponent>();
 
 		_ents.list.push_back(player);
 	}
 
-	const sf::Color enemy_cols[]{ {208, 62, 25},
+	const sf::Color enemy_colours[]{ {208, 62, 25},
 								{219, 133, 28}, 
 								{70, 191, 238},
 								{234, 130, 229} };
@@ -78,7 +77,7 @@ void GameScene::load()
 		auto enemy = make_shared<Entity>();
 		auto s = enemy->addComponent<ShapeComponent>();
 		s->setShape<sf::CircleShape>(12.f);
-		s->getShape().setFillColor(enemy_cols[i % 4]);
+		s->getShape().setFillColor(enemy_colours[i % 4]);
 		s->getShape().setOrigin(Vector2f(12.f, 12.f));
 		enemy->setPosition(Vector2f((gameWidth/2) + (i * 100), gameHeight * 0.8f));
 		enemy->addComponent<EnemyAIComponent>();

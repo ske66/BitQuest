@@ -11,10 +11,10 @@ void PlayerMovementComponent::update(float dt) {
 
 	// Movement
 	sf::Vector2f direction = { 0.0f, 0.0f };
-	if (Keyboard::isKeyPressed(Keyboard::Left)) {
+	if (Keyboard::isKeyPressed(Keyboard::A)) {
 		direction.x--;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Right)) {
+	if (Keyboard::isKeyPressed(Keyboard::D)) {
 		direction.x++;
 	}
 	
