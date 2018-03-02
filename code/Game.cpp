@@ -1,8 +1,9 @@
 #include "Game.h"
 #include "ecm.h"
+#include "cmp_texture_component.h"
 #include "cmp_player_movement.h"
 #include "cmp_enemy_AI.h"
-#define ENEMY_COUNT 4
+#define ENEMY_COUNT 1
 
 
 using namespace std;
@@ -42,6 +43,7 @@ void GameScene::update(float dt)
 		activeScene = menuScene;
 	}
 	Scene::update(dt);
+
 }
 
 void GameScene::render() 
@@ -53,51 +55,44 @@ void GameScene::respawn() {}
 
 void GameScene::load() 
 {
-
+	
 	{
-		auto player = make_shared<Entity>();
 		
-		auto s = player->addComponent<ShapeComponent>();
-		s->setShape<sf::CircleShape>(12.f);
-		s->getShape().setFillColor(Color::Yellow);
-		s->getShape().setOrigin(Vector2f(12.f, 12.f));
-		player->setPosition(Vector2f(gameWidth * 0.5f, gameHeight * 0.8f));
-		player->addComponent<PlayerMovementComponent>();
+		sf::Texture temp;
+		temp.loadFromFile("res\\characters\\Bob_spritesheet(75%).png");
 
+		auto player = make_shared<Entity>();
+		player->addComponent<PlayerMovementComponent>();
+		auto s = player->addComponent<TextureComponent>();
+		s->setShape<sf::RectangleShape>(Vector2f(240.f,240.f));
+		s->setTexture(temp);
+		s->getShape().setTexture(s->getTexture());
+		s->getShape().setTextureRect(IntRect(0,0,240,240));
+		s->getShape().setOrigin(Vector2f(120.f, 120.f));
+		player->setPosition(Vector2f(gameWidth * 0.5f, gameHeight * 0.8f));
 		_ents.list.push_back(player);
 	}
 
-	const sf::Color enemy_colours[]{ {208, 62, 25},
-								{219, 133, 28}, 
-								{70, 191, 238},
-								{234, 130, 229} };
-
-	for (int i = 0; i < ENEMY_COUNT; ++i)
 	{
+
+		sf::Texture temp;
+		temp.loadFromFile("res\\characters\\Wizard_spritesheet(75%).png");
+
 		auto enemy = make_shared<Entity>();
-		auto s = enemy->addComponent<ShapeComponent>();
-		s->setShape<sf::CircleShape>(12.f);
-		s->getShape().setFillColor(enemy_colours[i % 4]);
-		s->getShape().setOrigin(Vector2f(12.f, 12.f));
-		enemy->setPosition(Vector2f((gameWidth/2) + (i * 100), gameHeight * 0.8f));
+		auto s = enemy->addComponent<TextureComponent>();
+		s->setShape<sf::RectangleShape>(Vector2f(240.f,240.f));
+		s->setTexture(temp);
+		s->getShape().setTexture(s->getTexture());
+		s->getShape().setOrigin(Vector2f(120.f, 120.f));
+		s->getShape().setTextureRect(IntRect(0, 0, 240, 240));
+		enemy->setPosition(Vector2f((gameWidth / 2) - 200, gameHeight * 0.8f));
 		enemy->addComponent<EnemyAIComponent>();
 
 		_ents.list.push_back(enemy);
 
 	}
+
 }
 
-void ShapeComponent::update(float dt)
-{
-	_shape->setPosition(_parent->getPosition());
-}
 
-void ShapeComponent::render()
-{
-	Renderer::queue(_shape.get());
-}
 
-sf::Shape& ShapeComponent::getShape() const { return *_shape; }
-
-ShapeComponent::ShapeComponent(Entity* p)
-	: Component(p), _shape(make_shared<sf::CircleShape>()){}

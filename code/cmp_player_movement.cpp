@@ -4,6 +4,7 @@
 using namespace sf;
 using namespace std;
 
+
 PlayerMovementComponent::PlayerMovementComponent(Entity* p)
 	: ActorMovementComponent(p) {}
 
@@ -21,4 +22,8 @@ void PlayerMovementComponent::update(float dt) {
 
 	move((float)dt * direction * _speed);
 
+}
+float PlayerMovementComponent::getSpeed() const
+{
+	return _speed;
 }

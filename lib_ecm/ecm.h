@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML\Graphics.hpp>
 #include "maths.h"
 #include <algorithm>
 #include <memory>
@@ -15,6 +16,7 @@ protected:
 	std::vector<std::shared_ptr<Component>> _components;
 	sf::Vector2f _position;
 	
+
 	float _rotation;
 	bool _alive;
 	bool _visible;
@@ -30,6 +32,10 @@ public:
 	const sf::Vector2f &getPosition() const;
 	void setPosition(const sf::Vector2f &_position);
 	void is_fordeletion() const;
+	
+
+	
+
 	float getRotation() const;
 	void setRotation(float _rotation);
 	bool isAlive() const;
