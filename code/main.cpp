@@ -2,6 +2,7 @@
 #include "System_Renderer.h"
 #include "ecm.h"
 #include "Scene.h"
+#include "sys_physics.h"
 
 #include "SFML\Graphics.hpp"
 #include <iostream>
@@ -40,7 +41,11 @@ void Update(RenderWindow &window)
 	}
 
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	{
 		window.close();
+	}
+
+		Physics::update(dt);
 }
 
 void Render(RenderWindow &window)
@@ -54,6 +59,7 @@ int main()
 	RenderWindow window(VideoMode(gameWidth, gameHeight), "BitQuest");
 
 	Renderer::initialise(window);
+	Physics::initialise();
 
 	Load();
 	
@@ -65,5 +71,6 @@ int main()
 		window.display();
 	}
 
+	Physics::shutdown();
 	return 0;
 }

@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "ecm.h"
+#include "sys_physics.h"
+#include "cmp_player_physics.h"
 #include "cmp_texture_component.h"
 #include "cmp_player_movement.h"
 #include "cmp_enemy_AI.h"
@@ -30,7 +32,7 @@ void MenuScene::load()
 	font.loadFromFile("res/fonts/RobotoMono-Regular.ttf");
 	text.setFont(font);
 	text.setCharacterSize(24);
-	text.setString("Almost Pacman");
+	text.setString("Bit_Quest");
 	text.setColor(Color::White);
 	text.setPosition((gameWidth * 0.5f) - (text.getLocalBounds().width * 0.5f), 0);
 	
@@ -58,20 +60,27 @@ void GameScene::load()
 	
 	{
 		
+
 		sf::Texture temp;
-		temp.loadFromFile("res\\characters\\Bob_spritesheet(75%).png");
+		temp.loadFromFile("res\\characters\\Bob_spritesheet(75%).png"); //temporary texture staorage for load is destroyed as soon as scope left
 
 		auto player = make_shared<Entity>();
-		player->addComponent<PlayerMovementComponent>();
 		auto s = player->addComponent<TextureComponent>();
 		s->setShape<sf::RectangleShape>(Vector2f(240.f,240.f));
-		s->setTexture(temp);
-		s->getShape().setTexture(s->getTexture());
+		s->setTexture(temp); //setting texture component equal to temporary texture
+		s->getShape().setTexture(s->getTexture()); 
 		s->getShape().setTextureRect(IntRect(0,0,240,240));
 		s->getShape().setOrigin(Vector2f(120.f, 120.f));
 		player->setPosition(Vector2f(gameWidth * 0.5f, gameHeight * 0.8f));
+		
+		player->addComponent<PlayerPhysicsComponent>(Vector2f(240.f, 240.f));
+
 		_ents.list.push_back(player);
 	}
+
+
+	
+	
 
 	{
 
