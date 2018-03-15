@@ -19,10 +19,12 @@ set(SFML_INCS "lib/sfml/include")
 link_directories("${CMAKE_BINARY_DIR}/lib/sfml/lib")
 add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/res" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/res)
 
+
 #### BitQuest ####
 file (GLOB_RECURSE SOURCES Code/*.cpp Code/*.h)
 add_executable(Bitquest ${SOURCES})
 target_include_directories(Bitquest SYSTEM PRIVATE ${SFML_INCS})
+#target_include_directories(Bitquest SYSTEM PRIVATE ${SFML_INCS})
 target_link_libraries(Bitquest lib_tile_level_loader lib_ecm lib_maths sfml-graphics Box2D)
 add_dependencies(Bitquest copy_resources)
 set_target_properties(Bitquest PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration))

@@ -2,6 +2,7 @@
 #include "sys_physics.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
+#include "levelsystem.h"
 
 using namespace std;
 using namespace sf;
@@ -32,11 +33,7 @@ bool PlayerPhysicsComponent::isGrounded() const {
 void PlayerPhysicsComponent::update(float dt) {
 
 	const auto pos = _parent->getPosition();
-
-	//Teleport to start if we fall off map.
-//	if (pos.y > ls::getHeight() * ls::getTileSize()) {
-//		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
-	//}
+	
 
 	if (Keyboard::isKeyPressed(Keyboard::Left) ||
 		Keyboard::isKeyPressed(Keyboard::Right)) {
@@ -89,11 +86,12 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 	const Vector2f& size)
 	: PhysicsComponent(p, true, size) {
 	_size = sv2_to_bv2(size, true);
-	_maxVelocity = Vector2f(200.f, 400.f);
-	_groundspeed = 30.f;
-	_grounded = false;
+	_maxVelocity = Vector2f(400.f, 600.f);
+	_groundspeed = 200.f;
+	_grounded = true;
 	_body->SetSleepingAllowed(false);
 	_body->SetFixedRotation(true);
 	//Bullet items have higher-res collision detection
 	_body->SetBullet(true);
+	teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 }

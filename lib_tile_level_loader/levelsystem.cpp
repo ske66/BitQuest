@@ -11,7 +11,7 @@ size_t LevelSystem::_height;
 
 float LevelSystem::_tileSize(100.f);
 vector<std::unique_ptr<sf::RectangleShape>> LevelSystem::_sprites;
-Vector2f LevelSystem::_offset(0.0f, 30.0f);
+Vector2f LevelSystem::_offset(0.0f, 0.0f);
 
 size_t LevelSystem::getHeight() {
 	return _height;
@@ -75,8 +75,14 @@ void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 		case '+':
 			temp_tiles.push_back(WAYPOINT);
 			break;
-		case 'n':
-			temp_tiles.push_back(ENEMY);
+		case '1':
+			temp_tiles.push_back(ENEMY_GOBLIN);
+			break;
+		case '2':
+			temp_tiles.push_back(ENEMY_ORC);
+			break;
+		case '3':
+			temp_tiles.push_back(ENEMY_TROLL);
 			break;
 		case '\n': // end of line
 			if (w == 0) { // if we haven't written width yet
@@ -137,6 +143,19 @@ LevelSystem::TILE LevelSystem::getTileAt(Vector2f v) {
 		throw string("Tile out of range.");
 	}
 	return getTile(Vector2ul((v - _offset) / (_tileSize)));
+}
+
+std::vector<sf::Vector2ul> LevelSystem::findTiles(LevelSystem::TILE tile) {
+	std::vector<sf::Vector2ul> ret;
+	for (int i = 0; i < _width * _height; i++) {
+		if (_tiles[i] == tile) {
+			ret.push_back(Vector2ul(i % _width, i / _width));
+		}
+	}
+	if (ret.size() == 0) {
+		throw string("No tiles found.");
+	}
+	return ret;
 }
 
 void LevelSystem::render(RenderWindow &window) {

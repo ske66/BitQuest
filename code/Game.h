@@ -4,8 +4,8 @@
 #include "Scene.h"
 #include "ecm.h"
 
-constexpr uint16_t gameWidth = 1600;
-constexpr uint16_t gameHeight = 800;
+constexpr uint16_t gameWidth = 1200;
+constexpr uint16_t gameHeight = 1000;
 
 
 extern std::shared_ptr<Scene> gameScene;
