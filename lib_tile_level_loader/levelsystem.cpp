@@ -84,6 +84,21 @@ void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 		case '3':
 			temp_tiles.push_back(ENEMY_TROLL);
 			break;
+		case '4':
+			temp_tiles.push_back(ENEMY_SLIME);
+			break;
+		case '5':
+			temp_tiles.push_back(ENEMY_SKELETON);
+			break;
+		case '6':
+			temp_tiles.push_back(ENEMY_GHOST);
+			break;
+		case 'G':
+			temp_tiles.push_back(GAVIN);
+			break;
+		case 'S':
+			temp_tiles.push_back(SHOP);
+			break;
 		case '\n': // end of line
 			if (w == 0) { // if we haven't written width yet
 				w = i; // set width
