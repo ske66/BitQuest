@@ -14,7 +14,7 @@
 #define SLIME_COUNT 2
 #define SKELETON_COUNT 2
 #define GHOST_COUNT 2
-#define SHOP 3
+#define SHOP_COUNT 3
 
 
 using namespace std;
@@ -43,7 +43,6 @@ void MenuScene::update(float dt)
 void MenuScene::render() 
 {
 	Scene::render();
-	//Renderer::queue(&text); //apparently this doesn't go here but the text wont render on the screen!?
 }
 
 void MenuScene::load() 

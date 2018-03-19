@@ -13,9 +13,9 @@ w+                                                     +w
 w+                                                     +w
 w+                                                     +w
 w+                                                     +w
-s                                                      +w
-w+                         6                           +w
 w+                                                     +w
+w+                         6                           +w
+w+          s                                          +w
 w+                                                     +w
 w+                                                     +w
 w+                                                     +w
