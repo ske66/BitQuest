@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include <SFML/Graphics.hpp>
@@ -38,5 +39,6 @@ public:
 	//sf::Texture texture;
 };
 
+*/
 
 

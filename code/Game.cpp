@@ -1,3 +1,4 @@
+/*
 #include "Game.h"
 #include "ecm.h"
 #include "sys_physics.h"
@@ -51,8 +52,7 @@ void MenuScene::load()
 	font.loadFromFile("res/fonts/RobotoMono-Regular.ttf");
 	text.setFont(font);
 	text.setCharacterSize(24);
-	text.setString("Bit_Quest");
-	text.setColor(Color::White);
+	text.setString("BitQuest");
 	text.setPosition((gameWidth * 0.5f) - (text.getLocalBounds().width * 0.5f), 0);
 	
 }
@@ -138,7 +138,7 @@ void GameScene::load()
 
 	ls::loadLevelFile("res/level_1.txt", 25.f);
 
-	
+
 		//Wall generation
 		for (int i = 0; i < walls.size(); ++i){
 			auto wall = make_shared<Entity>();
@@ -335,5 +335,5 @@ void GameScene::load()
 }
 
 
-
+*/
 
