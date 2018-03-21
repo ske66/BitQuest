@@ -2,6 +2,7 @@
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_texture_component.h"
 #include "../components/cmp_enemy_AI.h"
+#include "../components/cmp_gavin_physics.h"
 #include "../GameState.h"
 #include <levelsystem.h>
 #include <iostream>
@@ -44,10 +45,11 @@ void Level1Scene::Load() {
 		s->getShape().setTextureRect(IntRect(0, 0, 240, 240));
 		s->getShape().setOrigin(Vector2f(120.f, 120.f));
 
-		player->addComponent<PlayerPhysicsComponent>(Vector2f(100.f, 220.f));
+		player->addComponent<PlayerPhysicsComponent>(Vector2f(110.f, 240.f));
+		
 	}
 
-	/*
+	
 	//GAVIN CREATION
 	{
 		gavin = makeEntity();
@@ -63,10 +65,11 @@ void Level1Scene::Load() {
 		s->getShape().setTextureRect(IntRect(0, 0, 240, 240));
 		s->getShape().setOrigin(Vector2f(120.f, 120.f));
 
+		gavin->addComponent<GavinPhysicsComponent>(Vector2f(100, 240));
 		//gavin->addComponent<EnemyPhysicsComponent>(Vector2f(100.0f, 220.f));
 	}
 
-
+	/*
 	//GOBLIN CREATION
 	{
 		auto goblin = makeEntity();
@@ -115,7 +118,7 @@ void Level1Scene::Load() {
 		}
 	}
 
-
+	
 	//TROLL CREATION
 
 	{
@@ -146,11 +149,15 @@ void Level1Scene::Load() {
 			auto e = makeEntity();
 			e->setPosition(pos);
 			e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
+			auto shape = e->addComponent<TextureComponent>();
+			shape->setShape<sf::RectangleShape>(Vector2f(20.f, 20.f));
+			shape->getShape().setFillColor(sf::Color::Yellow);
+
 		}
 	}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	cout << "Scene 1 Loaded" << endl;
+//	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	//cout << "Scene 1 Loaded" << endl;
 
 	setLoaded(true);
 }
@@ -167,6 +174,10 @@ void Level1Scene::Update(const double& dt) {
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
+
+	sf::View player_veiw(sf::FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
+	player_veiw.setCenter(player->getPosition());
+	Engine::GetWindow().setView(player_veiw);
 	Scene::Update(dt);
 }
 

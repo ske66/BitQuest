@@ -12,7 +12,7 @@ namespace Physics
 
 	void initialise()
 	{
-		b2Vec2 gravity(0.0f, -10.0f);
+		b2Vec2 gravity(0.0f, -40.0f);
 		world.reset(new b2World(gravity));
 	}
 

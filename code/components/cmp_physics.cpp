@@ -18,6 +18,8 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f size)
 	
 
 	BodyDef.type = _dynamic ? b2_dynamicBody : b2_staticBody;
+	BodyDef.position = sv2_to_bv2(invert_height(p->getPosition()));
+
 	_body = Physics::GetWorld()->CreateBody(&BodyDef);
 	_body->SetActive(true);
 	{
@@ -25,7 +27,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f size)
 		Shape.SetAsBox(sv2_to_bv2(size).x * 0.5, sv2_to_bv2(size).y * 0.5);
 		b2FixtureDef FixtureDef;
 
-		FixtureDef.density = _dynamic ? 10.f : 0.f;
+		//FixtureDef.density = _dynamic ? 10.f : 0.f;
 		FixtureDef.friction = _dynamic ? 0.1f : 0.8f;
 		FixtureDef.restitution = .2;
 		FixtureDef.shape = &Shape;

@@ -1,4 +1,4 @@
-#include "cmp_player_physics.h"
+#include "cmp_gavin_physics.h"
 #include "system_physics.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
@@ -8,7 +8,7 @@ using namespace std;
 using namespace sf;
 using namespace Physics;
 
-bool PlayerPhysicsComponent::isGrounded() const {
+bool GavinPhysicsComponent::isGrounded() const {
 	auto touch = getTouching();
 	const auto& pos = _body->GetPosition();
 	const float halfPlrHeigt = _size.y * .5f;
@@ -30,47 +30,40 @@ bool PlayerPhysicsComponent::isGrounded() const {
 	return false;
 }
 
+void GavinPhysicsComponent::update(double dt) {
 
-void PlayerPhysicsComponent::update(double dt) {
 
-	
 
 	const auto pos = _parent->getPosition();
-	
+
 	if (pos.y > ls::getHeight() * ls::getTileSize())
 	{
-		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+		teleport(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
 	}
 
-	if (Keyboard::isKeyPressed(Keyboard::Left) ||
-		Keyboard::isKeyPressed(Keyboard::Right)) {
-		// Moving Either Left or Right
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			if (getVelocity().x < _maxVelocity.x)
-				impulse({ (float)(dt * _groundspeed), 0 });
-			
-		}
-		else {
-			if (getVelocity().x > -_maxVelocity.x)
-				impulse({ -(float)(dt * _groundspeed), 0 });
+	//{
 
-		}
-	}
-	else {
-		// Dampen X axis movement
-		dampen({ 0.7f, 1.0f });
-	}
+	//}
 
+	//impulse({ -(float)(dt * _groundspeed), 0 });
+
+	
+	// Dampen X axis movement
+	//dampen({ 0.7f, 1.0f });
+	
+
+	/*
 	// Handle Jump
 	if (Keyboard::isKeyPressed(Keyboard::Up)) {
 		_grounded = isGrounded();
 		if (_grounded) {
-			setVelocity(Vector2f(getVelocity().x,  300.f));
+			setVelocity(Vector2f(getVelocity().x, 300.f));
 			teleport(Vector2f(pos.x, pos.y - 5.0f));
 			impulse(Vector2f(0, -100.f));
 
 		}
 	}
+	*/
 
 	//Are we in air?
 	if (!_grounded) {
@@ -89,17 +82,16 @@ void PlayerPhysicsComponent::update(double dt) {
 	v.y = copysign(min(abs(v.y), _maxVelocity.y), v.y);
 	setVelocity(v);
 
-	
-
 	PhysicsComponent::update(dt);
 }
 
-PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
+GavinPhysicsComponent::GavinPhysicsComponent(Entity* p,
 	const Vector2f& size)
 	: PhysicsComponent(p, true, size) {
 	_size = sv2_to_bv2(size, true);
+	i = 0;
 	_maxVelocity = Vector2f(400.f, 800.f);
-//	_fixture->SetDensity(0.2);
+	//	_fixture->SetDensity(0.2);
 	_groundspeed = 200.f;
 	_grounded = false;
 	_body->SetSleepingAllowed(false);
