@@ -1,11 +1,14 @@
 #include "cmp_animation_component.h"
 
+
 /*
 
-AnimationComponent::AnimationComponent(sf::Texture* texture, sf::Vector2u imageCount, float switchTime) : Component(p) 
+AnimationComponent::AnimationComponent(std::string path, sf::Vector2u imageCount, float switchTime) : Component(p) 
 {
-	this->imageCount = imageCount;
-	this->switchTime = switchTime;
+
+
+	imageCount = imageCount;
+	switchTime = switchTime;
 	totalTime = 0.0f;
 	currentImage.x = 0;
 

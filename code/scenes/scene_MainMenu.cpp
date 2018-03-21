@@ -12,6 +12,7 @@ void MainMenuScene::Load() {
 	{
 		auto txt = makeEntity();
 		auto t = txt->addComponent<TextComponent>("BITQUEST!\nPress Space to Start!");
+		
 	}
 	setLoaded(true);
 }

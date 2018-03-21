@@ -1,6 +1,6 @@
 #include "scene_level1.h"
 #include "../components/cmp_player_physics.h"
-#include "../components/cmp_texture_component.h"
+#include "../components/cmp_sprite.h"
 #include "../components/cmp_enemy_AI.h"
 #include "../components/cmp_gavin_physics.h"
 #include "../GameState.h"
@@ -34,17 +34,8 @@ void Level1Scene::Load() {
 	{
 		player = makeEntity();
 		player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
-
-		sf::Texture temp_bob;
-		temp_bob.loadFromFile("res\\textures\\Bob_spritesheet.png"); //temporary texture storage for load is destroyed as soon as scope left
-
-		auto s = player->addComponent<TextureComponent>();
-		s->setShape<sf::RectangleShape>(Vector2f(240.f, 240.f));
-		s->setTexture(temp_bob); //setting texture component equal to temporary texture
-		s->getShape().setTexture(s->getTexture());
-		s->getShape().setTextureRect(IntRect(0, 0, 240, 240));
-		s->getShape().setOrigin(Vector2f(120.f, 120.f));
-
+		auto s = player->addComponent<SpriteComponent>();
+		s->Initialise("Bob_spritesheet.png",Vector2f(0,120),Vector2u(8,8));
 		player->addComponent<PlayerPhysicsComponent>(Vector2f(110.f, 240.f));
 		
 	}
@@ -52,21 +43,13 @@ void Level1Scene::Load() {
 	
 	//GAVIN CREATION
 	{
+
 		gavin = makeEntity();
 		gavin->setPosition(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
-
-		sf::Texture temp_gavin;
-		temp_gavin.loadFromFile("res\\textures\\Gavin_spritesheet.png");
-
-		auto s = gavin->addComponent<TextureComponent>();
-		s->setShape<sf::RectangleShape>(Vector2f(240.0f, 240.0f));
-		s->setTexture(temp_gavin);
-		s->getShape().setTexture(s->getTexture());
-		s->getShape().setTextureRect(IntRect(0, 0, 240, 240));
-		s->getShape().setOrigin(Vector2f(120.f, 120.f));
-
+		auto s = gavin->addComponent<SpriteComponent>();
+		s->Initialise("Gavin_spritesheet.png", sf::Vector2f(0, 120),Vector2u(8,8));
 		gavin->addComponent<GavinPhysicsComponent>(Vector2f(100, 240));
-		//gavin->addComponent<EnemyPhysicsComponent>(Vector2f(100.0f, 220.f));
+		
 	}
 
 	/*
@@ -149,9 +132,8 @@ void Level1Scene::Load() {
 			auto e = makeEntity();
 			e->setPosition(pos);
 			e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
-			auto shape = e->addComponent<TextureComponent>();
-			shape->setShape<sf::RectangleShape>(Vector2f(20.f, 20.f));
-			shape->getShape().setFillColor(sf::Color::Yellow);
+			
+			
 
 		}
 	}
@@ -174,6 +156,8 @@ void Level1Scene::Update(const double& dt) {
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
+
+	std::cout << player->getState() << endl;
 
 	sf::View player_veiw(sf::FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
 	player_veiw.setCenter(player->getPosition());

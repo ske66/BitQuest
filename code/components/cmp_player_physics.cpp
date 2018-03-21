@@ -41,30 +41,49 @@ void PlayerPhysicsComponent::update(double dt) {
 	{
 		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	}
+	
+
+	if (getVelocity().x == 0 && isGrounded() == true && _parent->getState() != "attack")
+	{
+		_parent->setState("idle"); 
+	}
+	
+	if (Keyboard::isKeyPressed(Keyboard::Space))
+	{
+		_parent->setState("attack");
+	}
 
 	if (Keyboard::isKeyPressed(Keyboard::Left) ||
-		Keyboard::isKeyPressed(Keyboard::Right)) {
+		Keyboard::isKeyPressed(Keyboard::Right)) 
+	{
 		// Moving Either Left or Right
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {
+		if (Keyboard::isKeyPressed(Keyboard::Right)) 
+		{
+			_parent->setState("walk_right");
 			if (getVelocity().x < _maxVelocity.x)
 				impulse({ (float)(dt * _groundspeed), 0 });
 			
 		}
-		else {
+		else 
+		{
+			_parent->setState("walk_left");
 			if (getVelocity().x > -_maxVelocity.x)
 				impulse({ -(float)(dt * _groundspeed), 0 });
 
 		}
 	}
-	else {
+	else 
+	{
 		// Dampen X axis movement
 		dampen({ 0.7f, 1.0f });
 	}
 
 	// Handle Jump
-	if (Keyboard::isKeyPressed(Keyboard::Up)) {
+	if (Keyboard::isKeyPressed(Keyboard::Up)) 
+	{
 		_grounded = isGrounded();
 		if (_grounded) {
+			_parent->setState("jump");
 			setVelocity(Vector2f(getVelocity().x,  300.f));
 			teleport(Vector2f(pos.x, pos.y - 5.0f));
 			impulse(Vector2f(0, -100.f));
@@ -73,13 +92,15 @@ void PlayerPhysicsComponent::update(double dt) {
 	}
 
 	//Are we in air?
-	if (!_grounded) {
+	if (!_grounded) 
+	{
 		// Check to see if we have landed yet
 		_grounded = isGrounded();
 		// disable friction while jumping
 		setFriction(0.f);
 	}
-	else {
+	else 
+	{
 		setFriction(0.1f);
 	}
 

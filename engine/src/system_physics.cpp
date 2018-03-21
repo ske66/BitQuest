@@ -9,11 +9,14 @@ namespace Physics
 	static shared_ptr<b2World> world;
 	const int32 velocityIterations = 6;
 	const int32 positionIterations = 2;
+	b2ContactListener CollsionCheck;
 
+		
 	void initialise()
 	{
 		b2Vec2 gravity(0.0f, -40.0f);
 		world.reset(new b2World(gravity));
+		//world->SetContactListener(CollsionCheck); 
 	}
 
 	void shutdown() { world.reset(); }

@@ -53,6 +53,7 @@ protected:
 	bool _visible;
 	bool _fordeletion;
 	std::set<std::string> _tags;
+	std::string state;
 
 public:
 	void addTag(const std::string& t);
@@ -65,6 +66,10 @@ public:
 	virtual void update(double dt);
 
 	virtual void render();
+
+	std::string getState() const;
+
+	void setState(std::string);
 
 
 	const sf::Vector2f& getPosition() const;

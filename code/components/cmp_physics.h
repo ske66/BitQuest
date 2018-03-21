@@ -1,6 +1,6 @@
 
 #pragma once
-#include "cmp_texture_component.h"
+#include "cmp_sprite.h"
 #include "ecm.h"
 #include <Box2D/Dynamics/b2Body.h>
 

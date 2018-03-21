@@ -41,29 +41,6 @@ void GavinPhysicsComponent::update(double dt) {
 		teleport(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
 	}
 
-	//{
-
-	//}
-
-	//impulse({ -(float)(dt * _groundspeed), 0 });
-
-	
-	// Dampen X axis movement
-	//dampen({ 0.7f, 1.0f });
-	
-
-	/*
-	// Handle Jump
-	if (Keyboard::isKeyPressed(Keyboard::Up)) {
-		_grounded = isGrounded();
-		if (_grounded) {
-			setVelocity(Vector2f(getVelocity().x, 300.f));
-			teleport(Vector2f(pos.x, pos.y - 5.0f));
-			impulse(Vector2f(0, -100.f));
-
-		}
-	}
-	*/
 
 	//Are we in air?
 	if (!_grounded) {

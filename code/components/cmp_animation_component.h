@@ -3,14 +3,13 @@
 #include <SFML/Graphics.hpp>
 #include "System_Renderer.h"
 
+/*
 class AnimationComponent : public Component
 {
 protected:
-	std::shared_ptr<sf::Shape> _shape;
 	sf::Texture _texture;
 
-public:
-	explicit AnimationComponent(sf::Texture* texture, sf::Vector2u imageCount, float switchTime);
+	explicit AnimationComponent(std::string path, sf::Vector2u imageCount, float switchTime);
 	AnimationComponent() = delete;
 
 	sf::IntRect uvRect;
@@ -35,3 +34,4 @@ private:
 	float totalTime;
 	float switchTime;
 };
+*/
