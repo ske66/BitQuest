@@ -11,14 +11,14 @@ protected:
 public:
 
 	double switchtime;
-	sf::IntRect uvRect;
+	sf::IntRect animUvRect;
 	sf::Vector2u currentimage;
 	double totaltime;
 	sf::Vector2u imagecount;
 
 	SpriteComponent() = delete;
 
-	void Initialise(std::string a, sf::Vector2f b, sf::Vector2u imagecount);
+	void Animation(std::string a, sf::Vector2f b, sf::Vector2u imagecount);
 
 	explicit SpriteComponent(Entity* p);
 	void update(double dt);
@@ -37,7 +37,6 @@ public:
 class ShapeComponent : public Component {
 protected:
 	std::shared_ptr<sf::Shape> _shape;
-	// sf::Shape _shape;
 
 public:
 	ShapeComponent() = delete;

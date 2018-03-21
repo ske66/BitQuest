@@ -5,8 +5,28 @@
 
 using namespace std;
 
-SpriteComponent::SpriteComponent(Entity* p )
-	: Component(p),_sprite(make_shared<sf::Sprite>()) 
+
+void SpriteComponent::Animation(std::string a,sf::Vector2f b, sf::Vector2u imagecount)
+{
+	_texture = Resources::get<sf::Texture>(a);
+	_sprite->setTexture(*_texture);
+	_sprite->setTextureRect(sf::IntRect(0, 0, 240, 240));
+	_sprite->setOrigin(b);
+	
+	this->imagecount = imagecount;
+	this->switchtime = 0.1f; 
+
+	currentimage.x = 0;
+    totaltime = 0.0f;
+
+	animUvRect.width = _texture->getSize().x / float(imagecount.x);
+	animUvRect.height = _texture->getSize().y / float(imagecount.y);
+	
+}
+
+
+SpriteComponent::SpriteComponent(Entity* p)
+	: Component(p), _sprite(make_shared<sf::Sprite>())
 {
 
 }
@@ -14,7 +34,6 @@ SpriteComponent::SpriteComponent(Entity* p )
 void SpriteComponent::update(double dt) {
 	_sprite->setPosition(_parent->getPosition());
 	_sprite->setRotation(_parent->getRotation());
-
 
 
 	if (_parent->getState() == "walk_right")
@@ -32,7 +51,7 @@ void SpriteComponent::update(double dt) {
 		currentimage.y = 6;
 	}
 
-	if (_parent->getState() == "idle" )
+	if (_parent->getState() == "idle")
 	{
 		currentimage.y = 2;
 	}
@@ -40,11 +59,12 @@ void SpriteComponent::update(double dt) {
 	if (_parent->getState() == "attack")
 	{
 		currentimage.y = 7;
-		
+
+		std::cout << currentimage.x << endl;
+
 		if (currentimage.y == 7 && currentimage.x == 7)
 		{
 			_parent->setState("idle");
-			currentimage.x = 0;
 		}
 	}
 
@@ -54,7 +74,6 @@ void SpriteComponent::update(double dt) {
 	{
 		totaltime -= switchtime;
 		currentimage.x++;
-		std::cout << totaltime << endl;
 
 		if (currentimage.x >= imagecount.x)
 		{
@@ -62,39 +81,12 @@ void SpriteComponent::update(double dt) {
 		}
 	}
 
-	uvRect.left = currentimage.x * uvRect.width;
-	uvRect.top = currentimage.y *  uvRect.height;
+	animUvRect.left = currentimage.x * animUvRect.width;
+	animUvRect.top = currentimage.y *  animUvRect.height;
 
-	_sprite->setTextureRect(uvRect);
 
-	//std::cout << totaltime  << endl;
-	//std::cout << currentimage << endl;
-
-	//std::cout << totaltime << endl;
-
+	_sprite->setTextureRect(animUvRect);
 }
-
-
-
-void SpriteComponent::Initialise(std::string a,sf::Vector2f b,sf::Vector2u imagecount)
-{
-	_texture = Resources::get<sf::Texture>(a);
-	_sprite->setTexture(*_texture);
-	_sprite->setTextureRect(sf::IntRect(0, 0, 240, 240));
-	_sprite->setOrigin(b);
-	
-	this->imagecount = imagecount;
-	this->switchtime = 0.1f; 
-
-	currentimage.x = 0;
-    totaltime = 0.0f;
-
-	uvRect.width = _texture->getSize().x / float(imagecount.x);
-	uvRect.height = _texture->getSize().y / float(imagecount.y);
-
-	
-}
-
 
 void SpriteComponent::render() { Renderer::queue(_sprite.get()); }
 

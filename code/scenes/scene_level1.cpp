@@ -23,9 +23,9 @@ vector<shared_ptr<Entity>> ghosts;
 
 void Level1Scene::Load() {
 	cout << "Scene 1 loading" << endl;
-	ls::loadLevelFile("res/level_1.txt", 40.f);
+	ls::loadLevelFile("res/level_1.txt", 60.f);
 
-	auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
+	auto ho = Engine::getWindowSize().y - (ls::getHeight() * 60.f);
 	ls::setOffset(Vector2f(0, ho));
 
 
@@ -35,8 +35,8 @@ void Level1Scene::Load() {
 		player = makeEntity();
 		player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 		auto s = player->addComponent<SpriteComponent>();
-		s->Initialise("Bob_spritesheet.png",Vector2f(0,120),Vector2u(8,8));
-		player->addComponent<PlayerPhysicsComponent>(Vector2f(110.f, 240.f));
+		s->Animation("Bob_spritesheet.png",Vector2f(0,150), Vector2u(8,8));
+		player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 240));
 		
 	}
 
@@ -47,8 +47,8 @@ void Level1Scene::Load() {
 		gavin = makeEntity();
 		gavin->setPosition(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
 		auto s = gavin->addComponent<SpriteComponent>();
-		s->Initialise("Gavin_spritesheet.png", sf::Vector2f(0, 120),Vector2u(8,8));
-		gavin->addComponent<GavinPhysicsComponent>(Vector2f(100, 240));
+		s->Animation("Gavin_spritesheet.png", Vector2f(0, 150), Vector2u(8,8));
+		gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 240));
 		
 	}
 
@@ -125,18 +125,30 @@ void Level1Scene::Load() {
 
 
 	{
-		auto walls = ls::findTiles(ls::WALL);
-		for (auto w : walls) {
-			auto pos = ls::getTilePosition(w);
-			pos += Vector2f(20.f, 20.f);
+
+		auto floor = ls::findTiles(ls::FLOOR);
+		for (auto f : floor)
+		{
+			auto pos = ls::getTilePosition(f);
+			pos += Vector2f(60.f, 60.f);
 			auto e = makeEntity();
 			e->setPosition(pos);
-			e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
-			
-			
+			auto s = e->addComponent<SpriteComponent>();
+			e->addComponent<PhysicsComponent>(false, Vector2f(60.f, 60.f));
+		}
 
+		auto walls = ls::findTiles(ls::WALL);
+		for (auto w : walls) 
+		{
+			auto pos = ls::getTilePosition(w);
+			pos += Vector2f(60.f, 60.f);
+			auto e = makeEntity();
+			e->setPosition(pos);
+			e->addComponent<PhysicsComponent>(false, Vector2f(60.f,60.f));
 		}
 	}
+
+
 
 //	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	//cout << "Scene 1 Loaded" << endl;
@@ -156,8 +168,6 @@ void Level1Scene::Update(const double& dt) {
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
-
-	std::cout << player->getState() << endl;
 
 	sf::View player_veiw(sf::FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
 	player_veiw.setCenter(player->getPosition());
