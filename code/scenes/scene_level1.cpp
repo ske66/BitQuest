@@ -14,13 +14,8 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> gavin;
+static shared_ptr<Entity> background;
 
-vector<shared_ptr<Entity>> goblins;
-vector<shared_ptr<Entity>> orcs;
-vector<shared_ptr<Entity>> trolls;
-vector<shared_ptr<Entity>> slimes;
-vector<shared_ptr<Entity>> skeletons;
-vector<shared_ptr<Entity>> ghosts;
 
 void Level1Scene::Load() {
 	cout << "Scene 1 loading" << endl;
@@ -30,7 +25,20 @@ void Level1Scene::Load() {
 	auto ho = Engine::getWindowSize().y - (ls::getHeight() * 240.f);
 	ls::setOffset(Vector2f(0, ho));
 
+
+	//TILEMAP GENERATION
+
 	{
+
+		{
+			//background texture to hide spawns
+			background = makeEntity();
+			background->setPosition(Vector2f(200, -6000));
+			auto s = background->addComponent<SpriteComponent>();
+			//s->
+			s->Sprite("Background.png", IntRect(0, 0, 6500, 6500));
+		}
+
 
 		auto floor = ls::findTiles(ls::FLOOR);
 		for (auto f : floor)
@@ -41,36 +49,46 @@ void Level1Scene::Load() {
 			e->setPosition(pos);
 			auto s = e->addComponent<SpriteComponent>();
 			s->Sprite("NewTerrain.png", IntRect(0, 0, 240, 240));
-			e->addComponent<PhysicsComponent>(false, Vector2f(240.f, 240.f));
+			e->addComponent<PhysicsComponent>(false, Vector2f(480, 240));
 		}
-		/*
-		auto background = ls::findTiles(ls::EMPTY);
-		for (auto b : background)
+		
+		auto ground = ls::findTiles(ls::GROUND);
+		for (auto g : ground)
 		{
-			auto pos = ls::getTilePosition(b);
+			auto pos = ls::getTilePosition(g);
 			pos += Vector2f(120.f, 120.f);
 			auto e = makeEntity();
 			e->setPosition(pos);
 			auto s = e->addComponent<SpriteComponent>();
-			s->Sprite("NewTerrain.png", IntRect(240, 240, 240, 240));
+			s->Sprite("NewTerrain.png", IntRect(0, 240, 240, 240));
 		}
 
-		*/
-
-
+		
 
 		auto walls = ls::findTiles(ls::WALL);
 		for (auto w : walls)
 		{
 			auto pos = ls::getTilePosition(w);
-			pos += Vector2f(120.f, 120.f);
+			pos += Vector2f(120, 120);
 			auto e = makeEntity();
 			e->setPosition(pos);
 			auto s = e->addComponent<SpriteComponent>();
 			s->Sprite("NewTerrain.png", IntRect(240, 0, 240, 240));
-			e->addComponent<PhysicsComponent>(false, Vector2f(240.f, 240.f));
+			e->addComponent<PhysicsComponent>(false, Vector2f(120, 240));
 		}
 
+	}
+
+	//COIN CREATION
+	auto coins = ls::findTiles(ls::COIN);
+	for (auto c :coins)
+	{
+		auto pos = ls::getTilePosition(c);
+		pos += Vector2f(120.f, 120.f);
+		auto e = makeEntity();
+		e->setPosition(pos);
+		auto s = e->addComponent<AnimationComponent>();
+		s->Animation("Coin_spritesheet.png", Vector2f(0, -60), IntRect(0, 0, 60, 60), Vector2u(6, 1));
 	}
 
 
@@ -79,8 +97,8 @@ void Level1Scene::Load() {
 		player = makeEntity();
 		player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 		auto s = player->addComponent<AnimationComponent>();
-		s->Animation("Bob_spritesheet.png",Vector2f(0,150), Vector2u(8,8));
-		player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 240));
+		s->Animation("Bob_spritesheet.png",Vector2f(0,120), IntRect(0,0,240,240), Vector2u(8,8));
+		player->addComponent<PlayerPhysicsComponent>(Vector2f(0, 240));
 		
 	}
 
@@ -91,57 +109,43 @@ void Level1Scene::Load() {
 		gavin = makeEntity();
 		gavin->setPosition(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
 		auto s = gavin->addComponent<AnimationComponent>();
-		s->Animation("Gavin_spritesheet.png", Vector2f(0, 150), Vector2u(8,8));
-		gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 240));
+		s->Animation("Gavin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8,8));
+		gavin->addComponent<GavinPhysicsComponent>(Vector2f(0, 240));
 		
 	}
 
-	/*
+	
 	//GOBLIN CREATION
 	{
-		auto goblin = makeEntity();
-		goblin->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY_GOBLIN)[3]));
 
-		sf::Texture temp_goblin;
-		temp_goblin.loadFromFile("res\\textures\\Goblin_spritesheet.png");
-
-		for (int i = 0; i < 4; ++i) {
-			auto goblin = make_shared<Entity>();
-			auto s = goblin->addComponent<TextureComponent>();
-			s->setShape<sf::RectangleShape>(Vector2f(240.f, 240.f));
-			s->setTexture(temp_goblin);
-			s->getShape().setTexture(s->getTexture());
-			s->getShape().setTextureRect(IntRect(0, 0, 240, 240));
-			s->getShape().setOrigin(Vector2f(120.f, 120.f));
-
-			goblin->addComponent<EnemyAIComponent>();
-			//goblin->addComponent<EnemyPhysicsComponent>();
-
+	auto goblins = ls::findTiles(ls::ENEMY_GOBLIN);
+	for (auto go : goblins)
+		{
+			auto pos = ls::getTilePosition(go);
+			pos += Vector2f(120.f, 120.f);
+			auto goblin = makeEntity();
+			goblin->setPosition(pos);
+			auto s = goblin->addComponent<AnimationComponent>();
+			s->Animation("Goblin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+			goblin->addComponent<GavinPhysicsComponent>(Vector2f(0, 240));
 		}
 	}
-
+	 
 
 	//ORC CREATION
 
 	{
-		auto orc = makeEntity();
-		orc->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY_ORC)[1]));
 
-		sf::Texture temp_orc;
-		temp_orc.loadFromFile("res\\textures\\Orc_spritesheet.png");
-
-		for (int i = 0; i < 2; ++i) {
-			auto orc = make_shared<Entity>();
-			auto s = orc->addComponent<TextureComponent>();
-			s->setShape<sf::RectangleShape>(Vector2f(240.f, 240.f));
-			s->setTexture(temp_orc);
-			s->getShape().setTexture(s->getTexture());
-			s->getShape().setTextureRect(IntRect(0, 0, 240, 240));
-			s->getShape().setOrigin(Vector2f(120.f, 120.f));
-
-			orc->addComponent<EnemyAIComponent>();
-			//orc->addComponent<EnemyPhysicsComponent>();
-
+	auto orcs = ls::findTiles(ls::ENEMY_ORC);
+	for (auto o : orcs)
+		{
+			auto pos = ls::getTilePosition(o);
+			pos += Vector2f(120.f, 120.f);
+			auto orc = makeEntity();
+			orc->setPosition(pos);
+			auto s = orc->addComponent<AnimationComponent>();
+			s->Animation("Orc_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+			orc->addComponent<GavinPhysicsComponent>(Vector2f(0, 240));
 		}
 	}
 
@@ -149,22 +153,19 @@ void Level1Scene::Load() {
 	//TROLL CREATION
 
 	{
-		auto troll = makeEntity();
-		troll->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY_TROLL)[0]));
 
-		sf::Texture temp_troll;
-		temp_troll.loadFromFile("res\\textures\\Troll_spritesheet.png");
-
-		for (int i = 0; i < 1; ++i) {
-			auto troll = make_shared<Entity>();
-			auto s = troll->addComponent<TextureComponent>();
-			s->setShape<sf::RectangleShape>(Vector2f(240.0f, 240.f));
-			//s->setTexture(temp_)
+	auto trolls = ls::findTiles(ls::ENEMY_TROLL);
+	for (auto tr : trolls)
+		{
+			auto pos = ls::getTilePosition(tr);
+			pos += Vector2f(120.f, 120.f);
+			auto troll = makeEntity();
+			troll->setPosition(pos);
+			auto s = troll->addComponent<AnimationComponent>();
+			s->Animation("Troll_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+			troll->addComponent<GavinPhysicsComponent>(Vector2f(0, 240));
 		}
-
 	}
-
-	*/
 
 	setLoaded(true);
 }
@@ -182,9 +183,9 @@ void Level1Scene::Update(const double& dt) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
-	sf::View player_veiw(sf::FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
-	player_veiw.setCenter(player->getPosition());
-	Engine::GetWindow().setView(player_veiw);
+	sf::View player_view(sf::FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
+	player_view.setCenter(player->getPosition());
+	Engine::GetWindow().setView(player_view);
 	Scene::Update(dt);
 }
 
@@ -192,3 +193,4 @@ void Level1Scene::Render() {
 	ls::render(Engine::GetWindow());
 	Scene::Render();
 }
+

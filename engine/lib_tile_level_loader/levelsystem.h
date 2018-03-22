@@ -8,8 +8,11 @@
 
 #define ls LevelSystem
 
-class LevelSystem {
+class LevelSystem{
+
 public:
+
+
 	static void loadLevelFile(const std::string&, float tileSize = 100.f);
 	static void unload();
 	static void render(sf::RenderWindow &window);
@@ -20,6 +23,7 @@ public:
 		EMPTY = ' ',
 		GROUND = 'g',
 		START = 's',
+		COIN = 'c',
 		END = 'e', 
 		WALL = 'w',
 		FLOOR = 'f',

@@ -75,5 +75,4 @@ GavinPhysicsComponent::GavinPhysicsComponent(Entity* p,
 	_body->SetFixedRotation(true);
 	//Bullet items have higher-res collision detection
 	_body->SetBullet(true);
-	//teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 }

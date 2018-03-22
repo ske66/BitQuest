@@ -5,14 +5,15 @@
 
 using namespace std;
 
-void AnimationComponent::Animation(std::string a,sf::Vector2f b, sf::Vector2u imagecount)
+void AnimationComponent::Animation(std::string a,sf::Vector2f b, sf::IntRect animUvRect, sf::Vector2u imagecount)
 {
 	_texture = Resources::get<sf::Texture>(a);
 	_sprite->setTexture(*_texture);
-	_sprite->setTextureRect(sf::IntRect(0, 0, 240, 240));
+	_sprite->setTextureRect(animUvRect);
 	_sprite->setOrigin(b);
 	
 	this->imagecount = imagecount;
+	this->animUvRect = animUvRect;
 	this->switchtime = 0.1f; 
 
 	currentimage.x = 0;
