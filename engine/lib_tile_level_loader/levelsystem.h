@@ -17,7 +17,8 @@ public:
 	typedef unsigned char Tile;
 
 	enum TILES { 
-		EMPTY = ' ', 
+		EMPTY = ' ',
+		GROUND = 'g',
 		START = 's',
 		END = 'e', 
 		WALL = 'w',
@@ -30,7 +31,7 @@ public:
 		ENEMY_SLIME = '4', 
 		ENEMY_SKELETON = '5', 
 		ENEMY_GHOST = '6', 
-		GAVIN = 'g', 
+		GAVIN = 'G', 
 		SHOP = '$', 
 		WAYPOINT = '+' 
 	};
