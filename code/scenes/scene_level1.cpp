@@ -30,6 +30,48 @@ void Level1Scene::Load() {
 	auto ho = Engine::getWindowSize().y - (ls::getHeight() * 240.f);
 	ls::setOffset(Vector2f(0, ho));
 
+	{
+
+		auto floor = ls::findTiles(ls::FLOOR);
+		for (auto f : floor)
+		{
+			auto pos = ls::getTilePosition(f);
+			pos += Vector2f(120.f, 120.f);
+			auto e = makeEntity();
+			e->setPosition(pos);
+			auto s = e->addComponent<SpriteComponent>();
+			s->Sprite("NewTerrain.png", IntRect(0, 0, 240, 240));
+			e->addComponent<PhysicsComponent>(false, Vector2f(240.f, 240.f));
+		}
+		/*
+		auto background = ls::findTiles(ls::EMPTY);
+		for (auto b : background)
+		{
+			auto pos = ls::getTilePosition(b);
+			pos += Vector2f(120.f, 120.f);
+			auto e = makeEntity();
+			e->setPosition(pos);
+			auto s = e->addComponent<SpriteComponent>();
+			s->Sprite("NewTerrain.png", IntRect(240, 240, 240, 240));
+		}
+
+		*/
+
+
+
+		auto walls = ls::findTiles(ls::WALL);
+		for (auto w : walls)
+		{
+			auto pos = ls::getTilePosition(w);
+			pos += Vector2f(120.f, 120.f);
+			auto e = makeEntity();
+			e->setPosition(pos);
+			auto s = e->addComponent<SpriteComponent>();
+			s->Sprite("NewTerrain.png", IntRect(240, 0, 240, 240));
+			e->addComponent<PhysicsComponent>(false, Vector2f(240.f, 240.f));
+		}
+
+	}
 
 
 	//PLAYER CREATION
@@ -123,41 +165,6 @@ void Level1Scene::Load() {
 	}
 
 	*/
-
-
-
-	{
-
-		auto floor = ls::findTiles(ls::FLOOR);
-		for (auto f : floor)
-		{
-			auto pos = ls::getTilePosition(f);
-			pos += Vector2f(120.f, 120.f);
-			auto e = makeEntity();
-			e->setPosition(pos);
-			auto s = e->addComponent<SpriteComponent>();
-			s->Sprite("NewTerrain.png", IntRect(0, 0, 240, 240));
-			e->addComponent<PhysicsComponent>(false, Vector2f(240.f, 240.f));
-		}
-		
-		auto walls = ls::findTiles(ls::WALL);
-		for (auto w : walls) 
-		{
-			auto pos = ls::getTilePosition(w);
-			pos += Vector2f(120.f, 120.f);
-			auto e = makeEntity();
-			e->setPosition(pos);
-			auto s = e->addComponent<SpriteComponent>();
-			s->Sprite("NewTerrain.png", IntRect(240, 240,240 , 240));
-			e->addComponent<PhysicsComponent>(false, Vector2f(240.f,240.f));
-		}
-		
-	}
-
-
-
-//	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	//cout << "Scene 1 Loaded" << endl;
 
 	setLoaded(true);
 }

@@ -23,8 +23,6 @@ public:
 		END = 'e', 
 		WALL = 'w',
 		FLOOR = 'f',
-		CORNERL='c',
-		CORNERR='C',
 		ENEMY_GOBLIN = '1', 
 		ENEMY_ORC = '2',
 		ENEMY_TROLL = '3', 
