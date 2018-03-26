@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include <ecm.h>
 #include "cmp_actor_movement.h"
 
@@ -13,3 +13,4 @@ public:
 	void render() override {}
 	void update(double dt) override;
 };
+*/

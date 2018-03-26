@@ -1,3 +1,5 @@
+
+/*
 #include "cmp_enemy_ai.h"
 
 using namespace sf;
@@ -17,3 +19,5 @@ void EnemyAIComponent::update(double dt) {
 	move((float)dt * direction * _speed);
 
 }
+
+*/

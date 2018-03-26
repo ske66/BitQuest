@@ -1,4 +1,4 @@
-#include "scene_level1.h"
+#include "scene_level_1.h"
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_animation.h"
@@ -39,7 +39,7 @@ void Level1Scene::Load() {
 			s->Sprite("Background.png", IntRect(0, 0, 6500, 6500));
 		}
 
-
+		//Floor textures
 		auto floor = ls::findTiles(ls::FLOOR);
 		for (auto f : floor)
 		{
@@ -52,6 +52,7 @@ void Level1Scene::Load() {
 			e->addComponent<PhysicsComponent>(false, Vector2f(480, 240));
 		}
 		
+		//Ground (under floor) textures
 		auto ground = ls::findTiles(ls::GROUND);
 		for (auto g : ground)
 		{
@@ -64,7 +65,7 @@ void Level1Scene::Load() {
 		}
 
 		
-
+		//Wall Textures
 		auto walls = ls::findTiles(ls::WALL);
 		for (auto w : walls)
 		{

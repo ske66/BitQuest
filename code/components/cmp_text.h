@@ -1,22 +1,45 @@
 #pragma once
 
+
+
 #include <SFML/Graphics/Text.hpp>
+
 #include <ecm.h>
 
+
+
 class TextComponent : public Component {
-	public:
-		TextComponent() = delete;
-		explicit TextComponent(Entity* p, const std::string& std = "");
-		void update(double dt) override;
 
-		void render() override;
+public:
 
-		~TextComponent() override = default;
+	TextComponent() = delete;
 
-		void SetText(const std::string& str);
+	explicit TextComponent(Entity* p, const std::string& str = "");
+
+	void update(double dt) override;
+
+
+
+	void render() override;
+
+
+
+	~TextComponent() override = default;
+
+
+
+	void SetText(const std::string& str);
+
+	sf::Text& getText();
+
+
 
 protected:
+
 	std::shared_ptr<sf::Font> _font;
+
 	std::string _string;
+
 	sf::Text _text;
+
 };
