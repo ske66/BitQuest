@@ -41,7 +41,7 @@ void GavinPhysicsComponent::update(double dt) {
 
 	if (pos.y > ls::getHeight() * ls::getTileSize())
 	{
-//		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+		//		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	}
 
 	{
@@ -87,10 +87,4 @@ GavinPhysicsComponent::GavinPhysicsComponent(Entity* p,
 	_body->SetFixedRotation(true);
 	//Bullet items have higher-res collision detection
 	_body->SetBullet(true);
-<<<<<<< HEAD
-	teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 }
-
-=======
-}
->>>>>>> b5ffb189b6edb982915f3ae3dc8ba305200e1e51

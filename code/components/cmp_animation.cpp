@@ -5,23 +5,23 @@
 
 using namespace std;
 
-void AnimationComponent::Animation(std::string a,sf::Vector2f b, sf::IntRect animUvRect, sf::Vector2u imagecount)
+void AnimationComponent::Animation(std::string a, sf::Vector2f b, sf::IntRect animUvRect, sf::Vector2u imagecount)
 {
 	_texture = Resources::get<sf::Texture>(a);
 	_sprite->setTexture(*_texture);
 	_sprite->setTextureRect(animUvRect);
 	_sprite->setOrigin(b);
-	
+
 	this->imagecount = imagecount;
 	this->animUvRect = animUvRect;
-	this->switchtime = 0.1f; 
+	this->switchtime = 0.1f;
 
 	currentimage.x = 0;
-    totaltime = 0.0f;
+	totaltime = 0.0f;
 
 	animUvRect.width = _texture->getSize().x / float(imagecount.x);
 	animUvRect.height = _texture->getSize().y / float(imagecount.y);
-	
+
 }
 
 
@@ -70,7 +70,7 @@ void AnimationComponent::update(double dt) {
 
 	totaltime += dt;
 
-	if (totaltime >= switchtime) 
+	if (totaltime >= switchtime)
 	{
 		totaltime -= switchtime;
 		currentimage.x++;
@@ -98,7 +98,7 @@ void ShapeComponent::update(double dt) {
 	_shape->setPosition(_parent->getPosition());
 	_shape->setRotation(_parent->getRotation());
 
-	
+
 }
 
 

@@ -9,14 +9,14 @@ void PhysicsComponent::update(double dt)
 {
 	_parent->setPosition(invert_height(bv2_to_sv2(_body->GetPosition())));
 	_parent->setRotation((180 / b2_pi)* _body->GetAngle());
-	
+
 }
 
 PhysicsComponent::PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f size)
 	: Component(p), _dynamic(dyn)
 {
 	b2BodyDef BodyDef;
-	
+
 
 	BodyDef.type = _dynamic ? b2_dynamicBody : b2_staticBody;
 	BodyDef.position = sv2_to_bv2(invert_height(p->getPosition()));
@@ -38,7 +38,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f size)
 
 
 }
-void PhysicsComponent::setFriction(float r) { _fixture->SetFriction(r);}
+void PhysicsComponent::setFriction(float r) { _fixture->SetFriction(r); }
 
 void PhysicsComponent::setMass(float m) { _fixture->SetDensity(m); }
 
@@ -78,7 +78,7 @@ void PhysicsComponent::dampen(const sf::Vector2f& i)
 {
 	auto vel = _body->GetLinearVelocity();
 	vel.x *= i.x;
-	vel.y *= i.y; 
+	vel.y *= i.y;
 	_body->SetLinearVelocity(vel);
 
 }

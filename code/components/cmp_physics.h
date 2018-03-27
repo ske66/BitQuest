@@ -1,4 +1,3 @@
-
 #pragma once
 #include "cmp_sprite.h"
 #include "ecm.h"
@@ -7,7 +6,7 @@
 class PhysicsComponent : public Component
 {
 protected:
-	b2Body* _body;
+	b2Body * _body;
 	const bool _dynamic;
 	b2Fixture* _fixture;
 
@@ -15,7 +14,7 @@ public:
 	PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f size);
 
 
-	
+
 	b2Fixture* const getFixture()const;
 	bool isTouching(const PhysicsComponent& pc) const;
 	bool isTouching(const PhysicsComponent& pc, b2Contact const* bc) const;
@@ -34,4 +33,3 @@ public:
 
 	~PhysicsComponent() override;
 };
-

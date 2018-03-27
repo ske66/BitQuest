@@ -3,7 +3,9 @@
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_animation.h"
 #include "../components/cmp_enemy_AI.h"
+#include "../components/cmp_player_status.h"
 #include "../components/cmp_gavin_physics.h"
+#include "../components/cmp_enemy_AI.h"
 #include "../GameState.h"
 #include <levelsystem.h>
 #include <iostream>
@@ -98,8 +100,9 @@ void Level1Scene::Load() {
 		player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 		auto s = player->addComponent<AnimationComponent>();
 		s->Animation("Bob_spritesheet.png",Vector2f(0,120), IntRect(0,0,240,240), Vector2u(8,8));
-		player->addComponent<PlayerPhysicsComponent>(Vector2f(0, 240));
-		
+		player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 240));
+		player->addComponent<PlayerStatusComponent>();
+		player->addTag("player"); 
 	}
 
 	
@@ -111,6 +114,8 @@ void Level1Scene::Load() {
 		auto s = gavin->addComponent<AnimationComponent>();
 		s->Animation("Gavin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8,8));
 		gavin->addComponent<GavinPhysicsComponent>(Vector2f(0, 240));
+		gavin->addComponent<GavinAiComponent>();
+		gavin->addTag("gavin");
 		
 	}
 

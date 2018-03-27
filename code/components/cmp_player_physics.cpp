@@ -122,6 +122,7 @@ void PlayerPhysicsComponent::update(double dt) {
 void PlayerPhysicsComponent::CollisionCheck(double dt)
 {
 	auto g = _parent->scene->ents.find("gavin")[0];
+
 	auto cs = getTouching();
 
 
@@ -130,7 +131,6 @@ void PlayerPhysicsComponent::CollisionCheck(double dt)
 		if (c->GetFixtureA() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
 		{
 			
-
 			if (g->getState() == "attack")
 			{
 				totaltime -= switchtime;
@@ -157,7 +157,6 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 	_body->SetFixedRotation(true);
 	//Bullet items have higher-res collision detection
 	_body->SetBullet(true);
-	teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
 }
 
