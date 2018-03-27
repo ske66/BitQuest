@@ -21,11 +21,8 @@ static shared_ptr<Entity> btnLoadGame;
 static shared_ptr<Entity> btnSettings;
 static shared_ptr<Entity> btnExit;
 
-void MainMenuScene::Load() {
-	cout << "Main Menu Load \n";
-
-	sf::Vector2i position = sf::Mouse::getPosition();
-
+void MainMenuScene::Load() 
+{
 
 	//Button Locations
 	{
@@ -170,8 +167,6 @@ void MainMenuScene::Load() {
 void MainMenuScene::Update(const double& dt) 
 
 {
-	{
-
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 		sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
 
@@ -206,8 +201,6 @@ void MainMenuScene::Update(const double& dt)
 		}
 
 
-
-
 		if (btnSettings->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 		{
 			highlightSettings->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
@@ -239,7 +232,6 @@ void MainMenuScene::Update(const double& dt)
 			highlightExit->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
 		}
 		
-	}
 	
 
 	Scene::Update(dt);

@@ -113,7 +113,7 @@ void Level1Scene::Load() {
 		gavin->setPosition(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
 		auto s = gavin->addComponent<AnimationComponent>();
 		s->Animation("Gavin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8,8));
-		gavin->addComponent<GavinPhysicsComponent>(Vector2f(0, 240));
+		gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 240));
 		gavin->addComponent<GavinAiComponent>();
 		gavin->addTag("gavin");
 		
