@@ -36,9 +36,10 @@ void Loading_render() {
 	octagon.setRotation(loadingspinner);
 	octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
 	octagon.setFillColor(Color(255, 255, 255, min(255.f, 40.f*loadingTime)));
-	static Text t("Loading", *Resources::get<sf::Font>("RobotoMono-Regular.ttf"));
+	static Text t("Loading...", *Resources::get<sf::Font>("Wonder.ttf"));
 	t.setFillColor(Color(255, 255, 255, min(255.f, 40.f*loadingTime)));
-	t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f, 0.3f));
+	t.setPosition(Engine::GetWindow().getSize().x / 4 + 400.f, 500.f);
+	//t.setPosition(Engine::getWindowSize().g) * Vector2f(0.4f, 0.3f));
 	Renderer::queue(&t);
 	Renderer::queue(&octagon);
 }
@@ -98,9 +99,6 @@ void Engine::Start(unsigned int width, unsigned int height,
 			if (event.type == Event::Closed) {
 				window.close();
 			}
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
-			window.close();
 		}
 
 		window.clear();

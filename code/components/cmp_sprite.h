@@ -22,7 +22,6 @@ public:
 	void render() override;
 
 
-
 	sf::Sprite& getSprite() const;
 
 	template <typename... Targs> void setSprite(Targs... params) {

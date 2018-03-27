@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 #include "cmp_enemy_AI.h"
 
+=======
+
+/*
+#include "cmp_enemy_ai.h"
+>>>>>>> b5ffb189b6edb982915f3ae3dc8ba305200e1e51
 
 using namespace std;
 
 
 
+<<<<<<< HEAD
 GavinAiComponent::GavinAiComponent(Entity* p)
 	: Component(p)
 {
@@ -42,3 +49,16 @@ void GavinAiComponent::render() {  }
 
 
 
+=======
+	sf::Vector2f direction = { 0.0f, 0.0f };
+	
+	direction.x = rand() % 2 + 0 - 1;
+	
+	
+	
+	move((float)dt * direction * _speed);
+
+}
+
+*/
+>>>>>>> b5ffb189b6edb982915f3ae3dc8ba305200e1e51

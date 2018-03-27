@@ -19,7 +19,7 @@ public:
 
 	AnimationComponent() = delete;
 
-	void Animation(std::string a, sf::Vector2f b, sf::Vector2u imagecount);
+	void Animation(std::string a, sf::Vector2f b, sf::IntRect animUvRect, sf::Vector2u imagecount);
 
 
 	explicit AnimationComponent(Entity* p);
