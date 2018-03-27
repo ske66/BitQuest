@@ -14,7 +14,6 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> gavin;
-static shared_ptr<Entity> background;
 
 
 void Level1Scene::Load() {
@@ -32,7 +31,7 @@ void Level1Scene::Load() {
 
 		{
 			//background texture to hide spawns
-			background = makeEntity();
+			auto background = makeEntity();
 			background->setPosition(Vector2f(200, -6000));
 			auto s = background->addComponent<SpriteComponent>();
 			//s->
