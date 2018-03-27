@@ -3,6 +3,10 @@
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
 #include "levelsystem.h"
+#include "ecm.h"
+#include "engine.h"
+#include "cmp_player_status.h"
+#include "cmp_gavin_physics.h"
 
 using namespace std;
 using namespace sf;
@@ -32,8 +36,6 @@ bool PlayerPhysicsComponent::isGrounded() const {
 
 
 void PlayerPhysicsComponent::update(double dt) {
-
-	
 
 	const auto pos = _parent->getPosition();
 	
@@ -110,10 +112,38 @@ void PlayerPhysicsComponent::update(double dt) {
 	v.y = copysign(min(abs(v.y), _maxVelocity.y), v.y);
 	setVelocity(v);
 
-	
 
+	CollisionCheck(dt);
 	PhysicsComponent::update(dt);
 }
+
+
+
+void PlayerPhysicsComponent::CollisionCheck(double dt)
+{
+	auto g = _parent->scene->ents.find("gavin")[0];
+	auto cs = getTouching();
+
+
+	for (auto c : cs)
+	{
+		if (c->GetFixtureA() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
+		{
+			
+
+			if (g->getState() == "attack")
+			{
+				totaltime -= switchtime;
+				_parent->get_components<PlayerStatusComponent>()[0]->takeDamage(1.0);
+				std::cout << _parent->get_components<PlayerStatusComponent>()[0]->getHealth() << std::endl;
+			}
+
+		}
+
+	}
+
+}
+
 
 PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 	const Vector2f& size)
@@ -128,4 +158,6 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 	//Bullet items have higher-res collision detection
 	_body->SetBullet(true);
 	teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+
 }
+

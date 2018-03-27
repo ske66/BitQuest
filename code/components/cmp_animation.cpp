@@ -47,7 +47,7 @@ void AnimationComponent::update(double dt) {
 
 	if (_parent->getState() == "jump")
 	{
-		currentimage.y = 6;
+		currentimage.y = 2;
 	}
 
 	if (_parent->getState() == "idle")
@@ -69,7 +69,7 @@ void AnimationComponent::update(double dt) {
 
 	totaltime += dt;
 
-	if (totaltime >= switchtime) //<------ switch time
+	if (totaltime >= switchtime) 
 	{
 		totaltime -= switchtime;
 		currentimage.x++;

@@ -9,10 +9,13 @@ protected:
 	sf::Vector2f _maxVelocity;
 	bool _grounded;
 	float _groundspeed;
-
+	double switchtime;
+	double totaltime;
 	bool isGrounded() const;
 
 public:
+
+	void CollisionCheck(double dt);
 
 	b2Body getBody();
 

@@ -14,6 +14,8 @@ protected:
 public:
 	PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f size);
 
+
+	
 	b2Fixture* const getFixture()const;
 	bool isTouching(const PhysicsComponent& pc) const;
 	bool isTouching(const PhysicsComponent& pc, b2Contact const* bc) const;
@@ -28,6 +30,7 @@ public:
 	void dampen(const sf::Vector2f& s);
 	void setVelocity(const sf::Vector2f& v);
 	void teleport(const sf::Vector2f& v);
+
 
 	~PhysicsComponent() override;
 };

@@ -90,6 +90,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	Renderer::initialise(window);
 	Physics::initialise();
 	
+
 	ChangeScene(scn);
 	while (window.isOpen()) {
 		Event event;

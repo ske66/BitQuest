@@ -8,12 +8,19 @@
 #include <levelsystem.h>
 #include <iostream>
 #include <thread>
+#include "Box2D\Box2D.h"
+#include "system_physics.h"
+#include "CollisionListner.h"
+#include "../components/cmp_player_status.h"
+#include "../components/cmp_enemy_AI.h"
 
 using namespace std;
 using namespace sf;
 
+
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> gavin;
+
 
 vector<shared_ptr<Entity>> goblins;
 vector<shared_ptr<Entity>> orcs;
@@ -21,6 +28,8 @@ vector<shared_ptr<Entity>> trolls;
 vector<shared_ptr<Entity>> slimes;
 vector<shared_ptr<Entity>> skeletons;
 vector<shared_ptr<Entity>> ghosts;
+
+
 
 void Level1Scene::Load() {
 	cout << "Scene 1 loading" << endl;
@@ -32,28 +41,32 @@ void Level1Scene::Load() {
 
 
 
+	{
+		gavin = makeEntity();
+		gavin->setPosition(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
+		auto g = gavin->addComponent<AnimationComponent>();
+		g->Animation("Gavin_spritesheet.png", Vector2f(0, 150), Vector2u(8, 8));
+		gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 240));
+		gavin->addComponent<GavinAiComponent>();
+		gavin->addTag("gavin");
+	}
+
 	//PLAYER CREATION
 	{
 		player = makeEntity();
 		player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
-		auto s = player->addComponent<AnimationComponent>();
-		s->Animation("Bob_spritesheet.png",Vector2f(0,150), Vector2u(8,8));
+
+		player->addComponent<PlayerStatusComponent>();
+
+		auto p = player->addComponent<AnimationComponent>();
+		p->Animation("Bob_spritesheet.png",Vector2f(0,150), Vector2u(8,8));
 		player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 240));
+		player->addTag("player");
 		
 	}
+
 
 	
-	//GAVIN CREATION
-	{
-
-		gavin = makeEntity();
-		gavin->setPosition(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
-		auto s = gavin->addComponent<AnimationComponent>();
-		s->Animation("Gavin_spritesheet.png", Vector2f(0, 150), Vector2u(8,8));
-		gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 240));
-		
-	}
-
 	/*
 	//GOBLIN CREATION
 	{
@@ -137,7 +150,7 @@ void Level1Scene::Load() {
 			e->setPosition(pos);
 			auto s = e->addComponent<SpriteComponent>();
 			s->Sprite("NewTerrain.png", IntRect(0, 0, 240, 240));
-			e->addComponent<PhysicsComponent>(false, Vector2f(240.f, 240.f));
+			e->addComponent<PhysicsComponent>(false, Vector2f(240.f, 220.f));
 		}
 		
 		auto walls = ls::findTiles(ls::WALL);
@@ -149,7 +162,7 @@ void Level1Scene::Load() {
 			e->setPosition(pos);
 			auto s = e->addComponent<SpriteComponent>();
 			s->Sprite("NewTerrain.png", IntRect(240, 240,240 , 240));
-			e->addComponent<PhysicsComponent>(false, Vector2f(240.f,240.f));
+			e->addComponent<PhysicsComponent>(false, Vector2f(240.f,220.f));
 		}
 		
 	}

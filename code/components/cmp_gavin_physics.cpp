@@ -1,8 +1,12 @@
-#include "cmp_gavin_physics.h"
+#include "cmp_player_physics.h"
 #include "system_physics.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
 #include "levelsystem.h"
+#include  "../code/scenes/CollisionListner.h"
+#include "ecm.h"
+#include "engine.h"
+#include "cmp_gavin_physics.h"
 
 using namespace std;
 using namespace sf;
@@ -30,26 +34,32 @@ bool GavinPhysicsComponent::isGrounded() const {
 	return false;
 }
 
+
 void GavinPhysicsComponent::update(double dt) {
-
-
 
 	const auto pos = _parent->getPosition();
 
 	if (pos.y > ls::getHeight() * ls::getTileSize())
 	{
-		teleport(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
+//		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+	}
+
+	{
+		// Dampen X axis movement
+		dampen({ 0.7f, 1.0f });
 	}
 
 
 	//Are we in air?
-	if (!_grounded) {
+	if (!_grounded)
+	{
 		// Check to see if we have landed yet
 		_grounded = isGrounded();
 		// disable friction while jumping
 		setFriction(0.f);
 	}
-	else {
+	else
+	{
 		setFriction(0.1f);
 	}
 
@@ -59,6 +69,9 @@ void GavinPhysicsComponent::update(double dt) {
 	v.y = copysign(min(abs(v.y), _maxVelocity.y), v.y);
 	setVelocity(v);
 
+
+
+
 	PhysicsComponent::update(dt);
 }
 
@@ -66,7 +79,6 @@ GavinPhysicsComponent::GavinPhysicsComponent(Entity* p,
 	const Vector2f& size)
 	: PhysicsComponent(p, true, size) {
 	_size = sv2_to_bv2(size, true);
-	i = 0;
 	_maxVelocity = Vector2f(400.f, 800.f);
 	//	_fixture->SetDensity(0.2);
 	_groundspeed = 200.f;
@@ -77,3 +89,4 @@ GavinPhysicsComponent::GavinPhysicsComponent(Entity* p,
 	_body->SetBullet(true);
 	teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 }
+
