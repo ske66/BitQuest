@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "maths.h"
+#include "../code/GameState.h"
 #include "system_physics.h"
 #include "system_Renderer.h"
 #include "system_resources.h"
@@ -19,6 +20,8 @@ static float loadingTime;
 static RenderWindow* _window;
 static Event* _event;
 
+static shared_ptr<Entity> goblin;
+
 
 
 void Loading_update(float dt, const Scene* const scn) {
@@ -34,6 +37,59 @@ void Loading_update(float dt, const Scene* const scn) {
 }
 void Loading_render() {
 	// cout << "Eng: Loading Screen Render\n";
+
+
+
+
+	double switchtime;
+	sf::IntRect animUvRect;
+	sf::Vector2u currentimage;
+	double totaltime;
+	sf::Vector2u imagecount;
+
+	imagecount = Vector2u(1, 8);
+
+	currentimage.x = 0;
+	totaltime = 0.0f;
+	switchtime = 0.1f;
+	animUvRect = IntRect(480, 0, 240, 240);
+
+	Texture spritesheet;
+	Sprite goblin;
+
+	spritesheet.loadFromFile("res/textures/Goblin_spritesheet.png");
+
+	goblin.setTexture(spritesheet);
+	goblin.setTextureRect(animUvRect);
+
+	animUvRect.width = spritesheet.getSize().x / float(imagecount.x);
+	animUvRect.height = spritesheet.getSize().y / float(imagecount.y);
+
+	/*
+	totaltime += &dt;
+
+	if (totaltime >= switchtime)
+	{
+		totaltime -= switchtime;
+		currentimage.x++;
+
+		if (currentimage.x >= imagecount.x)
+		{
+			currentimage.x = 0;
+		}
+	}
+
+	animUvRect.left = currentimage.x * animUvRect.width;
+	animUvRect.top = currentimage.y *  animUvRect.height;
+
+
+	_sprite->setTextureRect(animUvRect);
+
+	*/
+
+	
+
+
 	static CircleShape octagon(80, 8);
 	octagon.setOrigin(80, 80);
 	octagon.setRotation(loadingspinner);
@@ -42,7 +98,7 @@ void Loading_render() {
 	static Text t("Loading...", *Resources::get<sf::Font>("Wonder.ttf"));
 	t.setFillColor(Color(255, 255, 255, min(255.f, 40.f*loadingTime)));
 	t.setPosition(Engine::GetWindow().getSize().x / 4 + 400.f, 500.f);
-	//t.setPosition(Engine::getWindowSize().g) * Vector2f(0.4f, 0.3f));
+	//t.setPosition(Engine::getWindowSize()) * Vector2f(0.4f, 0.3f));
 	Renderer::queue(&t);
 	Renderer::queue(&octagon);
 }
@@ -138,7 +194,7 @@ void Engine::ChangeScene(Scene* s) {
 	if (!s->isLoaded()) {
 		cout << "Eng: Entering Loading Screen\n";
 		loadingTime = 0;
-		_activeScene->Load();
+		_activeScene->LoadAsync();
 		loading = true;
 	}
 }
