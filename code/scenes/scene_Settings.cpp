@@ -17,6 +17,9 @@ static shared_ptr<Entity> highlightGraphics;
 static shared_ptr<Entity> highlightAudio;
 static shared_ptr<Entity> highlightGameplay;
 
+double totalTime = 0.0f;
+double clickDelay = 0.2f;
+
 
 void SettingsScene::Load() 
 {
@@ -122,66 +125,74 @@ void SettingsScene::UnLoad() {
 
 void SettingsScene::Update(const double& dt) 
 {
+	auto e = Engine::getEvent();
+
+	totalTime += dt;
+
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
 
-	if (btnGraphics->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
+	if (totalTime >= clickDelay)
 	{
-		highlightGraphics->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
+		totalTime -= clickDelay;
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (btnGraphics->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 		{
-			Engine::ChangeScene((Scene*)&settingsGraphics);
+			highlightGraphics->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
+
+			if (e.mouseButton.button == sf::Mouse::Left)
+			{
+				Engine::ChangeScene((Scene*)&settingsGraphics);	
+			}	
 		}
-	}
-	else
-	{
-		highlightGraphics->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
-
-
-
-
-	if (btnAudio->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-	{
-		highlightAudio->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		else
 		{
-			Engine::ChangeScene((Scene*)&settingsAudio);
+			highlightGraphics->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
 		}
-	}
-	else
-	{
-		highlightAudio->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
+		
 
 
 
-
-	if (btnGameplay->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-	{
-		highlightGameplay->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (btnAudio->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 		{
-			Engine::ChangeScene((Scene*)&settingsGameplay);
+			highlightAudio->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
+
+			if (e.mouseButton.button == sf::Mouse::Left)
+			{
+				Engine::ChangeScene((Scene*)&settingsAudio);
+			}
 		}
-	}
-	else
-	{
-		highlightGameplay->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
-
-
-
-	if (btnBack->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-	{
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		else
 		{
-			Engine::ChangeScene((Scene*)&menu);
+			highlightAudio->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
+		}
+			
+
+
+
+		if (btnGameplay->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
+		{
+			highlightGameplay->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
+
+			if (e.mouseButton.button == sf::Mouse::Left)
+			{
+				Engine::ChangeScene((Scene*)&settingsGameplay);
+			}
+		}
+		else
+		{
+			highlightGameplay->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
+		}
+
+
+
+		if (btnBack->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
+		{
+			if (e.mouseButton.button == sf::Mouse::Left)
+			{
+				Engine::ChangeScene((Scene*)&menu);
+			}
 		}
 	}
 
