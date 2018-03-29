@@ -4,13 +4,13 @@
 #include "cmp_state.h"
 #include "cmp_player_physics.h"
 #include "cmp_gavin_physics.h"
-
+#include "cmp_animation.h"
 
 class PlayerControlerComponent : public Component
 {
 protected:
 	double _health = 10;
-	int coins;
+	int coins = 0;
 
 public:
 

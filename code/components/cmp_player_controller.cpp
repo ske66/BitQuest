@@ -29,32 +29,34 @@ void PlayerControlerComponent::collectCoin()
 void PlayerControlerComponent::update(double dt)
 {
 	auto me = _parent->get_components<StateComponent>()[0];
+	auto me_anim = _parent->get_components<AnimationComponent>()[0];
 	auto me_pys = _parent->get_components<PlayerPhysicsComponent>()[0];
 
 	if (me->getAttacking() != true)
 	{
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
+			
 			me->setWalkingLeft();
-			me_pys->MoveLeft(dt);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			me_pys->MoveLeft(dt); 
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				me->setAttacking();
 				me_pys->setVelocity({ 0.0 , 0.0 });
 			}
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			me->setWalkingRight();
 			me_pys->MoveRight(dt);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				me->setAttacking();
 				me_pys->setVelocity({ 0.0 , 0.0 });
 			}
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			me->setAttacking();
 

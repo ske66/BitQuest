@@ -2,9 +2,10 @@
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_animation.h"
-#include "../components/cmp_enemy_AI.h"
+#include "../components/cmp_gavin_AI.h"
 #include "../components/cmp_gavin_physics.h"
 #include "../components/cmp_player_controller.h"
+#include "../components/cmp_general_AI.h"
 #include "../GameState.h"
 #include <levelsystem.h>
 #include <iostream>
@@ -148,8 +149,9 @@ void Level1Scene::Load() {
 			goblin->setPosition(pos);
 			goblin->addComponent<StateComponent>();
 			auto s = goblin->addComponent<AnimationComponent>();
-			s->Animation("Goblin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
-			goblin->addComponent<GavinPhysicsComponent>(Vector2f(0, 240));
+			s->Animation("Goblin_spritesheet.png", Vector2f(120, 230), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+			auto f = goblin->addComponent<PhysicsComponent>(true , Vector2f(100,200));
+			goblin->addComponent<GeneralAiComponent>();
 			s->getSprite().setOrigin(s->getSprite().getGlobalBounds().width / 2, s->getSprite().getGlobalBounds().height / 2);
 		}
 	}

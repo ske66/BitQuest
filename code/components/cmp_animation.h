@@ -16,6 +16,7 @@ protected:
 
 public:
 
+	bool faceRight = true;
 	double switchtime;
 	sf::IntRect animUvRect;
 	sf::Vector2u currentimage;

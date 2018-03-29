@@ -1,10 +1,10 @@
-#include "cmp_enemy_AI.h"
+#include "cmp_gavin_AI.h"
 
 
 using namespace std;
 
-bool canMove = true;
-int attackLock = 2000;
+
+
 
 GavinAiComponent::GavinAiComponent(Entity* p)
 	: Component(p)
@@ -21,6 +21,8 @@ void GavinAiComponent::update(double dt)
 {
 	totaltime += dt;
 
+	if (_parent->get_components<StateComponent>()[0]->getAttacking() != true)
+	{
 		if (checkInRange(200))
 		{
 			if (totaltime >= attackspeed)
@@ -35,10 +37,11 @@ void GavinAiComponent::update(double dt)
 		{
 			moveToPlayer();
 		}
-	if (checkInRange(400) == false)
-	{
+		if (checkInRange(400) == false)
+		{
 
-		_parent->get_components<StateComponent>()[0]->setIdle();
+			_parent->get_components<StateComponent>()[0]->setIdle();
+		}
 	}
 }
 

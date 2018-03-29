@@ -49,7 +49,7 @@ void AnimationComponent::update(double dt) {
 			attackImgNo = 0;
 		}
 	}
-	else if (c->getWalkingRight() == true || c->getWalkingLeft() == true)
+	else if (c->getWalkingRight() == true )
 	{
 		if (attackImgNo != 0)
 		{
@@ -57,12 +57,26 @@ void AnimationComponent::update(double dt) {
 		}
 		else
 		{
+			faceRight = true;
 			currentimage.y = 0;
 			Anim(dt);
 		}
 
 	}
+	else if (c->getWalkingLeft() == true)
+	{
+		if (attackImgNo != 0)
+		{
+			c->setAttacking();
+		}
+		else
+		{
+			faceRight = false;
+			currentimage.y = 0;
+			Anim(dt);
+		}
 
+	}
 	else if (c->getJumping() == true || c->getIdle() == true)
 	{
 		if (attackImgNo != 0)
@@ -113,8 +127,21 @@ void AnimationComponent::Anim(double dt)
 		}
 	}
 
-	animUvRect.left = currentimage.x * animUvRect.width;
+	
 	animUvRect.top = currentimage.y *  animUvRect.height;
+
+
+	if (faceRight)
+	{
+		animUvRect.left = currentimage.x * animUvRect.width;
+		animUvRect.width = abs(animUvRect.width);
+	}
+	else
+	{
+		animUvRect.left = (currentimage.x + 1) * abs(animUvRect.width);
+		animUvRect.width = -abs(animUvRect.width);
+	}
+
 
 
 	_sprite->setTextureRect(animUvRect);
@@ -138,8 +165,19 @@ void AnimationComponent::attackAnim(double dt)
 		}
 	}
 
-	animUvRect.left = attackImgNo * animUvRect.width;
+	
 	animUvRect.top = currentimage.y *  animUvRect.height;
+
+	if (faceRight)
+	{
+		animUvRect.left = attackImgNo * animUvRect.width;
+		animUvRect.width = abs(animUvRect.width);
+	}
+	else
+	{
+		animUvRect.left = (attackImgNo + 1) * abs(animUvRect.width);
+		animUvRect.width = -abs(animUvRect.width);
+	}
 
 
 	_sprite->setTextureRect(animUvRect);

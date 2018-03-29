@@ -46,7 +46,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	
 
 	// Handle Jump
-	if (Keyboard::isKeyPressed(Keyboard::Up)) 
+	if (Keyboard::isKeyPressed(Keyboard::Space)) 
 	{
 		_grounded = isGrounded();
 		if (_grounded) {
