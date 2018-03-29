@@ -135,7 +135,7 @@ void SettingsAudioScene::Update(const double& dt)
 {
 	auto e = Engine::getEvent();
 
-	totalTimeAudio += dt; 
+	totalTimeAudio += dt;
 
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 		sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
@@ -157,7 +157,7 @@ void SettingsAudioScene::Update(const double& dt)
 				}
 
 			}
-
+		}
 
 			if (studMaster->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().getGlobalBounds().contains(worldPos))
 			{
@@ -238,7 +238,7 @@ void SettingsAudioScene::Update(const double& dt)
 			{
 				doneText->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(192, 192, 192));
 			}
-		}
+
 
 	Scene::Update(dt);
 		

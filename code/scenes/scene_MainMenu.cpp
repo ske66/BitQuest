@@ -167,6 +167,9 @@ void MainMenuScene::Load()
 void MainMenuScene::Update(const double& dt) 
 
 {
+
+	auto e = Engine::getEvent();
+
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 		sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
 
@@ -216,15 +219,13 @@ void MainMenuScene::Update(const double& dt)
 		}
 
 
-
-
 		if (btnExit->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 		{
 			highlightExit->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				//Engine::GetWindow().close;
+				Engine::GetWindow().close();
 			}
 		}
 		else

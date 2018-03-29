@@ -17,6 +17,7 @@ public:
 	virtual void Render();
 	bool isLoaded() const;
 	std::shared_ptr<Entity> makeEntity();
+
 	
 
 	EntityManager ents;
@@ -29,6 +30,10 @@ private:
 	mutable std::mutex _loaded_mtx;
 };
 
+
+
+
+
 class Engine {
 public:
 	Engine() = delete;
@@ -39,6 +44,7 @@ public:
 	static sf::Vector2u getWindowSize();
 	static sf::Event& getEvent();
 	static void setVsync(bool b);
+
 
 private:
 	static Scene* _activeScene;

@@ -232,7 +232,6 @@ void SettingsGameplayScene::Update(const double& dt)
 				Engine::ChangeScene((Scene*)&settings);
 			}
 		}
-
 	}
 
 	if (walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))

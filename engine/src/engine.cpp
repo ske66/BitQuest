@@ -14,93 +14,82 @@ using namespace std;
 Scene* Engine::_activeScene = nullptr;
 std::string Engine::_gameName;
 
+
+
 static bool loading = false;
 static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
 static Event* _event;
 
-static shared_ptr<Entity> goblin;
+Texture spritesheet;
+Sprite goblin;
 
 
+float switchtime;
+IntRect uvRect = IntRect(240, 0, 240, 240);
+sf::Vector2u currentimage;
+float totalTime;
+sf::Vector2u imagecount(8,8);
+
+void Loading_Load()
+{
+	spritesheet.loadFromFile("res/textures/orc_spritesheet.png");
+	goblin.setTexture(spritesheet);
+	goblin.setTextureRect(uvRect);
+	goblin.setOrigin(0, 120);
+
+	switchtime = 0.04f;
+
+	//currentimage.x = 0;
+	totalTime = 0.f;
+
+	uvRect.width = spritesheet.getSize().x / float(imagecount.x);
+	uvRect.width = spritesheet.getSize().y / float(imagecount.y);
+
+}
 
 void Loading_update(float dt, const Scene* const scn) {
-	//  cout << "Eng: Loading Screen\n";
+	Loading_Load();
+
 	if (scn->isLoaded()) {
-		cout << "Eng: Exiting Loading Screen\n";
 		loading = false;
 	}
 	else {
-		loadingspinner += 220.0f * dt;
-		loadingTime += dt;
+
+		totalTime += dt;
+
+		if (totalTime >= switchtime)
+		{
+			totalTime -= switchtime;
+
+			currentimage.x++;
+
+			if (currentimage.x >= imagecount.x)
+			{
+				currentimage.x = 0;
+				
+				cout << "animation restarted" << endl;
+			}
+		}
+
+		uvRect.left = currentimage.x * uvRect.width;
+		uvRect.top = currentimage.y *  uvRect.height;
+
+		goblin.setTextureRect(uvRect);
+		goblin.setOrigin(Engine::GetWindow().getSize().x / 2, Engine::GetWindow().getSize().y / 2);
+		goblin.setPosition(Engine::GetWindow().getSize().x - 125, Engine::GetWindow().getSize().y / 2 + 200);
+
 	}
 }
 void Loading_render() {
-	// cout << "Eng: Loading Screen Render\n";
 
-
-
-
-	double switchtime;
-	sf::IntRect animUvRect;
-	sf::Vector2u currentimage;
-	double totaltime;
-	sf::Vector2u imagecount;
-
-	imagecount = Vector2u(1, 8);
-
-	currentimage.x = 0;
-	totaltime = 0.0f;
-	switchtime = 0.1f;
-	animUvRect = IntRect(480, 0, 240, 240);
-
-	Texture spritesheet;
-	Sprite goblin;
-
-	spritesheet.loadFromFile("res/textures/Goblin_spritesheet.png");
-
-	goblin.setTexture(spritesheet);
-	goblin.setTextureRect(animUvRect);
-
-	animUvRect.width = spritesheet.getSize().x / float(imagecount.x);
-	animUvRect.height = spritesheet.getSize().y / float(imagecount.y);
-
-	/*
-	totaltime += &dt;
-
-	if (totaltime >= switchtime)
-	{
-		totaltime -= switchtime;
-		currentimage.x++;
-
-		if (currentimage.x >= imagecount.x)
-		{
-			currentimage.x = 0;
-		}
-	}
-
-	animUvRect.left = currentimage.x * animUvRect.width;
-	animUvRect.top = currentimage.y *  animUvRect.height;
-
-
-	_sprite->setTextureRect(animUvRect);
-
-	*/
-
-	
-
-
-	static CircleShape octagon(80, 8);
-	octagon.setOrigin(80, 80);
-	octagon.setRotation(loadingspinner);
-	octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
-	octagon.setFillColor(Color(255, 255, 255, min(255.f, 40.f*loadingTime)));
 	static Text t("Loading...", *Resources::get<sf::Font>("Wonder.ttf"));
-	t.setFillColor(Color(255, 255, 255, min(255.f, 40.f*loadingTime)));
-	t.setPosition(Engine::GetWindow().getSize().x / 4 + 400.f, 500.f);
-	//t.setPosition(Engine::getWindowSize()) * Vector2f(0.4f, 0.3f));
+	t.setOrigin(Engine::GetWindow().getSize().x / 2, Engine::GetWindow().getSize().y / 2);
+	t.setPosition(Engine::GetWindow().getSize().x - 125, 900.f);
+
 	Renderer::queue(&t);
-	Renderer::queue(&octagon);
+	Renderer::queue(&goblin);
 }
 
 float frametimes[256] = {};
