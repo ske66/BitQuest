@@ -3,6 +3,9 @@
 #include <System_renderer.h>
 #include <System_resources.h>
 
+bool attacking = false;
+
+
 using namespace std;
 
 void AnimationComponent::Animation(std::string a, sf::Vector2f b, sf::IntRect animUvRect, sf::Vector2u imagecount)
@@ -15,6 +18,7 @@ void AnimationComponent::Animation(std::string a, sf::Vector2f b, sf::IntRect an
 	this->imagecount = imagecount;
 	this->animUvRect = animUvRect;
 	this->switchtime = 0.1f;
+
 
 	currentimage.x = 0;
 	totaltime = 0.0f;
@@ -35,6 +39,8 @@ void AnimationComponent::update(double dt) {
 	_sprite->setPosition(_parent->getPosition());
 	_sprite->setRotation(_parent->getRotation());
 
+
+	totaltime += dt;
 
 	if (_parent->getState() == "walk_right")
 	{
@@ -58,6 +64,7 @@ void AnimationComponent::update(double dt) {
 
 	if (_parent->getState() == "attack")
 	{
+
 		currentimage.y = 7;
 
 		std::cout << currentimage.x << endl;
@@ -67,9 +74,7 @@ void AnimationComponent::update(double dt) {
 			_parent->setState("idle");
 		}
 	}
-
-	totaltime += dt;
-
+	
 	if (totaltime >= switchtime)
 	{
 		totaltime -= switchtime;
@@ -80,6 +85,7 @@ void AnimationComponent::update(double dt) {
 			currentimage.x = 0;
 		}
 	}
+	
 
 	animUvRect.left = currentimage.x * animUvRect.width;
 	animUvRect.top = currentimage.y *  animUvRect.height;

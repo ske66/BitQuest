@@ -17,6 +17,9 @@ using namespace sf;
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> gavin;
 
+static shared_ptr<Entity> BlackBar;
+static shared_ptr<Entity> BlackBarBottom;
+
 
 void Level1Scene::Load() {
 	cout << "Scene 1 loading" << endl;
@@ -172,6 +175,25 @@ void Level1Scene::Load() {
 		}
 	}
 
+
+
+	//Load UI
+	{
+		BlackBar = makeEntity();
+		auto bar = BlackBar->addComponent<ShapeComponent>();
+		bar->setShape<sf::RectangleShape>(Vector2f(1300, 50.f));
+		bar->getShape().setOrigin(0, 50);
+		bar->getShape().setFillColor(Color::Black);
+
+		BlackBarBottom = makeEntity();
+		auto bar2 = BlackBarBottom->addComponent<ShapeComponent>();
+		bar2->setShape<sf::RectangleShape>(Vector2f(1300, 50.f));
+		bar2->getShape().setOrigin(0, 50);
+		bar2->getShape().setFillColor(Color::Black);
+	}
+
+
+
 	setLoaded(true);
 }
 
@@ -183,6 +205,17 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
+
+	BlackBar->setPosition({ Engine::GetWindow().getView().getCenter().x,
+						   Engine::GetWindow().getView().getCenter().y });
+
+	BlackBarBottom->setPosition({ Engine::GetWindow().getView().getCenter().x,
+							Engine::GetWindow().getView().getCenter().y });
+
+
+	BlackBar->setPosition(Vector2f(BlackBar->getPosition().x - 640, BlackBar->getPosition().y - Engine::GetWindow().getSize().y / 2 + 50));
+	BlackBarBottom->setPosition(Vector2f(BlackBarBottom->getPosition().x - 640, BlackBarBottom->getPosition().y - Engine::GetWindow().getSize().y / 2 + 720));
+
 
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&menu);
