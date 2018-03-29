@@ -35,51 +35,51 @@ void AnimationComponent::update(double dt) {
 	_sprite->setPosition(_parent->getPosition());
 	_sprite->setRotation(_parent->getRotation());
 
-
-	if (_parent->getState() == "walk_right")
-	{
-		currentimage.y = 0;
-	}
-
-	if (_parent->getState() == "walk_left")
-	{
-		currentimage.y = 0;
-	}
-
-	if (_parent->getState() == "jump")
-	{
-		currentimage.y = 2;
-	}
-
-	if (_parent->getState() == "idle")
-	{
-		currentimage.y = 2;
-	}
-
-	if (_parent->getState() == "attack")
-	{
-		currentimage.y = 7;
-
-		std::cout << currentimage.x << endl;
-
-		if (currentimage.y == 7 && currentimage.x == 7)
+	
+		if (_parent->getState() == "walk_right")
 		{
-			_parent->setState("idle");
+			currentimage.y = 0;
 		}
-	}
 
-	totaltime += dt;
-
-	if (totaltime >= switchtime)
-	{
-		totaltime -= switchtime;
-		currentimage.x++;
-
-		if (currentimage.x >= imagecount.x)
+		if (_parent->getState() == "walk_left")
 		{
-			currentimage.x = 0;
+			currentimage.y = 0;
 		}
-	}
+
+		if (_parent->getState() == "jump")
+		{
+			currentimage.y = 2;
+		}
+
+		if (_parent->getState() == "idle")
+		{
+			currentimage.y = 2;
+		}
+
+		if (_parent->getState() == "attack")
+		{
+			currentimage.y = 7;
+
+			std::cout << currentimage.x << endl;
+
+			if (currentimage.y == 7 && currentimage.x == 7)
+			{
+				_parent->setState("idle");
+			}
+		}
+
+		totaltime += dt;
+
+		if (totaltime >= switchtime)
+		{
+			totaltime -= switchtime;
+			currentimage.x++;
+
+			if (currentimage.x >= imagecount.x)
+			{
+				currentimage.x = 0;
+			}
+		}
 
 	animUvRect.left = currentimage.x * animUvRect.width;
 	animUvRect.top = currentimage.y *  animUvRect.height;

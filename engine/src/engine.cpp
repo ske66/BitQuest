@@ -6,6 +6,7 @@
 #include "system_resources.h"
 #include <SFML\Graphics.hpp>
 #include <future>
+#include <vector>
 #include <iostream>
 #include <stdexcept>
 
@@ -32,16 +33,20 @@ sf::Vector2u currentimage;
 float totalTime;
 sf::Vector2u imagecount(8,8);
 
+
 void Loading_Load()
 {
-	spritesheet.loadFromFile("res/textures/orc_spritesheet.png");
+	string monster;
+	const string monster_cols[]{ "goblin", "orc", "troll", "skeleton", "slime", "ghost" };
+	monster = (monster_cols[2]);
+
+	spritesheet.loadFromFile("res/textures/" + monster +"_spritesheet.png");
 	goblin.setTexture(spritesheet);
 	goblin.setTextureRect(uvRect);
 	goblin.setOrigin(0, 120);
 
-	switchtime = 0.04f;
+	switchtime = 0.045f;
 
-	//currentimage.x = 0;
 	totalTime = 0.f;
 
 	uvRect.width = spritesheet.getSize().x / float(imagecount.x);
@@ -101,7 +106,7 @@ void Engine::Update() {
 	{
 		frametimes[++ftc] = dt;
 		static string avg = _gameName + " FPS:";
-		if (ftc % 60 == 0) {
+		if (ftc % 50 == 0) {
 			double davg = 0;
 			for (const auto t : frametimes) {
 				davg += t;
@@ -141,7 +146,9 @@ void Engine::Start(unsigned int width, unsigned int height,
 	Renderer::initialise(window);
 	Physics::initialise();
 	ChangeScene(scn);
+
 	while (window.isOpen()) {
+
 		
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) {
