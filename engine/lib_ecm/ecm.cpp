@@ -40,12 +40,6 @@ void Entity::setPosition(const sf::Vector2f& _position) {
 	Entity::_position = _position;
 }
 
-string Entity::getState() const { return state; }
-
-void Entity::setState(string State) 
-{
-	Entity::state = State;
-}
 
 
 float Entity::getRotation() const { return _rotation; }

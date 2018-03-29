@@ -3,36 +3,79 @@
 
 using namespace std;
 
-
+bool canMove = true;
+int attackLock = 2000;
 
 GavinAiComponent::GavinAiComponent(Entity* p)
 	: Component(p)
 {
-	attackspeed = 0.1;
+
+	_parent->get_components<StateComponent>()[0]->setIdle();
+	attackspeed = 2.0f;
 	totaltime = 0.0;
+
 }
+
 
 void GavinAiComponent::update(double dt)
 {
-	auto p = _parent->scene->ents.find("player")[0];
-
 	totaltime += dt;
 
-	if (totaltime >= attackspeed)
-	{
-		totaltime -= attackspeed;
+		if (checkInRange(200))
+		{
+			if (totaltime >= attackspeed)
+			{
+				totaltime -= attackspeed;
 
-		if (_parent->getState() != "attack")
-		{
-			std::cout << "attack mode" << std::endl;
-			_parent->setState("attack");
-			return;
+				_parent->get_components<StateComponent>()[0]->setAttacking();
+			}
+
 		}
-		else
+		else if (checkInRange(400) == true)
 		{
-			std::cout << "standby" << std::endl;
-			_parent->setState("");
+			moveToPlayer();
 		}
+	if (checkInRange(400) == false)
+	{
+
+		_parent->get_components<StateComponent>()[0]->setIdle();
+	}
+}
+
+bool GavinAiComponent::checkInRange(int range)
+{
+	auto player = _parent->scene->ents.find("player")[0];
+
+	if (player->getPosition().x >= _parent->getPosition().x - range && player->getPosition().x <= _parent->getPosition().x)
+	{
+		return true;
+	}
+	if (player->getPosition().x <= _parent->getPosition().x + range && player->getPosition().x >= _parent->getPosition().x)
+	{
+		return true;
+	}
+	return false;
+}
+
+void GavinAiComponent::moveToPlayer()
+{
+
+	auto enemy = _parent->get_components<GavinPhysicsComponent>()[0];
+
+	auto enemy_state = _parent->get_components<StateComponent>()[0];
+	auto player = _parent->scene->ents.find("player")[0];
+
+	if (player->getPosition().x > _parent->getPosition().x)
+	{
+		enemy_state->setWalkingRight();
+		enemy->impulse({ 5.0f , 0.0f });
+		enemy->dampen({ 0.7f , 1.0f });
+	}
+	if (player->getPosition().x < _parent->getPosition().x)
+	{
+		enemy->impulse({ -5.0f , 0.0f });
+		enemy->dampen({ 0.7f , 1.0f });
+		enemy_state->setWalkingLeft();
 	}
 }
 

@@ -1,7 +1,13 @@
 #pragma once
+#include "cmp_state.h"
 #include "ecm.h"
+#include "engine.h"
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <iostream>
+#include <System_renderer.h>
+#include <System_resources.h>
+
 
 class AnimationComponent : public Component {
 protected:
@@ -15,7 +21,11 @@ public:
 	sf::Vector2u currentimage;
 	double totaltime;
 	sf::Vector2u imagecount;
+	int attackImgNo;
+	bool animDone;
 
+	void Anim(double dt);
+	void attackAnim(double dt);
 
 	AnimationComponent() = delete;
 

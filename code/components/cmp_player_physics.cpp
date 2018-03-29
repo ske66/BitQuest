@@ -1,12 +1,4 @@
 #include "cmp_player_physics.h"
-#include "system_physics.h"
-#include <LevelSystem.h>
-#include <SFML/Window/Keyboard.hpp>
-#include "levelsystem.h"
-#include "ecm.h"
-#include "engine.h"
-#include "cmp_player_status.h"
-#include "cmp_gavin_physics.h"
 
 using namespace std;
 using namespace sf;
@@ -38,6 +30,8 @@ bool PlayerPhysicsComponent::isGrounded() const {
 void PlayerPhysicsComponent::update(double dt) {
 
 	const auto pos = _parent->getPosition();
+
+	auto me = _parent->get_components<StateComponent>()[0];
 	
 	if (pos.y > ls::getHeight() * ls::getTileSize())
 	{
@@ -45,47 +39,18 @@ void PlayerPhysicsComponent::update(double dt) {
 	}
 	
 
-	if (getVelocity().x == 0 && isGrounded() == true && _parent->getState() != "attack")
+	if (getVelocity().x == 0 && isGrounded() == true && me->getAttacking() == false)
 	{
-		_parent->setState("idle"); 
+		me->setIdle();
 	}
 	
-	if (Keyboard::isKeyPressed(Keyboard::Space))
-	{
-		_parent->setState("attack");
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Left) ||
-		Keyboard::isKeyPressed(Keyboard::Right)) 
-	{
-		// Moving Either Left or Right
-		if (Keyboard::isKeyPressed(Keyboard::Right)) 
-		{
-			_parent->setState("walk_right");
-			if (getVelocity().x < _maxVelocity.x)
-				impulse({ (float)(dt * _groundspeed), 0 });
-			
-		}
-		else 
-		{
-			_parent->setState("walk_left");
-			if (getVelocity().x > -_maxVelocity.x)
-				impulse({ -(float)(dt * _groundspeed), 0 });
-
-		}
-	}
-	else 
-	{
-		// Dampen X axis movement
-		dampen({ 0.7f, 1.0f });
-	}
 
 	// Handle Jump
 	if (Keyboard::isKeyPressed(Keyboard::Up)) 
 	{
 		_grounded = isGrounded();
 		if (_grounded) {
-			_parent->setState("jump");
+			me->setJumping();
 			setVelocity(Vector2f(getVelocity().x,  300.f));
 			teleport(Vector2f(pos.x, pos.y - 5.0f));
 			impulse(Vector2f(0, -100.f));
@@ -113,35 +78,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	setVelocity(v);
 
 
-	CollisionCheck(dt);
 	PhysicsComponent::update(dt);
-}
-
-
-
-void PlayerPhysicsComponent::CollisionCheck(double dt)
-{
-	auto g = _parent->scene->ents.find("gavin")[0];
-
-	auto cs = getTouching();
-
-
-	for (auto c : cs)
-	{
-		if (c->GetFixtureA() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
-		{
-			
-			if (g->getState() == "attack")
-			{
-				totaltime -= switchtime;
-				_parent->get_components<PlayerStatusComponent>()[0]->takeDamage(1.0);
-				std::cout << _parent->get_components<PlayerStatusComponent>()[0]->getHealth() << std::endl;
-			}
-
-		}
-
-	}
-
 }
 
 
@@ -160,3 +97,15 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 
 }
 
+void PlayerPhysicsComponent::MoveLeft(double dt)
+{
+
+	if (getVelocity().x > -_maxVelocity.x)
+		impulse({ -(float)(dt * _groundspeed), 0 });
+}
+
+void PlayerPhysicsComponent::MoveRight(double dt)
+{
+	if(getVelocity().x < _maxVelocity.x)
+		impulse({ (float)(dt * _groundspeed), 0 });
+}

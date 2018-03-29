@@ -1,7 +1,17 @@
 #pragma once
-#pragma once
 
+
+#include "cmp_state.h"
 #include "cmp_physics.h"
+#include "cmp_player_physics.h"
+#include "system_physics.h"
+#include <LevelSystem.h>
+#include <SFML/Window/Keyboard.hpp>
+#include "levelsystem.h"
+#include "ecm.h"
+#include "engine.h"
+
+#include "cmp_gavin_physics.h"
 
 class PlayerPhysicsComponent : public PhysicsComponent {
 protected:
@@ -15,7 +25,8 @@ protected:
 
 public:
 
-	void CollisionCheck(double dt);
+	void MoveRight(double dt);
+	void MoveLeft(double dt);
 
 	b2Body getBody();
 

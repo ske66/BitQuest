@@ -1,7 +1,4 @@
 #include "cmp_animation.h"
-#include <iostream>
-#include <System_renderer.h>
-#include <System_resources.h>
 
 using namespace std;
 
@@ -16,6 +13,7 @@ void AnimationComponent::Animation(std::string a, sf::Vector2f b, sf::IntRect an
 	this->animUvRect = animUvRect;
 	this->switchtime = 0.1f;
 
+	attackImgNo = 0;
 	currentimage.x = 0;
 	totaltime = 0.0f;
 
@@ -36,44 +34,78 @@ void AnimationComponent::update(double dt) {
 	_sprite->setRotation(_parent->getRotation());
 
 
-	if (_parent->getState() == "walk_right")
-	{
-		currentimage.y = 0;
-	}
 
-	if (_parent->getState() == "walk_left")
-	{
-		currentimage.y = 0;
-	}
+	auto c = _parent->get_components<StateComponent>()[0];
 
-	if (_parent->getState() == "jump")
-	{
-		currentimage.y = 2;
-	}
 
-	if (_parent->getState() == "idle")
-	{
-		currentimage.y = 2;
-	}
-
-	if (_parent->getState() == "attack")
+	if (c->getAttacking() == true)
 	{
 		currentimage.y = 7;
+		attackAnim(dt);
 
-		std::cout << currentimage.x << endl;
-
-		if (currentimage.y == 7 && currentimage.x == 7)
+		if (attackImgNo == 7)
 		{
-			_parent->setState("idle");
+			c->setIdle();
+			attackImgNo = 0;
+		}
+	}
+	else if (c->getWalkingRight() == true || c->getWalkingLeft() == true)
+	{
+		if (attackImgNo != 0)
+		{
+			c->setAttacking();
+		}
+		else
+		{
+			currentimage.y = 0;
+			Anim(dt);
+		}
+
+	}
+
+	else if (c->getJumping() == true || c->getIdle() == true)
+	{
+		if (attackImgNo != 0)
+		{
+			c->setAttacking();
+		}
+		else
+		{
+			currentimage.y = 2;
+			Anim(dt);
 		}
 	}
 
+	else if (c->getAttacking() == true)
+	{
+		currentimage.y = 7;
+		attackAnim(dt);
+
+		if (attackImgNo == 7)
+		{
+			c->setIdle();
+			attackImgNo = 0;
+		}
+	}
+	else
+	{
+		Anim(dt);
+	}
+
+
+}
+
+void AnimationComponent::render() { Renderer::queue(_sprite.get()); }
+
+void AnimationComponent::Anim(double dt)
+{
 	totaltime += dt;
 
 	if (totaltime >= switchtime)
 	{
 		totaltime -= switchtime;
 		currentimage.x++;
+
 
 		if (currentimage.x >= imagecount.x)
 		{
@@ -86,12 +118,33 @@ void AnimationComponent::update(double dt) {
 
 
 	_sprite->setTextureRect(animUvRect);
+
 }
 
-void AnimationComponent::render() { Renderer::queue(_sprite.get()); }
+void AnimationComponent::attackAnim(double dt)
+{
+	totaltime += dt;
 
 
+	if (totaltime >= switchtime)
+	{
+		totaltime -= switchtime;
+		attackImgNo++;
+		cout << attackImgNo << endl;
 
+		if (attackImgNo >= imagecount.x)
+		{
+			attackImgNo = 0;
+		}
+	}
+
+	animUvRect.left = attackImgNo * animUvRect.width;
+	animUvRect.top = currentimage.y *  animUvRect.height;
+
+
+	_sprite->setTextureRect(animUvRect);
+
+}
 
 void ShapeComponent::update(double dt) {
 
