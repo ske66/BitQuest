@@ -252,3 +252,8 @@ namespace timing {
 } // namespace timing
 
 Scene::~Scene() { UnLoad(); }
+
+Scene* Engine::GetActiveScene()
+	{
+		return _activeScene;
+	}

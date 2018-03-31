@@ -11,8 +11,6 @@ void SpriteComponent::Sprite(std::string a, sf::IntRect uvRect)
 	_texture = Resources::get<sf::Texture>(a);
 	_sprite->setTexture(*_texture);
 	_sprite->setTextureRect(uvRect);
-	_sprite->setOrigin(120, 120);
-
 	this->uvRect = uvRect;
 }
 

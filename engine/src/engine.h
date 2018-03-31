@@ -44,6 +44,7 @@ public:
 	static sf::Vector2u getWindowSize();
 	static sf::Event& getEvent();
 	static void setVsync(bool b);
+	static Scene* GetActiveScene();
 
 
 private:
