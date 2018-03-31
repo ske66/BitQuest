@@ -4,3 +4,7 @@
 #include <string>
 
 std::shared_ptr<Entity> makeButton(std::string, sf::Vector2f bounds);
+std::shared_ptr<Entity> makePlayer();
+std::shared_ptr<Entity> makeGavin();
+std::vector<std::shared_ptr<Entity>> makeEnemies();
+std::vector<std::shared_ptr<Entity>> makeCoin();

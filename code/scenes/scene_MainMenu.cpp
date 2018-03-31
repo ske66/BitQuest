@@ -20,7 +20,7 @@ static shared_ptr<Entity> btnSettings;
 static shared_ptr<Entity> btnExit;
 
 
-void MainMenuScene::Load() 
+void MainMenuScene::Load()
 {
 	{
 		auto background = makeEntity();
@@ -42,7 +42,7 @@ void MainMenuScene::Load()
 	
 	{
 
-		btnNewGame = makeButton("New Game", Vector2f(250, 60));
+		btnNewGame = makeButton("New Game", Vector2f(230, 60));
 		btnNewGame->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 1.5));
 		
 		auto sword = makeEntity();
@@ -56,7 +56,7 @@ void MainMenuScene::Load()
 	
 	{
 
-		btnLoadGame = makeButton("Load Game", Vector2f(250, 60));
+		btnLoadGame = makeButton("Load Game", Vector2f(230, 60));
 		btnLoadGame->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 2, Engine::GetWindow().getSize().y / 2 * 1.5));
 	
 		auto shield = makeEntity();
@@ -69,7 +69,7 @@ void MainMenuScene::Load()
 	}
 
 	{
-		btnSettings = makeButton("Settings", Vector2f(250, 60));
+		btnSettings = makeButton("Settings", Vector2f(230, 60));
 		btnSettings->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 3, Engine::GetWindow().getSize().y / 2 * 1.5));
 
 		auto chest = makeEntity();
@@ -82,7 +82,7 @@ void MainMenuScene::Load()
 
 	{
 		
-		btnExit = makeButton("Quit Game", Vector2f(250, 60));
+		btnExit = makeButton("Quit Game", Vector2f(230, 60));
 		btnExit->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 4, Engine::GetWindow().getSize().y / 2 * 1.5));
 
 		auto door = makeEntity();
