@@ -73,6 +73,20 @@ vector<shared_ptr<Entity>> makeEnemies()
 
 }
 
+shared_ptr<Entity>makeTorch()
+{
+	auto torch = Engine::GetActiveScene()->makeEntity();
+	torch->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+	torch->addTag("torch");
+
+	torch->addComponent<StateComponent>();
+	auto a = torch->addComponent<AnimationComponent>();
+	a->Animation("Torch.png", Vector2f(0, 120), IntRect(0, 0, 60, 60), Vector2u(8, 1));
+	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+	return torch;
+}
+
 vector<shared_ptr<Entity>> makeCoin()
 {
 	vector<shared_ptr<Entity>> Mcoins;
@@ -118,4 +132,25 @@ shared_ptr<Entity> makeButton(string text, Vector2f bounds)
 	button->addComponent<BtnComponent>(s, t, u);
 
 	return button;
+}
+
+void TilePhysics()
+{
+	auto walls = ls::findTiles(ls::WALL);
+	for (auto w : walls) {
+		auto pos = ls::getTilePosition(w);
+		pos += Vector2f(ls::getTileSize() / 2, ls::getTileSize() / 2);
+		auto e = Engine::GetActiveScene()->makeEntity();
+		e->setPosition(pos);
+		e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
+	}
+
+	auto floor = ls::findTiles(ls::FLOOR);
+	for (auto f : floor) {
+		auto pos = ls::getTilePosition(f);
+		pos += Vector2f(ls::getTileSize() / 2, ls::getTileSize() / 2);
+		auto e = Engine::GetActiveScene()->makeEntity();
+		e->setPosition(pos);
+		e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
+	}
 }

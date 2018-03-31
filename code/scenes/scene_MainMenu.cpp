@@ -6,8 +6,7 @@
 #include "../GameState.h"
 #include "../code/Prefabs.h"
 #include "engine.h"
-#include <SFML\Window\Keyboard.hpp>
-#include <SFML\Window\Mouse.hpp>
+#include "levelsystem.h"
 #include <SFML\Graphics.hpp>
 #include <iostream>
 
@@ -22,12 +21,8 @@ static shared_ptr<Entity> btnExit;
 
 void MainMenuScene::Load()
 {
-	{
-		auto background = makeEntity();
-		auto s = background->addComponent<SpriteComponent>();
-		background->setPosition(Vector2f(0, 0));
-		s->Sprite("Background.png", IntRect(0, 0, 6500, 6500));
-	}
+	ls::loadLevelFile("res/backgrounds.txt", 240.f);
+
 
 	{
 		//Position the game's Logo
@@ -37,11 +32,9 @@ void MainMenuScene::Load()
 		log->getSprite().setOrigin(log->getSprite().getLocalBounds().width/2, log->getSprite().getLocalBounds().height/2);
 
 		Logo->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, Engine::GetWindow().getSize().y * 0.25));
-	
 	}
 	
 	{
-
 		btnNewGame = makeButton("New Game", Vector2f(230, 60));
 		btnNewGame->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 1.5));
 		
@@ -96,16 +89,17 @@ void MainMenuScene::Load()
 	setLoaded(true);
 }
 
+
+void MainMenuScene::UnLoad() {
+	cout << "Scene 1 Unload" << endl;
+	ls::unload();
+	Scene::UnLoad();
+}
+
+
 void MainMenuScene::Update(const double& dt) 
 
 {
-
-	auto e = Engine::getEvent();
-
-		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
-		sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
-
-
 
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
@@ -128,4 +122,10 @@ void MainMenuScene::Update(const double& dt)
 		}
 
 	Scene::Update(dt);
+}
+
+
+void MainMenuScene::Render() {
+	ls::render(Engine::GetWindow());
+	Scene::Render();
 }

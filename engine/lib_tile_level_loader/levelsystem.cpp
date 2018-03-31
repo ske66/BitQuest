@@ -1,36 +1,56 @@
 #include "levelsystem.h"
+#include <../src/system_resources.h>
 #include <fstream>
 
 using namespace std;
 using namespace sf;
 
-std::map<LevelSystem::Tile, sf::Color> LevelSystem::_colours{
-	{ WALL, Color::White },
-	{ FLOOR, Color::Blue },
-	{ END, Color::Red }
-};
+float LevelSystem::_tileSize(240.f);
 
-sf::Color LevelSystem::getColor(LevelSystem::Tile t) {
-	auto it = _colours.find(t);
-	if (it == _colours.end()) {
-		_colours[t] = Color::Transparent;
+
+std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
+	{ WAYPOINT, IntRect(240,240, _tileSize, _tileSize) },
+	{ EMPTY, IntRect(240,240, _tileSize, _tileSize) },
+	{ START, IntRect(240,240, _tileSize, _tileSize)	},
+	{ END, IntRect(240,240, _tileSize, _tileSize) },
+	{ WALL, IntRect(240, 0, _tileSize, _tileSize) },
+	{ FLOOR, IntRect(0,0, _tileSize, _tileSize) },
+	{ GROUND, IntRect(0,240, _tileSize, _tileSize) },
+	{ COIN, IntRect(240,240, _tileSize, _tileSize) },
+	{ ENEMY_GOBLIN, IntRect(240,240, _tileSize, _tileSize) },
+	{ ENEMY_ORC, IntRect(240,240, _tileSize, _tileSize) },
+	{ ENEMY_TROLL, IntRect(240,240, _tileSize, _tileSize) },
+	{ ENEMY_SLIME, IntRect(240,240, _tileSize, _tileSize) },
+	{ ENEMY_SKELETON, IntRect(240,240, _tileSize, _tileSize) },
+	{ ENEMY_GHOST, IntRect(240,240, _tileSize, _tileSize) },
+	{ GAVIN, IntRect(240,240, _tileSize, _tileSize) },
+	{ SHOP, IntRect(240,240, _tileSize, _tileSize) } };
+
+
+sf::IntRect LevelSystem::getSpriteRect(LevelSystem::Tile t)
+{
+	auto it = _rectMap.find(t);
+	if (it == _rectMap.end())
+	{
+		return IntRect(12, 34, _tileSize, _tileSize);
 	}
-	return _colours[t];
+	return _rectMap[t];
 }
 
-void LevelSystem::setColor(LevelSystem::Tile t, sf::Color c) {
-	_colours[t] = c;
+void LevelSystem::setSpriteRect(LevelSystem::Tile t, sf::IntRect r)
+{
+	_rectMap[t] = r;
 }
 
 std::unique_ptr<LevelSystem::Tile[]> LevelSystem::_tiles;
 size_t LevelSystem::_width;
 size_t LevelSystem::_height;
 
-float LevelSystem::_tileSize(120.f);
-Vector2f LevelSystem::_offset(0.0f,30.0f);
-vector<std::unique_ptr<sf::RectangleShape>> LevelSystem::_sprites;
+Vector2f LevelSystem::_offset(0.0f,0.0f);
+Sprite LevelSystem::_map;
 
 void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
+	
 	_tileSize = tileSize;
 	size_t w = 0, h = 0;
 	string buffer;
@@ -83,108 +103,52 @@ void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 	buildSprites();
 }
 
-void LevelSystem::buildSprites(bool optimise) {
-	_sprites.clear();
+shared_ptr<Texture> tex;
+RenderTexture bigMapTexture;
+
+
+void LevelSystem::buildSprites() {
 
 	struct tp {
-		sf::Vector2f p;
-		sf::Vector2f s;
-		sf::Color c;
+		sf::Vector2f pos;
+		sf::IntRect intRect;
 	};
 	vector<tp> tps;
-	const auto tls = Vector2f(_tileSize, _tileSize);
-
 	for (size_t y = 0; y < _height; ++y) {
 		for (size_t x = 0; x < _width; ++x) {
 			Tile t = getTile({ x, y });
-			if (t == EMPTY) {
-				continue;
-			}
-			tps.push_back({ getTilePosition({x,y}), tls, getColor(t) });
+			tps.push_back({ getTilePosition({x,y}), getSpriteRect(t) });
 		}
 	}
 
-	const auto nonempty = tps.size();
+	tex = Resources::load<Texture>("NewTerrain.png");
+	bigMapTexture.create(_tileSize * _width, _tileSize * _height);
+	bigMapTexture.clear(Color::Red);
 
-	if (optimise && nonempty) {
+	//Make everything a big sprite
+	for (auto& t : tps)
+	{
+		auto s = Sprite();
+		s.setTexture(*tex);
+		s.setTextureRect(t.intRect);
+		s.setPosition(t.pos);
+		bigMapTexture.draw(s);
 
-		vector<tp> tpo;
-		tp last = tps[0];
-		size_t samecount = 0;
-
-		for (size_t i = 1; i < nonempty; ++i) {
-			bool same = ((tps[i].p.y == last.p.y) &&
-				(tps[i].p.x == last.p.x + (tls.x * (1 + samecount))) &&
-				(tps[i].c == last.c));
-			if (same) {
-				++samecount;
-			}
-			else
-			{
-				if (samecount) {
-					last.s.x = (1 + samecount) * tls.x;
-				}
-
-				tpo.push_back(last);
-				samecount = 0;
-				last = tps[i];
-			}
-		}
-		if (samecount) {
-			last.s.x = (1 + samecount) * tls.x;
-			tpo.push_back(last);
-		}
-
-		const auto xsave = tpo.size();
-		samecount = 0;
-		vector<tp> tpox;
-		for (size_t i = 0; i < tpo.size(); ++i) {
-			last = tpo[i];
-			for (size_t j = i + 1; j < tpo.size(); ++j) {
-				bool same = ((tpo[j].p.x == last.p.x) && (tpo[j].s == last.s) &&
-					(tpo[j].p.y == last.p.y + (tls.y * (1 + samecount))) &&
-					(tpo[j].c == last.c));
-				if (same) {
-					++samecount;
-					tpo.erase(tpo.begin() + j);
-					--j;
-				}
-			}
-			if (samecount) {
-				last.s.y = (1 + samecount) * tls.y;
-			}
-
-			tpox.push_back(last);
-			samecount = 0;
-		}
-
-		tps.swap(tpox);
 	}
 
-	for (auto& t : tps) {
-		auto s = make_unique<sf::RectangleShape>();
-		s->setPosition(t.p);
-		s->setSize(t.s);
-		s->setFillColor(Color::Red);
-		s->setFillColor(t.c);
-
-		_sprites.push_back(move(s));
-	}
-
-	cout << "Level with " << (_width * _height) << " Tiles, With " << nonempty
-		<< " Not Empty, using: " << _sprites.size() << " Sprites\n";
+	bigMapTexture.display();
+	_map = Sprite(bigMapTexture.getTexture());
 }
 
-void LevelSystem::render(RenderWindow& window) {
-	for (auto& t : _sprites) {
-		window.draw(*t);
-	}
+void LevelSystem::render(RenderWindow& window)
+{
+	window.draw(_map);
 }
 
 LevelSystem::Tile LevelSystem::getTile(sf::Vector2ul p) {
-	if (p.x > _width || p.y > _height) {
-		throw string("Tile out of range: ") + to_string(p.x) + "," +
-			to_string(p.y) + ")";
+	if (p.x > _width || p.y > _height)
+	{
+		return TILES::EMPTY;
 	}
 	return _tiles[(p.y * _width) + p.x];
 }
@@ -193,53 +157,61 @@ size_t LevelSystem::getWidth() { return _width; }
 
 size_t LevelSystem::getHeight() { return _height; }
 
-sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p) {
+sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p) 
+{
 	return (Vector2f(p.x, p.y) * _tileSize) + _offset;
 }
 
-std::vector<sf::Vector2ul> LevelSystem::findTiles(LevelSystem::Tile type) {
+std::vector<sf::Vector2ul> LevelSystem::findTiles(LevelSystem::Tile type)
+{
 	auto v = vector<sf::Vector2ul>();
-	for (size_t i = 0; i < _width * _height; ++i) {
-		if (_tiles[i] == type) {
+	for (size_t i = 0; i < _width * _height; ++i)
+	{
+		if (_tiles[i] == type)
+		{
 			v.push_back({ i % _width, i / _width });
 		}
 	}
-
 	return v;
 }
 
-LevelSystem::Tile LevelSystem::getTileAt(Vector2f v) {
+LevelSystem::Tile LevelSystem::getTileAt(Vector2f v) 
+{
 	auto a = v - _offset;
-	if (a.x < 0 || a.y < 0) {
-		throw string("Tile out of range ");
+	if (a.x < 0 || a.y < 0)
+	{
+		throw string("tile out of range");
 	}
 	return getTile(Vector2ul((v - _offset) / (_tileSize)));
 }
 
-bool LevelSystem::isOnGrid(sf::Vector2f v) {
+bool LevelSystem::isOnGrid(sf::Vector2f v)
+{
 	auto a = v - _offset;
-	if (a.x < 0 || a.y < 0) {
+	if (a.x < 0 || a.y < 0)
+	{
 		return false;
 	}
 	auto p = Vector2ul((v - _offset) / (_tileSize));
-	if (p.x > _width || p.y > _height) {
+	if (p.x > _width || p.y > _height)
+	{
 		return false;
 	}
 	return true;
 }
 
-void LevelSystem::setOffset(const Vector2f& _offset) {
+void LevelSystem::setOffset(const Vector2f& _offset)
+{
 	LevelSystem::_offset = _offset;
 	buildSprites();
 }
 
-void LevelSystem::unload() {
-	cout << "LevelSystem unloading\n";
-	_sprites.clear();
+void LevelSystem::unload()
+{
 	_tiles.reset();
 	_width = 0;
 	_height = 0;
-	_offset = { 0, 0 };
+	_offset = { 0,0 };
 }
 
 const Vector2f& LevelSystem::getOffset() { return _offset; }

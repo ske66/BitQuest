@@ -106,7 +106,7 @@ void Engine::Update() {
 	{
 		frametimes[++ftc] = dt;
 		static string avg = _gameName + " FPS:";
-		if (ftc % 50 == 0) {
+		if (ftc % 60 == 0) {
 			double davg = 0;
 			for (const auto t : frametimes) {
 				davg += t;
