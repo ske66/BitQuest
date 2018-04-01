@@ -5,6 +5,9 @@
 #include "SFML\Graphics.hpp"
 #include "SFML\Window\Event.hpp"
 #include "../GameState.h"
+#include "../code/Prefabs.h"
+#include"../components/cmp_btn.h"
+#include "levelsystem.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,13 +16,13 @@
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> btnGamePlayBack;
+static shared_ptr<Entity> btnBack;
+static shared_ptr<Entity> btnDone;
 static shared_ptr<Entity> walkLeftBox;
 static shared_ptr<Entity> walkRightBox;
 static shared_ptr<Entity> jumpBox;
 static shared_ptr<Entity> attackBox;
 static shared_ptr<Entity> switchBox;
-static shared_ptr<Entity> doneText;
 
 static shared_ptr<Entity> LeftChar;
 static shared_ptr<Entity> RightChar;
@@ -29,53 +32,30 @@ static shared_ptr<Entity> SwitchChar;
 
 //READ IN FROM FILE
 
-
-
 string txtwalkLeft = "A";
 string txtwalkRight = "D";
 string txtjump = "W"; 
 string txtattack = "_";
 string txtswitch = "Q";
 
-double totalTimeGameplay = 0.0f;
-double clickDelayGamePlay = 0.2f;
-
-
 void SettingsGameplayScene::Load() 
 {
-
 	ifstream file("res/savestates/PlayerControls.txt");
-
 	while (file >> txtwalkLeft >> txtwalkRight >> txtjump >> txtattack >> txtswitch)
 	{
 		cout << txtwalkLeft << endl;
-		cout << txtwalkRight << endl; 
+		cout << txtwalkRight << endl;
 		cout << txtjump << endl;
 		cout << txtattack << endl;
 	}
 
-
-
-	{
-		btnGamePlayBack = makeEntity();
-		auto b = btnGamePlayBack->addComponent<ShapeComponent>();
-		b->setShape<sf::RectangleShape>(Vector2f(100.f, 60.f));
-		b->getShape().setOrigin(b->getShape().getGlobalBounds().width / 2, b->getShape().getGlobalBounds().height / 2);
-		btnGamePlayBack->setPosition(Vector2f(200.f, 100.f));
-	}
-
-	auto background = makeEntity();
-	auto s = background->addComponent<SpriteComponent>();
-	background->setPosition(Vector2f(0, 0));
-	s->Sprite("Background.png", IntRect(0, 0, 6500, 6500));
+	ls::loadLevelFile("res/Backgrounds.txt", 240.f);
 
 	{
-		auto arrow = makeEntity();
-		auto s = arrow->addComponent<SpriteComponent>();
-		s->Sprite("arrow.png", IntRect(0, 0, 80, 50));
-		s->getSprite().setOrigin(s->getSprite().getGlobalBounds().width / 2, s->getSprite().getGlobalBounds().height / 2);
-		arrow->setPosition(Vector2f(200.f, 100.f));
+		btnBack = makeButton("Back", Vector2f(150, 60));
+		btnBack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
 	}
+
 
 	{
 		auto Gameplay = makeEntity();
@@ -188,25 +168,14 @@ void SettingsGameplayScene::Load()
 	}
 
 	{
-		//Save settings
-
-		auto done = makeEntity();
-		auto d = done->addComponent<SpriteComponent>();
-		d->Sprite("button.png", IntRect(0, 0, 300, 40));
-		d->getSprite().setOrigin(d->getSprite().getGlobalBounds().width / 2, d->getSprite().getGlobalBounds().height / 2);
-		done->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 600.f));
-
-		doneText = makeEntity();
-		auto dt = doneText->addComponent<TextComponent>("Done");
-		dt->getText().setOrigin(dt->getText().getGlobalBounds().width / 2, dt->getText().getGlobalBounds().height / 2);
-		doneText->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 600.f));
-
+		btnDone = makeButton("Done", Vector2f(150, 60));
+		btnDone->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
 	}
 	setLoaded(true);
 }
 
 void SettingsGameplayScene::UnLoad() {
-	cout << "Gameplay Settings Unload" << endl;
+	ls::unload();
 	Scene::UnLoad();
 }
 
@@ -215,24 +184,15 @@ void SettingsGameplayScene::Update(const double& dt)
 
 	auto e = Engine::getEvent();
 
-	totalTimeGameplay += dt;
-
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
 
-	if (totalTimeGameplay >= clickDelayGamePlay)
+
+	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
 	{
-		totalTimeGameplay -= clickDelayGamePlay;
-
-
-		if (btnGamePlayBack->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				Engine::ChangeScene((Scene*)&settings);
-			}
-		}
+		Engine::ChangeScene((Scene*)&settings);
 	}
+
 
 	if (walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 	{
@@ -240,21 +200,21 @@ void SettingsGameplayScene::Update(const double& dt)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-				if (e.type == sf::Event::TextEntered)
+			if (e.type == sf::Event::TextEntered)
+			{
+				if (e.text.unicode < 128)
 				{
-					if (e.text.unicode < 128)
-					{
-						txtwalkLeft = toupper(e.text.unicode);
-						LeftChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtwalkLeft);
-						LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
+					txtwalkLeft = toupper(e.text.unicode);
+					LeftChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtwalkLeft);
+					LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
 				}
 			}
 		}
-		
+
 	}
 	else
 	{
-		walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128,128,128));
+		walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
 	}
 
 
@@ -283,23 +243,23 @@ void SettingsGameplayScene::Update(const double& dt)
 
 
 
-	if(jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
+	if (jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 	{
 		jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			if (e.type == sf::Event::TextEntered)
+			{
+				if (e.text.unicode < 128)
 				{
-					if (e.text.unicode < 128)
-					{
-						txtjump = toupper(e.text.unicode);
-						JumpChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtjump);
-						JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
-					}
+					txtjump = toupper(e.text.unicode);
+					JumpChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtjump);
+					JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
 				}
 			}
 		}
+	}
 	else
 	{
 		jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
@@ -354,42 +314,24 @@ void SettingsGameplayScene::Update(const double& dt)
 	}
 
 
-
-
-	if (doneText->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos))
+	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
 	{
-		doneText->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
+		ofstream output;
+		output.open("res/savestates/PlayerControls.txt");
+		output << txtwalkLeft << endl;
+		output << txtwalkRight << endl;
+		output << txtjump << endl;
+		output << txtattack << endl;
+		output << txtswitch << endl;
+		output.close();
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-
-			//save the box's states
-
-			cout << "Controls Saved" << endl;
-
-			ofstream output;
-			output.open("res/savestates/PlayerControls.txt");
-			output << txtwalkLeft << endl;
-			output << txtwalkRight << endl;
-			output << txtjump << endl;
-			output << txtattack << endl;
-			output << txtswitch << endl;
-			output.close();
-
-			Engine::ChangeScene((Scene*)&settings);
-		}
+		Engine::ChangeScene((Scene*)&settings);
 	}
-	else
-	{
-		doneText->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(192, 192, 192));
-	}
-
 	Scene::Update(dt);
 }
 
 void SettingsGameplayScene::Render() 
 {
-
-
+	ls::render(Engine::GetWindow());
 	Scene::Render();
 }

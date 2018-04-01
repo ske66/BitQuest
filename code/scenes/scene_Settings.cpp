@@ -3,6 +3,7 @@
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_btn.h"
 #include "../code/Prefabs.h"
+#include "levelsystem.h"
 #include "SFML\Graphics.hpp"
 #include "../GameState.h"
 
@@ -14,17 +15,11 @@ static shared_ptr<Entity> btnGraphics;
 static shared_ptr<Entity> btnAudio;
 static shared_ptr<Entity> btnGameplay;
 
-double totalTime = 0.0f;
-double clickDelay = 0.3f;
-
 
 void SettingsScene::Load() 
 {
-	
-	//auto background = makeEntity();
-	//auto s = background->addComponent<SpriteComponent>();
-	//background->setPosition(Vector2f(0, 0));
-	//s->Sprite("Background.png", IntRect(0, 0, 6500, 6500));
+
+	ls::loadLevelFile("res/backgrounds.txt", 240.f);
 
 	{
 		auto txtSettings = makeEntity();
@@ -49,7 +44,7 @@ void SettingsScene::Load()
 }
 
 void SettingsScene::UnLoad() {
-	cout << "Settings Unload" << endl;
+	ls::unload();
 	Scene::UnLoad();
 }
 
@@ -80,6 +75,6 @@ void SettingsScene::Update(const double& dt)
 }
 
 void SettingsScene::Render() {
-	
+	ls::render(Engine::GetWindow());
 	Scene::Render();
 }

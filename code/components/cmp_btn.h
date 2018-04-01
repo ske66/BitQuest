@@ -18,6 +18,7 @@ public:
 	void update(double dt) override;
 	void render() override {}
 	void setHighlighted(bool, bool isClicked = false);
+	void setFilled();
 	bool isSelected();
 
 };

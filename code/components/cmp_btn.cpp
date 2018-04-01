@@ -42,6 +42,12 @@ void BtnComponent::setHighlighted(bool h, bool isClicked)
 	}
 }
 
+void BtnComponent::setFilled()
+{
+	_textCmp->getText().setFillColor(Color(240, 178, 0));
+	_underLine->getShape().setFillColor(Color(240, 178, 0));
+}
+
 bool BtnComponent::isSelected()
 {
 	if (_isHighlighted)

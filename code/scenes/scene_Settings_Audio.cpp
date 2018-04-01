@@ -2,50 +2,34 @@
 #include "../components/cmp_text.h"
 #include "../components/cmp_animation.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_btn.h"
+#include "../code/Prefabs.h"
 #include "SFML\Graphics.hpp"
 #include "../GameState.h"
+#include "levelsystem.h"
 
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> btnAudioBack;
+static shared_ptr<Entity> btnBack;
 static shared_ptr<Entity> studMaster;
 static shared_ptr<Entity> studMusic;
 static shared_ptr<Entity> studSFX;
-static shared_ptr<Entity> doneText;
-
-double totalTimeAudio = 0.0f; 
-double clickDelayAudio = 0.2f;
+static shared_ptr<Entity> btnDone;
 
 void SettingsAudioScene::Load()
 {
-	
-	{
-		btnAudioBack = makeEntity();
-		auto b = btnAudioBack->addComponent<ShapeComponent>();
-		b->setShape<sf::RectangleShape>(Vector2f(100.f, 60.f));
-		b->getShape().setOrigin(b->getShape().getGlobalBounds().width / 2, b->getShape().getGlobalBounds().height / 2);
-		btnAudioBack->setPosition(Vector2f(200.f, 100.f));
-	}
 
-	auto background = makeEntity();
-	auto s = background->addComponent<SpriteComponent>();
-	background->setPosition(Vector2f(0, 0));
-	s->Sprite("Background.png", IntRect(0, 0, 6500, 6500));
-
-	{
-		auto arrow = makeEntity();
-		auto s = arrow->addComponent<SpriteComponent>();
-		s->Sprite("arrow.png", IntRect(0, 0, 80, 50));
-		s->getSprite().setOrigin(s->getSprite().getGlobalBounds().width / 2, s->getSprite().getGlobalBounds().height / 2);
-		arrow->setPosition(Vector2f(200.f, 100.f));
-	}
+	ls::loadLevelFile("res/backgrounds.txt", 240.f);
 
 	{
 		auto txtAudio = makeEntity();
 		auto t = txtAudio->addComponent<TextComponent>("Audio");
 		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
 		txtAudio->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 100.f));
+
+		btnBack = makeButton("Back", Vector2f(150, 60));
+		btnBack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
 	}
 
 	{
@@ -84,8 +68,6 @@ void SettingsAudioScene::Load()
 		st->Sprite("stud.png", IntRect(0, 0, 32, 24));
 		st->getSprite().setOrigin(st->getSprite().getGlobalBounds().width / 2, st->getSprite().getGlobalBounds().height / 2);
 		studMusic->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 400.f));
-
-
 	}
 
 	{
@@ -110,16 +92,8 @@ void SettingsAudioScene::Load()
 	{
 		//Save settings
 
-		auto done = makeEntity();
-		auto d = done->addComponent<SpriteComponent>();
-		d->Sprite("button.png", IntRect(0, 0, 300, 40));
-		d->getSprite().setOrigin(d->getSprite().getGlobalBounds().width / 2, d->getSprite().getGlobalBounds().height / 2);
-		done->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
-
-		doneText = makeEntity();
-		auto dt = doneText->addComponent<TextComponent>("Done");
-		dt->getText().setOrigin(dt->getText().getGlobalBounds().width / 2, dt->getText().getGlobalBounds().height / 2);
-		doneText->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
+		btnDone = makeButton("Done", Vector2f(150, 60));
+		btnDone->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
 
 	}
 
@@ -127,37 +101,27 @@ void SettingsAudioScene::Load()
 }
 
 void SettingsAudioScene::UnLoad() {
-	cout << "Audio Settings Unload" << endl;
+	ls::unload();
 	Scene::UnLoad();
 }
 
 void SettingsAudioScene::Update(const double& dt)
 {
-	auto e = Engine::getEvent();
-
-	totalTimeAudio += dt;
-
 		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 		sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
 
-
-		if (totalTimeAudio >= clickDelayAudio)
+		if (btnBack->get_components<BtnComponent>()[0]->isSelected())
 		{
-			totalTimeAudio -= clickDelayAudio;
-
-			if (btnAudioBack->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-			{
-				if (e.MouseButtonPressed)
-				{
-					if (e.mouseButton.button == sf::Mouse::Left)
-					{
-						cout << "Yer in" << endl;
-						Engine::ChangeScene((Scene*)&settings);
-					}
-				}
-
-			}
+			Engine::ChangeScene((Scene*)&settings);
 		}
+
+
+		if (btnDone->get_components<BtnComponent>()[0]->isSelected())
+		{
+			Engine::ChangeScene((Scene*)&settings);
+		}
+
+
 
 			if (studMaster->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().getGlobalBounds().contains(worldPos))
 			{
@@ -165,8 +129,6 @@ void SettingsAudioScene::Update(const double& dt)
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
 					studMaster->setPosition(Vector2f(worldPos.x, 250));
-
-					cout << studMaster->getPosition() << endl;
 
 					if (studMaster->getPosition().x > 860.f)
 					{
@@ -187,8 +149,6 @@ void SettingsAudioScene::Update(const double& dt)
 				{
 					studMusic->setPosition(Vector2f(worldPos.x, 400));
 
-					cout << studMusic->getPosition() << endl;
-
 					if (studMusic->getPosition().x > 860.f)
 					{
 						studMusic->setPosition(Vector2f(860, 400));
@@ -208,8 +168,6 @@ void SettingsAudioScene::Update(const double& dt)
 				{
 					studSFX->setPosition(Vector2f(worldPos.x, 550));
 
-					cout << studSFX->getPosition() << endl;
-
 					if (studSFX->getPosition().x > 860.f)
 					{
 						studSFX->setPosition(Vector2f(860, 550));
@@ -222,29 +180,10 @@ void SettingsAudioScene::Update(const double& dt)
 				}
 			}
 
-			if (doneText->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos))
-			{
-				doneText->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-
-					//save the box's states
-
-					Engine::ChangeScene((Scene*)&settings);
-				}
-			}
-			else
-			{
-				doneText->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(192, 192, 192));
-			}
-
-
 	Scene::Update(dt);
-		
 }
 
 void SettingsAudioScene::Render() {
-
+	ls::render(Engine::GetWindow());
 	Scene::Render();
 }

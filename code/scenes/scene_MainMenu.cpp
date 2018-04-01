@@ -23,7 +23,6 @@ void MainMenuScene::Load()
 {
 	ls::loadLevelFile("res/backgrounds.txt", 240.f);
 
-
 	{
 		//Position the game's Logo
 		auto Logo = makeEntity();
@@ -91,7 +90,6 @@ void MainMenuScene::Load()
 
 
 void MainMenuScene::UnLoad() {
-	cout << "Scene 1 Unload" << endl;
 	ls::unload();
 	Scene::UnLoad();
 }

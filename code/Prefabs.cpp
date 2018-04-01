@@ -123,7 +123,7 @@ shared_ptr<Entity> makeButton(string text, Vector2f bounds)
 
 	auto u = button->addComponent<ShapeComponent>();
 	u->setShape<RectangleShape>(Vector2f(bounds.x, 5.f));
-	u->getShape().setFillColor(Color(128,128,128));
+	u->getShape().setFillColor(Color(128, 128, 128));
 	u->getShape().setOrigin(u->getShape().getGlobalBounds().width / 2, u->getShape().getGlobalBounds().height / 2 - 30);
 	
 	auto t = button->addComponent<TextComponent>(text);

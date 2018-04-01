@@ -4,53 +4,39 @@
 #include "../components/cmp_sprite.h"
 #include "SFML\Graphics.hpp"
 #include "../GameState.h"
+#include "levelsystem.h"
+#include "../components/cmp_btn.h"
+#include "../code/Prefabs.h"
 
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> btnGraphicsBack;
+static shared_ptr<Entity> btnBack;
+static shared_ptr<Entity> btnDone;
 
-static shared_ptr<Entity> txtLow;
-static shared_ptr<Entity> txtMed;
-static shared_ptr<Entity> txtHigh;
-static shared_ptr<Entity> txt30;
-static shared_ptr<Entity> txt60;
-static shared_ptr<Entity> txtWindow;
-static shared_ptr<Entity> txtFull;
-
-double totalTimeGraphics = 0.0f;
-double clickDelayGraphics = 0.2f;
+static shared_ptr<Entity> btnLow;
+static shared_ptr<Entity> btnMed;
+static shared_ptr<Entity> btnHigh;
+static shared_ptr<Entity> btn30;
+static shared_ptr<Entity> btn60;
+static shared_ptr<Entity> btnWindow;
+static shared_ptr<Entity> btnFull;
 
 
 void SettingsGraphicsScene::Load() 
 {
-	{
-
-		btnGraphicsBack = makeEntity();
-		auto b = btnGraphicsBack->addComponent<ShapeComponent>();
-		b->setShape<sf::RectangleShape>(Vector2f(100.f, 60.f));
-		b->getShape().setOrigin(b->getShape().getGlobalBounds().width / 2, b->getShape().getGlobalBounds().height / 2);
-		btnGraphicsBack->setPosition(Vector2f(200.f, 100.f));
-	}
-
-	auto background = makeEntity();
-	auto s = background->addComponent<SpriteComponent>();
-	background->setPosition(Vector2f(0, 0));
-	s->Sprite("Background.png", IntRect(0, 0, 6500, 6500));
+	ls::loadLevelFile("res/backgrounds.txt", 240.f);
 
 	{
-		auto arrow = makeEntity();
-		auto s = arrow->addComponent<SpriteComponent>();
-		s->Sprite("arrow.png", IntRect(0, 0, 80, 50));
-		s->getSprite().setOrigin(s->getSprite().getGlobalBounds().width / 2, s->getSprite().getGlobalBounds().height / 2);
-		arrow->setPosition(Vector2f(200.f, 100.f));
+		btnBack = makeButton("Back", Vector2f(150, 60));
+		btnBack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
 	}
 
 	{
-		auto txtSettings = makeEntity();
-		auto t = txtSettings->addComponent<TextComponent>("Graphics");
-		t->getText().setOrigin(t->getText().getGlobalBounds().width, t->getText().getGlobalBounds().height / 2);
-		txtSettings->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 100.f));
+		auto txtGraphics = makeEntity();
+		auto t = txtGraphics->addComponent<TextComponent>("Graphics");
+		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
+		txtGraphics->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 100.f));
 	}
 
 	{
@@ -59,153 +45,101 @@ void SettingsGraphicsScene::Load()
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtQuality->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 250.f));
 
-	    txtLow = makeEntity();
-		auto tl = txtLow->addComponent<TextComponent>("Low");
-		tl->getText().setOrigin(0, tl->getText().getGlobalBounds().height / 2);
-		tl->getText().setCharacterSize(18);
-		txtLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
+		btnLow = makeButton("Low", Vector2f(150, 60));
+		btnLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
 
-		txtMed = makeEntity();
-		auto tm = txtMed->addComponent<TextComponent>("Medium");
-		tm->getText().setOrigin(0, tm->getText().getGlobalBounds().height / 2);
-		tm->getText().setCharacterSize(18);
-		txtMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 250.f));
+		btnMed = makeButton("Medium", Vector2f(150, 60));
+		btnMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 250.f));
 
-		txtHigh = makeEntity();
-		auto th = txtHigh->addComponent<TextComponent>("High");
-		th->getText().setOrigin(0, tl->getText().getGlobalBounds().height / 2);
-		th->getText().setCharacterSize(18);
-		th->getText().setFillColor(Color(240, 178, 0));
-		txtHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 400, 250.f));
+		btnHigh = makeButton("High", Vector2f(150, 60));
+		btnHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 400, 250.f));
 	}
 
 	{
 		auto txtFPS = makeEntity();
 		auto t = txtFPS->addComponent<TextComponent>("FPS");
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
-		txtFPS->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 400.f));
-		
-		txt30 = makeEntity();
-		auto t30 = txt30->addComponent<TextComponent>("30fps");
-		t30->getText().setOrigin(0, t30->getText().getGlobalBounds().height / 2);
-		t30->getText().setCharacterSize(18);
-		txt30->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 400.f));
+		txtFPS->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 350.f));
 
-		txt60 = makeEntity();
-		auto t60 = txt60->addComponent<TextComponent>("60fps");
-		t60->getText().setOrigin(0, t60->getText().getGlobalBounds().height / 2);
-		t60->getText().setCharacterSize(18);
-		t60->getText().setFillColor(Color(240, 178, 0));
-		txt60->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 400.f));
+		btn30 = makeButton("30 FPS", Vector2f(150, 60));
+		btn30->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 350.f));
+
+		btn60 = makeButton("60 FPS", Vector2f(150, 60));
+		btn60->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 350.f));
 	}
+
 
 	{
 		auto txtMode = makeEntity();
 		auto t = txtMode->addComponent<TextComponent>("Video Mode");
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
-		txtMode->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 550.f));
+		txtMode->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 450.f));
 
-		txtWindow = makeEntity();
-		auto tw = txtWindow->addComponent<TextComponent>("Windowed");
-		tw->getText().setOrigin(0, tw->getText().getGlobalBounds().height / 2);
-		tw->getText().setCharacterSize(18);
-		tw->getText().setFillColor(Color(240, 178, 0));
-		txtWindow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 550.f));
+		btnWindow = makeButton("Window", Vector2f(150, 60));
+		btnWindow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
 
-		txtFull = makeEntity();
-		auto tf = txtFull->addComponent<TextComponent>("Full Screen");
-		tf->getText().setOrigin(0, tf->getText().getGlobalBounds().height / 2);
-		tf->getText().setCharacterSize(18);
-		txtFull->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 550.f));
+		btnFull = makeButton("Full", Vector2f(150, 60));
+		btnFull->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 450.f));
 
 	}
 
+	{
+		btnDone = makeButton("Done", Vector2f(150, 60));
+		btnDone->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
+	}
 	setLoaded(true);
 }
 
-void SettingsGraphicsScene::UnLoad() {
-	cout << "Graphics Settings Unload" << endl;
+void SettingsGraphicsScene::UnLoad() 
+{
+	ls::unload();
 	Scene::UnLoad();
 }
 
 void SettingsGraphicsScene::Update(const double& dt) 
 {
-	auto e = Engine::getEvent();
-
-	totalTimeGraphics += dt;
-
-
-	sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
-	sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
-
-	if (totalTimeGraphics >= clickDelayGraphics)
+	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
 	{
-		totalTimeGraphics -= clickDelayGraphics;
-	
-		if (btnGraphicsBack->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				Engine::ChangeScene((Scene*)&settings);
-			}
-		}
+		Engine::ChangeScene((Scene*)&settings);
+	}
+	Scene::Update(dt);
 
+	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
+	{
+		Engine::ChangeScene((Scene*)&settings);
 	}
 
-		if (txtLow->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			txtLow->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-			txtMed->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255,255,255));
-			txtHigh->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255,255,255));
-		}
+	if (btnLow->get_components<BtnComponent>()[0]->isSelected())
+	{
+	}
 
-		if (txtMed->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			txtLow->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255, 255, 255));
-			txtMed->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-			txtHigh->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255, 255, 255));
-		}
+	if (btnMed->get_components<BtnComponent>()[0]->isSelected())
+	{
+	}
 
-		if (txtHigh->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			txtLow->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255, 255, 255));
-			txtMed->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255, 255, 255));
-			txtHigh->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-		}
+	if (btnHigh->get_components<BtnComponent>()[0]->isSelected())
+	{
+	}
 
+	if (btn60->get_components<BtnComponent>()[0]->isSelected())
+	{
+	}
 
+	if (btn30->get_components<BtnComponent>()[0]->isSelected())
+	{
+	}
 
+	if (btnWindow->get_components<BtnComponent>()[0]->isSelected())
+	{
+	}
 
-		if (txt30->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			txt30->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-			txt60->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255, 255, 255));
-		}
-
-		if (txt60->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			txt30->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255, 255, 255));
-			txt60->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-		}
-
-
-
-		if (txtWindow->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			txtWindow->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-			txtFull->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255,255,255));
-		}
-
-		if (txtFull->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().contains(worldPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			txtWindow->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(255, 255, 255));
-			txtFull->GetCompatibleComponent<TextComponent>()[0]->getText().setFillColor(Color(240, 178, 0));
-		}
-
-	Scene::Update(dt);
+	if (btnFull->get_components<BtnComponent>()[0]->isSelected())
+	{
+	}
 }
 
-void SettingsGraphicsScene::Render() {
-
+void SettingsGraphicsScene::Render() 
+{
+	ls::render(Engine::GetWindow());
 	Scene::Render();
 }
