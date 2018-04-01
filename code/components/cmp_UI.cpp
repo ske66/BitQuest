@@ -20,11 +20,6 @@ UIComponent::UIComponent(Entity* p)
 	bottomBar.setFillColor(Color::Black);
 	topBar.setOrigin(0, 0);
 
-	auto logo->addComponent<SpriteComponent>();
-	logo->Sprite("Logo.png", IntRect(0, 0, 640, 320));
-	logo->getSprite().setOrigin(logo->getSprite().getLocalBounds().width / 2, logo->getSprite().getLocalBounds().height / 2);
-
-	Logo->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, Engine::GetWindow().getSize().y * 0.25));
 }
 
 void UIComponent::update(double dt)
