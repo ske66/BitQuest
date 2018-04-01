@@ -9,6 +9,7 @@
 #include "components\cmp_state.h"
 #include "components\cmp_general_AI.h"
 #include "components\cmp_gavin_AI.h"
+#include "components\cmp_UI.h"
 
 using namespace std;
 using namespace sf;
@@ -153,4 +154,11 @@ void TilePhysics()
 		e->setPosition(pos);
 		e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
 	}
+}
+
+shared_ptr<Entity>addUI()
+{
+	auto e = Engine::GetActiveScene()->makeEntity();
+	e->addComponent<UIComponent>();
+	return e;
 }

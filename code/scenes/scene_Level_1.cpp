@@ -30,6 +30,7 @@ void Level1Scene::Load() {
 
 		player = makePlayer();
 		view_center = player->getPosition();
+		addUI();
 
 		makeGavin();
 
