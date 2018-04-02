@@ -141,7 +141,7 @@ vector<shared_ptr<Entity>> makeChest()
 
 		chest->addComponent<StateComponent>();
 		auto s = chest->addComponent <SpriteComponent>();
-		s->Sprite("spritesheets/Chest.png", IntRect(0,0,240,240));
+		s->Sprite("spritesheets/Chest.png", IntRect(0,0,120,120));
 		s->getSprite().setOrigin(0,0);
 
 		Mchests.push_back(chest);
