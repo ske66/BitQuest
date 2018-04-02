@@ -25,7 +25,7 @@ static shared_ptr<Entity> btnFull;
 
 void SettingsGraphicsScene::Load() 
 {
-	ls::loadLevelFile("res/backgrounds.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
 	{
 		btnBack = makeButton("Back", Vector2f(150, 60));

@@ -20,7 +20,7 @@ static shared_ptr<Entity> btnDone;
 void SettingsAudioScene::Load()
 {
 
-	ls::loadLevelFile("res/backgrounds.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
 	{
 		auto txtAudio = makeEntity();

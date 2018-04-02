@@ -21,7 +21,7 @@ static shared_ptr<Entity> btnExit;
 
 void MainMenuScene::Load()
 {
-	ls::loadLevelFile("res/backgrounds.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
 	{
 		//Position the game's Logo
@@ -101,7 +101,7 @@ void MainMenuScene::Update(const double& dt)
 
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
-			Engine::ChangeScene((Scene*)&level1);
+				Engine::ChangeScene((Scene*)&level1);
 		}
 
 		if (btnLoadGame->get_components<BtnComponent>()[0]->isSelected())

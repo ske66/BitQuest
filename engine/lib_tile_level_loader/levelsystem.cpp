@@ -11,11 +11,12 @@ float LevelSystem::_tileSize(240.f);
 std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
 	{ WAYPOINT, IntRect(240,240, _tileSize, _tileSize) },
 	{ EMPTY, IntRect(240,240, _tileSize, _tileSize) },
-	{ START, IntRect(240,240, _tileSize, _tileSize)	},
+	{ START, IntRect(480,0, _tileSize, _tileSize)	},
 	{ END, IntRect(240,240, _tileSize, _tileSize) },
 	{ WALL, IntRect(240, 0, _tileSize, _tileSize) },
 	{ FLOOR, IntRect(0,0, _tileSize, _tileSize) },
 	{ GROUND, IntRect(0,240, _tileSize, _tileSize) },
+	{ ROCKS, IntRect(480,240, _tileSize, _tileSize) },
 	{ COIN, IntRect(240,240, _tileSize, _tileSize) },
 	{ ENEMY_GOBLIN, IntRect(240,240, _tileSize, _tileSize) },
 	{ ENEMY_ORC, IntRect(240,240, _tileSize, _tileSize) },
@@ -123,7 +124,7 @@ void LevelSystem::buildSprites() {
 
 	tex = Resources::load<Texture>("NewTerrain.png");
 	bigMapTexture.create(_tileSize * _width, _tileSize * _height);
-	bigMapTexture.clear(Color::Red);
+	bigMapTexture.clear(Color::White);
 
 	//Make everything a big sprite
 	for (auto& t : tps)

@@ -16,7 +16,7 @@ static shared_ptr<Entity> btnBack;
 
 void LoadGameScene::Load() 
 {
-	ls::loadLevelFile("res/Backgrounds.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
 	{
 		auto txtLoadGame = makeEntity();

@@ -22,7 +22,7 @@ Vector2f view_center;
 void Level1Scene::Load() {
 	cout << "Scene 1 loading" << endl;
 
-	ls::loadLevelFile("res/level_1.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/level_1.txt", 240.f);
 
 	//PLAYER CREATION
 	{

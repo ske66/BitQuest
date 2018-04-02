@@ -13,7 +13,7 @@ UIComponent::UIComponent(Entity* p)
 	:Component(p)
 {	
 	_texHeartUI = Resources::load<Texture>("heart.png");
-	_texCoinUI = Resources::load<Texture>("Coin_spritesheet.png");
+	_texCoinUI = Resources::load<Texture>("spritesheets/Coin_spritesheet.png");
 	
 	topBar = RectangleShape({ (float)Engine::GetWindow().getSize().x, 80.f });
 	topBar.setFillColor(Color::Black);

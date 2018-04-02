@@ -25,7 +25,7 @@ shared_ptr<Entity> makePlayer()
 	player->addComponent<PlayerControlerComponent>();
 	player->addComponent<PlayerPhysicsComponent>(Vector2f(120,220));
 	auto a = player->addComponent<AnimationComponent>();
-	a->Animation("Bob_spritesheet.png", Vector2f(0, 120), IntRect(0,0,240,240),Vector2u(8,8));
+	a->Animation("spritesheets/Bob_spritesheet.png", Vector2f(0, 120), IntRect(0,0,240,240),Vector2u(8,8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 	return player;
@@ -41,7 +41,7 @@ shared_ptr<Entity> makeGavin()
 	gavin->addComponent<GavinAiComponent>();
 	gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 240));
 	auto a = gavin->addComponent<AnimationComponent>();
-	a->Animation("Gavin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+	a->Animation("spritesheets/Gavin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 	return gavin;
@@ -64,7 +64,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		goblin->addComponent<GeneralAiComponent>();
 		goblin->addComponent<PhysicsComponent>(true, Vector2f(100,200));
 		auto a = goblin->addComponent<AnimationComponent>();
-		a->Animation("Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->Animation("Spritesheets/Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 	
 		enemies.push_back(goblin);
@@ -82,7 +82,7 @@ shared_ptr<Entity>makeTorch()
 
 	torch->addComponent<StateComponent>();
 	auto a = torch->addComponent<AnimationComponent>();
-	a->Animation("Torch.png", Vector2f(0, 120), IntRect(0, 0, 60, 60), Vector2u(8, 1));
+	a->Animation("spritesheets/Torch.png", Vector2f(0, 120), IntRect(0, 0, 60, 60), Vector2u(8, 1));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 	return torch;
@@ -102,7 +102,7 @@ vector<shared_ptr<Entity>> makeCoin()
 		coin->addComponent<StateComponent>();
 		coin->addComponent<PhysicsComponent>(false, Vector2f(30, 15));
 		auto a = coin->addComponent <AnimationComponent>();
-		a->Animation("Coin_spritesheet.png", Vector2f(0, -60), IntRect(0, 0, 60, 60), Vector2u(6, 1));
+		a->Animation("spritesheets/Coin_spritesheet.png", Vector2f(0, -60), IntRect(0, 0, 60, 60), Vector2u(6, 1));
 		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 		Mcoins.push_back(coin);

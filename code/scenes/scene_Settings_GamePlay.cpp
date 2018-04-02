@@ -49,7 +49,7 @@ void SettingsGameplayScene::Load()
 		cout << txtattack << endl;
 	}
 
-	ls::loadLevelFile("res/Backgrounds.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
 	{
 		btnBack = makeButton("Back", Vector2f(150, 60));
