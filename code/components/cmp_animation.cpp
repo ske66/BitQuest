@@ -19,9 +19,7 @@ void AnimationComponent::Animation(std::string a, sf::Vector2f b, sf::IntRect an
 
 	animUvRect.width = _texture->getSize().x / float(imagecount.x);
 	animUvRect.height = _texture->getSize().y / float(imagecount.y);
-
 }
-
 
 AnimationComponent::AnimationComponent(Entity* p)
 	: Component(p), _sprite(make_shared<sf::Sprite>())

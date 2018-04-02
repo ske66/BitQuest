@@ -28,8 +28,9 @@ void Level1Scene::Load() {
 	{
 		TilePhysics();
 
-		player = makePlayer();
-		view_center = player->getPosition();
+		makeShops();
+
+		makeTorches();
 
 		makeGavin();
 
@@ -37,7 +38,10 @@ void Level1Scene::Load() {
 
 		makeCoin();
 
-		makeTorch();
+		makeChest();
+
+		player = makePlayer();
+		view_center = player->getPosition();
 
 		addUI();
 

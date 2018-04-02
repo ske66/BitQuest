@@ -17,14 +17,19 @@ public:
 
 	typedef unsigned char Tile;
 
-	enum TILES { 
+	enum TILES {
 		EMPTY = ' ',
 		GROUND = 'g',
 		START = 's',
-		END = 'e', 
+		END = 'e',
 		WALL = 'w',
 		FLOOR = 'f',
-		ROCKS = 'r',
+		TORCH = 'T',
+		ROCKS = 'R',
+		WINDOW = 'W',
+		ALCOVE = 'A',
+		BONES = 'B',
+		CHEST = 'C',
 		COIN = 'c',
 		ENEMY_GOBLIN = '1', 
 		ENEMY_ORC = '2',

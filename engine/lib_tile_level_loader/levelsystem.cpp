@@ -17,6 +17,11 @@ std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
 	{ FLOOR, IntRect(0,0, _tileSize, _tileSize) },
 	{ GROUND, IntRect(0,240, _tileSize, _tileSize) },
 	{ ROCKS, IntRect(480,240, _tileSize, _tileSize) },
+	{ WINDOW, IntRect(240,480, _tileSize, _tileSize) },
+	{ ALCOVE, IntRect(0,480, _tileSize, _tileSize) },
+	{ BONES, IntRect(480,480, _tileSize, _tileSize) },
+	{ TORCH, IntRect(240,240, _tileSize, _tileSize) },
+	{ CHEST, IntRect(240,240, _tileSize, _tileSize) },
 	{ COIN, IntRect(240,240, _tileSize, _tileSize) },
 	{ ENEMY_GOBLIN, IntRect(240,240, _tileSize, _tileSize) },
 	{ ENEMY_ORC, IntRect(240,240, _tileSize, _tileSize) },
@@ -47,7 +52,7 @@ std::unique_ptr<LevelSystem::Tile[]> LevelSystem::_tiles;
 size_t LevelSystem::_width;
 size_t LevelSystem::_height;
 
-Vector2f LevelSystem::_offset(0.0f,0.0f);
+Vector2f LevelSystem::_offset(0.f,0.f);
 Sprite LevelSystem::_map;
 
 void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {

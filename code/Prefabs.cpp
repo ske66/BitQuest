@@ -11,9 +11,9 @@
 #include "components\cmp_gavin_AI.h"
 #include "components\cmp_UI.h"
 
+
 using namespace std;
 using namespace sf;
-
 
 shared_ptr<Entity> makePlayer()
 {
@@ -74,25 +74,87 @@ vector<shared_ptr<Entity>> makeEnemies()
 
 }
 
-shared_ptr<Entity>makeTorch()
+vector<shared_ptr<Entity>> makeShops()
 {
+	vector<shared_ptr<Entity>> Mshops;
+	
+	auto shops = ls::findTiles(ls::SHOP);
+	for (auto s : shops)
+	{
+		auto shop = Engine::GetActiveScene()->makeEntity();
+		shop->setPosition(ls::getTilePosition(s));
+		shop->addTag("Shop");
+
+		shop->addComponent<StateComponent>();
+		auto a = shop->addComponent <AnimationComponent>();
+		a->Animation("spritesheets/Shop_spritesheet.png", Vector2f(0,0), IntRect(0, 0, 240, 240), Vector2u(8, 1));
+		
+		auto f = shop->addComponent<AnimationComponent>();
+		f->Animation("spritesheets/flicker.png", Vector2f(30, 0), IntRect(0, 0, 240, 240), Vector2u(10, 1));
+
+		auto t = shop->addComponent<TextComponent>();
+		t->SetText("Press Enter to open shop");
+		t->getText().setCharacterSize(16);
+		t->getText().setOrigin(60, 40);
+		
+		Mshops.push_back(shop);
+	}
+	return Mshops;
+	
+}
+
+vector<shared_ptr<Entity>>makeTorches()
+{
+	vector<shared_ptr<Entity>> Mtorches;
+
+	auto torches = ls::findTiles(ls::TORCH);
+	for (auto t : torches)
+
+	{
 	auto torch = Engine::GetActiveScene()->makeEntity();
-	torch->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+	torch->setPosition(ls::getTilePosition(t));
 	torch->addTag("torch");
 
 	torch->addComponent<StateComponent>();
-	auto a = torch->addComponent<AnimationComponent>();
-	a->Animation("spritesheets/Torch.png", Vector2f(0, 120), IntRect(0, 0, 60, 60), Vector2u(8, 1));
-	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+	auto a = torch->addComponent<AnimationComponent>();	
+	a->Animation("spritesheets/Torch.png", Vector2f(0,0), IntRect(0, 0, 120, 120), Vector2u(8, 1));
 
-	return torch;
+	auto f = torch->addComponent<AnimationComponent>();
+	f->Animation("spritesheets/flicker.png", Vector2f(60, 60), IntRect(0, 0, 240, 240), Vector2u(10, 1));
+	
+	Mtorches.push_back(torch);
+
+	}
+	return Mtorches;
+}
+
+vector<shared_ptr<Entity>> makeChest()
+{
+	vector<shared_ptr<Entity>> Mchests;
+
+	auto chests = ls::findTiles(ls::CHEST);
+	for (auto c : chests)
+	{
+		auto chest = Engine::GetActiveScene()->makeEntity();
+		chest->setPosition(ls::getTilePosition(c));
+		chest->addTag("chest");
+
+		chest->addComponent<StateComponent>();
+		auto s = chest->addComponent <SpriteComponent>();
+		s->Sprite("spritesheets/Chest.png", IntRect(0,0,240,240));
+		s->getSprite().setOrigin(0,0);
+
+		Mchests.push_back(chest);
+	}
+	return Mchests;
+
 }
 
 vector<shared_ptr<Entity>> makeCoin()
 {
 	vector<shared_ptr<Entity>> Mcoins;
 	
-		auto coins = ls::findTiles(ls::COIN);
+	auto coins = ls::findTiles(ls::COIN);
 		for (auto c : coins)
 		{
 		auto coin = Engine::GetActiveScene()->makeEntity();
@@ -103,13 +165,15 @@ vector<shared_ptr<Entity>> makeCoin()
 		coin->addComponent<PhysicsComponent>(false, Vector2f(30, 15));
 		auto a = coin->addComponent <AnimationComponent>();
 		a->Animation("spritesheets/Coin_spritesheet.png", Vector2f(0, -60), IntRect(0, 0, 60, 60), Vector2u(6, 1));
-		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		a->getSprite().setOrigin(0,0);
 
 		Mcoins.push_back(coin);
 		}
 		return Mcoins;
 
 }
+
+
 
 shared_ptr<Entity> makeButton(string text, Vector2f bounds)
 {
