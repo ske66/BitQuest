@@ -7,9 +7,16 @@
 class UIComponent : public Component
 {
 private:
+
+	std::shared_ptr<sf::Texture> _texHeartUI;
+	std::shared_ptr<sf::Texture> _texCoinUI;
+
+	sf::Sprite heartUI;
+	sf::Sprite coinUI;
+
 	sf::RectangleShape topBar;
-	sf::RectangleShape bottomBar;
-	std::shared_ptr<Entity> health();
+
+	int currentHealth = 180;
 
 public:
 	UIComponent() = delete;
