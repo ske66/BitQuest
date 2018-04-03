@@ -9,11 +9,6 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
-#include <Time.h>
-#include <stdlib.h>     /* srand, rand */
-#include <stdio.h>      /* printf, NULL */
-
-
 
 using namespace sf;
 using namespace std;
@@ -42,8 +37,8 @@ sf::Vector2u imagecount(8,8);
 void Loading_Load()
 {
 	
-
-	spritesheet.loadFromFile("res/textures/goblin_spritesheet.png");
+	
+	spritesheet.loadFromFile("res/textures/Spritesheets/Goblin_spritesheet.png");
 	goblin.setTexture(spritesheet);
 	goblin.setTextureRect(uvRect);
 	goblin.setOrigin(0, 120);
@@ -54,7 +49,7 @@ void Loading_Load()
 
 	uvRect.width = spritesheet.getSize().x / float(imagecount.x);
 	uvRect.width = spritesheet.getSize().y / float(imagecount.y);
-
+	
 }
 
 void Loading_update(float dt, const Scene* const scn) {
@@ -63,6 +58,7 @@ void Loading_update(float dt, const Scene* const scn) {
 	if (scn->isLoaded()) {
 		loading = false;
 	}
+	
 	else {
 
 		totalTime += dt;
@@ -76,9 +72,7 @@ void Loading_update(float dt, const Scene* const scn) {
 			if (currentimage.x >= imagecount.x)
 			{
 				currentimage.x = 0;
-				
-				cout << "animation restarted" << endl;
-			}
+							}
 		}
 
 		uvRect.left = currentimage.x * uvRect.width;
@@ -89,6 +83,7 @@ void Loading_update(float dt, const Scene* const scn) {
 		goblin.setPosition(Engine::GetWindow().getSize().x - 125, Engine::GetWindow().getSize().y / 2 + 200);
 
 	}
+	
 }
 void Loading_render() {
 
@@ -118,6 +113,7 @@ void Engine::Update() {
 			_window->setTitle(avg + toStrDecPt(2, davg));
 		}
 	}
+	
 
 	if (loading) {
 		Loading_update(dt, _activeScene);

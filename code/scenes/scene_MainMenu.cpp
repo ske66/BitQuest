@@ -18,7 +18,6 @@ static shared_ptr<Entity> btnLoadGame;
 static shared_ptr<Entity> btnSettings;
 static shared_ptr<Entity> btnExit;
 
-
 void MainMenuScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);

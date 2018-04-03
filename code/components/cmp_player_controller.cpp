@@ -94,7 +94,6 @@ void PlayerControlerComponent::collisionCheck()
 			{
 
 				takeDamage(1.0);
-				std::cout << getHealth() << std::endl;
 			}
 
 		}
@@ -104,7 +103,6 @@ void PlayerControlerComponent::collisionCheck()
 			if (c->GetFixtureA() == b->get_components<PhysicsComponent>()[0]->getFixture())
 			{
 				collectCoin();
-				std::cout << getCoins() << std::endl;
 				b->setForDelete();
 			}
 

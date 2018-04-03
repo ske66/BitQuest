@@ -76,4 +76,3 @@ set(EXECUTABLES ${EXECUTABLES} BITQUEST)
   )
   
   add_dependencies(BITQUEST copy_resources)
-  

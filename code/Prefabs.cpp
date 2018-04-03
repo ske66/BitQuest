@@ -10,6 +10,7 @@
 #include "components\cmp_general_AI.h"
 #include "components\cmp_gavin_AI.h"
 #include "components\cmp_UI.h"
+#include "components\cmp_shop.h"
 
 
 using namespace std;
@@ -66,7 +67,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto a = goblin->addComponent<AnimationComponent>();
 		a->Animation("Spritesheets/Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
-	
+
 		enemies.push_back(goblin);
 	}
 
@@ -86,16 +87,9 @@ vector<shared_ptr<Entity>> makeShops()
 		shop->addTag("Shop");
 
 		shop->addComponent<StateComponent>();
+		auto s = shop->addComponent<ShopComponent>();
 		auto a = shop->addComponent <AnimationComponent>();
 		a->Animation("spritesheets/Shop_spritesheet.png", Vector2f(0,0), IntRect(0, 0, 240, 240), Vector2u(8, 1));
-		
-			auto t = shop->addComponent<TextComponent>();
-			t->SetText("Press Enter to open shop");
-			t->getText().setCharacterSize(16);
-			t->getText().setOrigin(60, 40);
-		
-		auto f = shop->addComponent<AnimationComponent>();
-		f->Animation("spritesheets/flicker.png", Vector2f(30, 0), IntRect(0, 0, 240, 240), Vector2u(10, 1));
 
 		Mshops.push_back(shop);
 	}
@@ -118,9 +112,6 @@ vector<shared_ptr<Entity>>makeTorches()
 	torch->addComponent<StateComponent>();
 	auto a = torch->addComponent<AnimationComponent>();	
 	a->Animation("spritesheets/Torch.png", Vector2f(0,0), IntRect(0, 0, 120, 120), Vector2u(8, 1));
-
-	auto f = torch->addComponent<AnimationComponent>();
-	f->Animation("spritesheets/flicker.png", Vector2f(60, 60), IntRect(0, 0, 240, 240), Vector2u(10, 1));
 	
 	Mtorches.push_back(torch);
 

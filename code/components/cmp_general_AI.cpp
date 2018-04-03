@@ -1,6 +1,5 @@
 #include "cmp_general_AI.h"
 
-
 using namespace std;
 
 bool canMove = true;

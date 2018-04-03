@@ -155,7 +155,6 @@ void AnimationComponent::attackAnim(double dt)
 	{
 		totaltime -= switchtime;
 		attackImgNo++;
-		cout << attackImgNo << endl;
 
 		if (attackImgNo >= imagecount.x)
 		{

@@ -3,7 +3,6 @@
 #include <SFML/System.hpp>
 #include <cmath>
 #include <iomanip>  // std::setprecision
-#include <iostream> // std::cout, std::fixed
 #include <sstream>
 #include <vector>
 

@@ -2,6 +2,8 @@ wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 www                                                              www
 www                                                              www
 www                                                              www
+www                                                              www
+www                                                              www
 www                                                           G  www
 www                                                       fffffffwww
 www                                                              www
@@ -12,40 +14,25 @@ www                                                              www
 www                                                              www
 www                                                              www
 www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
-www                                                              www
 www                                                        wwwwwwwww
-www                                                       T    Cwwww
-www                                                       ffffffwwww
-www                                                      f       www
-www                                              T      f        www
-www                                            fffff  ff         www
-www   fffffff                             T ff      ff         T www
-www  fwwwwwww                           ffff  f              ffffwww
-wwwf                            T fffff        fffff T      f    www
-wwwwfff         f f    $  ffffffffwwwwwf T          fff    f     www
-wwwwwwwf    ffffw wfffffffwwwwwwwww   wwff             ffff      www
-www      fffwwwww wwwwwwwww            wwwffffffff T             www
-www     fwwww                            wwwwwwwwwfff            www
-wwwfffffww        T                              wwwwffffff     Cwww
-wwwwwwwww      f fff                                wwwwwwwf  fffwww
+www                                                            Cwwww
+www                                                      fffffffwwww
+www                                                     f        www
+www                                                    f         www
+www                                           fffff  ff          www
+www   fffffff                              ff      ff            www
+www  f                                 ffff  f              fffffwww
+wwwf                             fffff        fffff        f     www
+www fff        f f       ffffffff     f            fff    f      www
+www    f    fffw wfffffff              ff             ffff       www
+www      fff                             ffffffff                www
+www     f                                        ffff            www
+wwwfffff                                             ffffff     Cwww
+www            f fff                                       f  fffwww
 www           fw wwwfff                                     Bfwwwwww
-www          fww wwwwwwffT              WT              T fffwwwwwww
-www      T  fwww wwwwwwwwf BA R        ffff             ffwwwwwwwwww
-www    Bffffwwww wwwwwwwwwfffffRTWAW ffwwwwfff         fwwwwwwwwwwww
-wwwTsRffwwwwwwww wwwwwwwwwwwwwwffffffwwwwwwwwwf  RT AAfwwwwwwwwwwwww
+www          fww wwwwwwff               W                 fffwwwwwww
+www        1fwww wwwwwwwwf BA R        ffff             ffwwwwwwwwww
+www    Bffffwwww wwwwwwwwwfffffR WAW ffwwwwfff         fwwwwwwwwwwww
+wwws Rffwwwwwwww wwwwwwwwwwwwwwffffffwwwwwwwwwf  R  AAfwwwwwwwwwwwww
 wwwfffwwwwwwwwww wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfffffffwwwwwwwwwwwwww
 wwwgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggww

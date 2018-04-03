@@ -20,39 +20,38 @@ Vector2f view_center;
 
 
 void Level1Scene::Load() {
-	cout << "Scene 1 loading" << endl;
 
-	ls::loadLevelFile("res/tilemaps/level_1.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/Level_1.txt", 240.f);
 
-	//PLAYER CREATION
-	{
-		TilePhysics();
+	TilePhysics();
 
-		makeShops();
+	makeShops();
 
-		makeTorches();
+	makeTorches();
 
-		makeGavin();
+	makeGavin();
 
-		makeEnemies();
+	makeCoin();
 
-		makeCoin();
+	makeChest();
 
-		makeChest();
+	makeEnemies();
 
-		player = makePlayer();
-		view_center = player->getPosition();
+	
 
-		addUI();
+	player = makePlayer();
+	view_center = player->getPosition();
 
-	}
+
+	addUI();
+	
+	
 
 
 	setLoaded(true);
 }
 
 void Level1Scene::UnLoad() {
-	cout << "Scene 1 Unload" << endl;
 	player.reset();
 	ls::unload();
 	Scene::UnLoad();
@@ -64,11 +63,10 @@ void Level1Scene::Update(const double& dt) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
-
 	View view(FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
 	float view_player_distance = sqrt(((player->getPosition().x - view_center.x) * (player->getPosition().x - view_center.x)) + ((player->getPosition().y - view_center.y) * (player->getPosition().y - view_center.y)));
-	if (view_player_distance > 80.f)
-		view_center += (player->getPosition() - view_center) *(float)dt * 2.3f;
+	if (view_player_distance > 40.f)
+		view_center += (player->getPosition() - view_center) *(float)dt * 3.5f;
 	view.setCenter(view_center);
 
 	Engine::GetWindow().setView(view);
