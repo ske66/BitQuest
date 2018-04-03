@@ -21,7 +21,7 @@ static shared_ptr<Entity> btnExit;
 
 void MainMenuScene::Load()
 {
-	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
 	{
 		//Position the game's Logo

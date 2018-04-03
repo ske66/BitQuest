@@ -89,14 +89,14 @@ vector<shared_ptr<Entity>> makeShops()
 		auto a = shop->addComponent <AnimationComponent>();
 		a->Animation("spritesheets/Shop_spritesheet.png", Vector2f(0,0), IntRect(0, 0, 240, 240), Vector2u(8, 1));
 		
+			auto t = shop->addComponent<TextComponent>();
+			t->SetText("Press Enter to open shop");
+			t->getText().setCharacterSize(16);
+			t->getText().setOrigin(60, 40);
+		
 		auto f = shop->addComponent<AnimationComponent>();
 		f->Animation("spritesheets/flicker.png", Vector2f(30, 0), IntRect(0, 0, 240, 240), Vector2u(10, 1));
 
-		auto t = shop->addComponent<TextComponent>();
-		t->SetText("Press Enter to open shop");
-		t->getText().setCharacterSize(16);
-		t->getText().setOrigin(60, 40);
-		
 		Mshops.push_back(shop);
 	}
 	return Mshops;
@@ -142,7 +142,7 @@ vector<shared_ptr<Entity>> makeChest()
 		chest->addComponent<StateComponent>();
 		auto s = chest->addComponent <SpriteComponent>();
 		s->Sprite("spritesheets/Chest.png", IntRect(0,0,120,120));
-		s->getSprite().setOrigin(0,0);
+		s->getSprite().setOrigin(0,-140);
 
 		Mchests.push_back(chest);
 	}

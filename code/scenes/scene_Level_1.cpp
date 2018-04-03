@@ -22,7 +22,7 @@ Vector2f view_center;
 void Level1Scene::Load() {
 	cout << "Scene 1 loading" << endl;
 
-	ls::loadLevelFile("res/tilemaps/TestEnvironment.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/level_1.txt", 240.f);
 
 	//PLAYER CREATION
 	{
@@ -59,7 +59,6 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
-
 	
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&menu);

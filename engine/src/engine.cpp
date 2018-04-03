@@ -9,6 +9,11 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include <Time.h>
+#include <stdlib.h>     /* srand, rand */
+#include <stdio.h>      /* printf, NULL */
+
+
 
 using namespace sf;
 using namespace std;
@@ -36,11 +41,9 @@ sf::Vector2u imagecount(8,8);
 
 void Loading_Load()
 {
-	string monster;
-	const string monster_cols[]{ "goblin", "orc", "troll", "skeleton", "slime", "ghost" };
-	monster = (monster_cols[2]);
+	
 
-	spritesheet.loadFromFile("res/textures/" + monster +"_spritesheet.png");
+	spritesheet.loadFromFile("res/textures/goblin_spritesheet.png");
 	goblin.setTexture(spritesheet);
 	goblin.setTextureRect(uvRect);
 	goblin.setOrigin(0, 120);

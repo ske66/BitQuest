@@ -28,15 +28,15 @@ www                                                              www
 www                                                              www
 www                                                              www
 www                                                        wwwwwwwww
-www                                                            Cwwww
+www                                                       T    Cwwww
 www                                                       ffffffwwww
 www                                                      f       www
-www                                                     f        www
-www      $                                     fffff  ff         www
-www   fffffff                               ff      ff           www
+www                                              T      f        www
+www                                            fffff  ff         www
+www   fffffff                             T ff      ff         T www
 www  fwwwwwww                           ffff  f              ffffwww
-wwwf                              fffff        fffff        f    www
-wwwwfff         f f       ffffffffwwwwwf T          fff    f     www
+wwwf                            T fffff        fffff T      f    www
+wwwwfff         f f    $  ffffffffwwwwwf T          fff    f     www
 wwwwwwwf    ffffw wfffffffwwwwwwwww   wwff             ffff      www
 www      fffwwwww wwwwwwwww            wwwffffffff T             www
 www     fwwww                            wwwwwwwwwfff            www
