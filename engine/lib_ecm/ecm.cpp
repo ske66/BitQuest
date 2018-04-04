@@ -40,8 +40,6 @@ void Entity::setPosition(const sf::Vector2f& _position) {
 	Entity::_position = _position;
 }
 
-
-
 float Entity::getRotation() const { return _rotation; }
 
 void Entity::setRotation(float _rotation) { Entity::_rotation = _rotation; }
@@ -85,7 +83,7 @@ Component::~Component() {}
 
 bool Component::is_fordeletion() const { return _fordeletion; }
 
-void EntityManager::update(float dt) {
+void EntityManager::update(double dt) {
 	for (size_t i = 0; i < list.size(); i++) {
 		if (list[i]->is_fordeletion()) {
 			list.erase(list.begin() + i);

@@ -33,7 +33,7 @@ public:
 
 struct EntityManager {
 	std::vector<std::shared_ptr<Entity>> list;
-	void update(float dt);
+	void update(double dt);
 	void render();
 	std::vector<std::shared_ptr<Entity>> find(const std::string& tag) const;
 	std::vector<std::shared_ptr<Entity>>

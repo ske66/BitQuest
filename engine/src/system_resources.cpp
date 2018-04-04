@@ -1,4 +1,5 @@
 #include "system_resources.h"
+#include "SFML\System\InputStream.hpp"
 
 namespace Resources {
 

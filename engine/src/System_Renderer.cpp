@@ -1,7 +1,6 @@
 #include "System_Renderer.h"
 #include <queue>
 
-
 using namespace std;
 using namespace sf;
 
