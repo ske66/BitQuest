@@ -34,15 +34,19 @@ static shared_ptr<Entity> SwitchChar;
 
 string txtwalkLeft = "A";
 string txtwalkRight = "D";
-string txtjump = "W"; 
+string txtjump = "W";
 string txtattack = "_";
 string txtswitch = "Q";
 
-void SettingsGameplayScene::Load() 
+void SettingsGameplayScene::Load()
 {
 	ifstream file("res/savestates/PlayerControls.txt");
 	while (file >> txtwalkLeft >> txtwalkRight >> txtjump >> txtattack >> txtswitch)
 	{
+		cout << txtwalkLeft << endl;
+		cout << txtwalkRight << endl;
+		cout << txtjump << endl;
+		cout << txtattack << endl;
 	}
 
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
@@ -80,8 +84,8 @@ void SettingsGameplayScene::Load()
 		LeftChar->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 400, 380.f));
 
 	}
-	
-	
+
+
 	{
 		//Set walk right
 
@@ -89,7 +93,7 @@ void SettingsGameplayScene::Load()
 		auto wr = WalkRight->addComponent<TextComponent>("Right");
 		wr->getText().setOrigin(wr->getText().getGlobalBounds().width / 2, wr->getText().getGlobalBounds().height / 2);
 		WalkRight->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 200, 300.f));
-		
+
 		walkRightBox = makeEntity();
 		auto wrb = walkRightBox->addComponent<ShapeComponent>();
 		wrb->setShape<sf::RectangleShape>(Vector2f(40.f, 50.f));
@@ -130,7 +134,7 @@ void SettingsGameplayScene::Load()
 		a->getText().setOrigin(a->getText().getGlobalBounds().width / 2, a->getText().getGlobalBounds().height / 2);
 		Attack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 300.f));
 
-	    attackBox = makeEntity();
+		attackBox = makeEntity();
 		auto ab = attackBox->addComponent<ShapeComponent>();
 		ab->setShape<sf::RectangleShape>(Vector2f(40.f, 50.f));
 		ab->getShape().setOrigin(ab->getShape().getGlobalBounds().width / 2, ab->getShape().getGlobalBounds().height / 2);
@@ -146,7 +150,7 @@ void SettingsGameplayScene::Load()
 		//Set switch
 
 		auto Switch = makeEntity();
-		auto s= Switch->addComponent<TextComponent>("Switch");
+		auto s = Switch->addComponent<TextComponent>("Switch");
 		s->getText().setOrigin(s->getText().getGlobalBounds().width / 2, s->getText().getGlobalBounds().height / 2);
 		Switch->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 400, 300.f));
 
@@ -178,7 +182,6 @@ void SettingsGameplayScene::UnLoad() {
 void SettingsGameplayScene::Update(const double& dt)
 {
 
-	auto e = Engine::getEvent();
 
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
 	sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
@@ -193,20 +196,6 @@ void SettingsGameplayScene::Update(const double& dt)
 	if (walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 	{
 		walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (e.type == sf::Event::TextEntered)
-			{
-				if (e.text.unicode < 128)
-				{
-					txtwalkLeft = toupper(e.text.unicode);
-					LeftChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtwalkLeft);
-					LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, LeftChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
-				}
-			}
-		}
-
 	}
 	else
 	{
@@ -218,19 +207,6 @@ void SettingsGameplayScene::Update(const double& dt)
 	if (walkRightBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 	{
 		walkRightBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (e.type == sf::Event::TextEntered)
-			{
-				if (e.text.unicode < 128)
-				{
-					txtwalkRight = toupper(e.text.unicode);
-					RightChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtwalkRight);
-					RightChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(RightChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, RightChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
-				}
-			}
-		}
 	}
 	else
 	{
@@ -242,19 +218,6 @@ void SettingsGameplayScene::Update(const double& dt)
 	if (jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 	{
 		jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (e.type == sf::Event::TextEntered)
-			{
-				if (e.text.unicode < 128)
-				{
-					txtjump = toupper(e.text.unicode);
-					JumpChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtjump);
-					JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, JumpChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
-				}
-			}
-		}
 	}
 	else
 	{
@@ -266,19 +229,6 @@ void SettingsGameplayScene::Update(const double& dt)
 	if (attackBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 	{
 		attackBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (e.type == sf::Event::TextEntered)
-			{
-				if (e.text.unicode < 128)
-				{
-					txtattack = toupper(e.text.unicode);
-					AttackChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtattack);
-					AttackChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(AttackChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, AttackChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
-				}
-			}
-		}
 	}
 	else
 	{
@@ -290,19 +240,6 @@ void SettingsGameplayScene::Update(const double& dt)
 	if (switchBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
 	{
 		switchBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			if (e.type == sf::Event::TextEntered)
-			{
-				if (e.text.unicode < 128)
-				{
-					txtswitch = toupper(e.text.unicode);
-					SwitchChar->GetCompatibleComponent<TextComponent>()[0]->SetText(txtswitch);
-					SwitchChar->GetCompatibleComponent<TextComponent>()[0]->getText().setOrigin(SwitchChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().width / 2, SwitchChar->GetCompatibleComponent<TextComponent>()[0]->getText().getGlobalBounds().height / 2);
-				}
-			}
-		}
 	}
 	else
 	{
@@ -326,7 +263,7 @@ void SettingsGameplayScene::Update(const double& dt)
 	Scene::Update(dt);
 }
 
-void SettingsGameplayScene::Render() 
+void SettingsGameplayScene::Render()
 {
 	ls::render(Engine::GetWindow());
 	Scene::Render();

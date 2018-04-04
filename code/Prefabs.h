@@ -8,10 +8,11 @@ std::shared_ptr<Entity> makePlayer();
 std::shared_ptr<Entity> makeGavin();
 std::shared_ptr<Entity> addUI();
 
-std::vector<std::shared_ptr<Entity>> makeTorches();
 std::vector<std::shared_ptr<Entity>> makeEnemies();
 std::vector<std::shared_ptr<Entity>> makeShops();
-std::vector<std::shared_ptr<Entity>> makeCoin();
-std::vector<std::shared_ptr<Entity>> makeChest();
+std::vector<std::shared_ptr<Entity>> makeTorches();
+std::vector<std::shared_ptr<Entity>> makeCoins();
+std::vector<std::shared_ptr<Entity>> makeChests();
+
 
 void TilePhysics();

@@ -17,8 +17,8 @@ void AnimationComponent::Animation(std::string a, sf::Vector2f b, sf::IntRect an
 	currentimage.x = 0;
 	totaltime = 0.0f;
 
-	animUvRect.width = _texture->getSize().x / float(imagecount.x);
-	animUvRect.height = _texture->getSize().y / float(imagecount.y);
+	animUvRect.width = _texture->getSize().x / (imagecount.x);
+	animUvRect.height = _texture->getSize().y / (imagecount.y);
 }
 
 AnimationComponent::AnimationComponent(Entity* p)
@@ -30,8 +30,6 @@ AnimationComponent::AnimationComponent(Entity* p)
 void AnimationComponent::update(double dt) {
 	_sprite->setPosition(_parent->getPosition());
 	_sprite->setRotation(_parent->getRotation());
-
-
 
 	auto c = _parent->get_components<StateComponent>()[0];
 
@@ -104,13 +102,15 @@ void AnimationComponent::update(double dt) {
 		Anim(dt);
 	}
 
-
+	
 }
 
 void AnimationComponent::render() { Renderer::queue(_sprite.get()); }
 
 void AnimationComponent::Anim(double dt)
 {
+
+	
 	totaltime += dt;
 
 	if (totaltime >= switchtime)
@@ -143,11 +143,12 @@ void AnimationComponent::Anim(double dt)
 
 
 	_sprite->setTextureRect(animUvRect);
-
+	
 }
 
 void AnimationComponent::attackAnim(double dt)
 {
+	
 	totaltime += dt;
 
 

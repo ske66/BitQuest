@@ -5,8 +5,8 @@
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <iostream>
-#include <System_renderer.h>
-#include <System_resources.h>
+#include <../engine/src/System_Renderer.h>
+#include <../engine/src/system_resources.h>
 
 
 class AnimationComponent : public Component {
@@ -28,8 +28,6 @@ public:
 	void Anim(double dt);
 	void attackAnim(double dt);
 
-	AnimationComponent() = delete;
-
 	void Animation(std::string a, sf::Vector2f b, sf::IntRect animUvRect, sf::Vector2u imagecount);
 
 
@@ -41,6 +39,8 @@ public:
 
 	template <typename... Targs> void setSprite(Targs... params) {
 		_sprite.reset(new sf::Sprite(params...));
+
+	AnimationComponent() = delete;
 	}
 
 };

@@ -21,7 +21,6 @@ static bool loading = false;
 static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
-static Event* _event;
 
 Texture spritesheet;
 Sprite goblin;
@@ -36,8 +35,6 @@ sf::Vector2u imagecount(8,8);
 
 void Loading_Load()
 {
-	
-	
 	spritesheet.loadFromFile("res/textures/Spritesheets/Goblin_spritesheet.png");
 	goblin.setTexture(spritesheet);
 	goblin.setTextureRect(uvRect);
@@ -47,8 +44,8 @@ void Loading_Load()
 
 	totalTime = 0.f;
 
-	uvRect.width = spritesheet.getSize().x / float(imagecount.x);
-	uvRect.width = spritesheet.getSize().y / float(imagecount.y);
+	uvRect.width = spritesheet.getSize().x / (imagecount.x);
+	uvRect.width = spritesheet.getSize().y / (imagecount.y);
 	
 }
 
@@ -104,14 +101,14 @@ void Engine::Update() {
 	{
 		frametimes[++ftc] = dt;
 		static string avg = _gameName + " FPS:";
-		if (ftc % 60 == 0) {
+		//if (ftc % 60 == 0) {
 			double davg = 0;
 			for (const auto t : frametimes) {
 				davg += t;
 			}
 			davg = 1.0 / (davg / 255.0);
 			_window->setTitle(avg + toStrDecPt(2, davg));
-		}
+		//}
 	}
 	
 
@@ -138,17 +135,15 @@ void Engine::Render(RenderWindow& window) {
 void Engine::Start(unsigned int width, unsigned int height,
 	const std::string& gameName, Scene* scn) {
 	RenderWindow window(VideoMode(width, height), gameName);
-	Event event;
 	_gameName = gameName;
 	_window = &window;
-	_event = &event;
 	Renderer::initialise(window);
 	Physics::initialise();
 	ChangeScene(scn);
 
 	while (window.isOpen()) {
+		Event event;
 
-		
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) {
 				window.close();
@@ -166,7 +161,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	}
 	window.close();
 	Physics::shutdown();
-	Renderer::shutdown();
+	//Renderer::shutdown();
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {
@@ -230,8 +225,6 @@ void Scene::LoadAsync() { _loaded_future = std::async(&Scene::Load, this); }
 sf::Vector2u Engine::getWindowSize() { return _window->getSize(); }
 
 sf::RenderWindow& Engine::GetWindow() { return *_window; }
-
-sf::Event& Engine::getEvent() { return *_event; }
 
 namespace timing {
 	// Return time since Epoc

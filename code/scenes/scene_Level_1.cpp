@@ -1,16 +1,8 @@
 #include "scene_level_1.h"
-#include "../components/cmp_player_physics.h"
-#include "../components/cmp_sprite.h"
-#include "../components/cmp_animation.h"
-#include "../components/cmp_gavin_AI.h"
-#include "../components/cmp_gavin_physics.h"
-#include "../components/cmp_player_controller.h"
-#include "../components/cmp_general_AI.h"
 #include "../GameState.h"
 #include "../code/Prefabs.h"
 #include <levelsystem.h>
 #include <iostream>
-#include <SFML\System.hpp>
 #include <string>
 #include <fstream>
 
@@ -28,19 +20,15 @@ void Level1Scene::Load() {
 
 	makeShops();
 
-	makeTorches();
-
 	makeGavin();
 
-	makeCoin();
+	makeCoins();
 
-	makeChest();
+	makeChests();
 
 	makeEnemies();
 
-	sf::Thread thread(makeEnemies);
-
-	thread.launch();
+	makeTorches();
 
 	player = makePlayer();
 	view_center = player->getPosition();
@@ -70,7 +58,7 @@ void Level1Scene::Update(const double& dt) {
 
 	Engine::GetWindow().setView(view);
 
-
+	
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
 	{
 		Vector2f currentPos = player->getPosition();
@@ -93,7 +81,6 @@ void Level1Scene::Update(const double& dt) {
 
 		Engine::ChangeScene(&menu);
 	}
-
 	Scene::Update(dt);
 
 }

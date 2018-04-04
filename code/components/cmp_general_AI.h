@@ -17,13 +17,14 @@ protected:
 
 public:
 
-	GeneralAiComponent() = delete;
 
 	void moveToPlayer();
 	explicit GeneralAiComponent(Entity* p);
 	bool checkInRange(int range);
 
-	void update(double dt);
+	void update(double dt) override;
 	void render() override;
+
+	GeneralAiComponent() = delete;
 
 };

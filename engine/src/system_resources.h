@@ -30,6 +30,7 @@ namespace Resources {
 	std::shared_ptr<sf::Music> load(const std::string& name);
 #endif // SOUND
 
+	
 	template <typename T>
 	static std::shared_ptr<T> get(const std::string& name) {
 		static std::map<std::string, std::shared_ptr<T>> _things;
@@ -43,4 +44,5 @@ namespace Resources {
 			return _things[name];
 		}
 	};
+	
 }

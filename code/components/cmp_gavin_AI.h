@@ -15,13 +15,13 @@ protected:
 
 public:
 
-	GavinAiComponent() = delete;
-
 	void moveToPlayer();
 	explicit GavinAiComponent(Entity* p);
 	bool checkInRange(int range);
 
 	void update(double dt);
 	void render() override;
+
+	GavinAiComponent() = delete;
 
 };

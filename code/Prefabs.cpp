@@ -10,7 +10,6 @@
 #include "components\cmp_general_AI.h"
 #include "components\cmp_gavin_AI.h"
 #include "components\cmp_UI.h"
-#include "components\cmp_shop.h"
 
 
 using namespace std;
@@ -71,6 +70,23 @@ vector<shared_ptr<Entity>> makeEnemies()
 		enemies.push_back(goblin);
 	}
 
+	auto orcs = ls::findTiles(ls::ENEMY_ORC);
+	for (auto or : orcs)
+	{
+		auto orc = Engine::GetActiveScene()->makeEntity();
+		orc->setPosition(ls::getTilePosition(or ));
+		orc->addTag("orc");
+
+		orc->addComponent<StateComponent>();
+		orc->addComponent<GeneralAiComponent>();
+		orc->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
+		auto a = orc->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Orc_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		enemies.push_back(orc);
+	}
+
 	return enemies;
 
 }
@@ -87,9 +103,12 @@ vector<shared_ptr<Entity>> makeShops()
 		shop->addTag("Shop");
 
 		shop->addComponent<StateComponent>();
-		auto s = shop->addComponent<ShopComponent>();
 		auto a = shop->addComponent <AnimationComponent>();
 		a->Animation("spritesheets/Shop_spritesheet.png", Vector2f(0,0), IntRect(0, 0, 240, 240), Vector2u(8, 1));
+		a->getSprite().setOrigin(0, 0);
+
+		auto t = shop->addComponent<TextComponent>("Press 'E' to enter shop!");
+		t->getText().setOrigin(150, 50);
 
 		Mshops.push_back(shop);
 	}
@@ -97,29 +116,28 @@ vector<shared_ptr<Entity>> makeShops()
 	
 }
 
-vector<shared_ptr<Entity>>makeTorches()
+vector<shared_ptr<Entity>> makeTorches()
 {
 	vector<shared_ptr<Entity>> Mtorches;
 
 	auto torches = ls::findTiles(ls::TORCH);
 	for (auto t : torches)
-
 	{
-	auto torch = Engine::GetActiveScene()->makeEntity();
-	torch->setPosition(ls::getTilePosition(t));
-	torch->addTag("torch");
+		auto torch = Engine::GetActiveScene()->makeEntity();
+		torch->setPosition(ls::getTilePosition(t));
+		torch->addTag("torch");
 
-	torch->addComponent<StateComponent>();
-	auto a = torch->addComponent<AnimationComponent>();	
-	a->Animation("spritesheets/Torch.png", Vector2f(0,0), IntRect(0, 0, 120, 120), Vector2u(8, 1));
-	
-	Mtorches.push_back(torch);
+		torch->addComponent<StateComponent>();
+		auto a = torch->addComponent<AnimationComponent>();
+		a->Animation("spritesheets/Torch.png", Vector2f(0, 0), IntRect(0, 0, 120, 120), Vector2u(8, 1));
 
+		Mtorches.push_back(torch);
 	}
+
 	return Mtorches;
 }
 
-vector<shared_ptr<Entity>> makeChest()
+vector<shared_ptr<Entity>> makeChests()
 {
 	vector<shared_ptr<Entity>> Mchests;
 
@@ -141,7 +159,7 @@ vector<shared_ptr<Entity>> makeChest()
 
 }
 
-vector<shared_ptr<Entity>> makeCoin()
+vector<shared_ptr<Entity>> makeCoins()
 {
 	vector<shared_ptr<Entity>> Mcoins;
 	

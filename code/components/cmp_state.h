@@ -27,9 +27,11 @@ public:
 	bool getIdle();
 
 	explicit StateComponent(Entity* p);
-	StateComponent() = delete;
 
 	void update(double dt);
 	void render() override;
+	
+	StateComponent() = delete;
+
 
 };
