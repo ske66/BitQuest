@@ -62,7 +62,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 
 		goblin->addComponent<StateComponent>();
 		goblin->addComponent<GeneralAiComponent>();
-		goblin->addComponent<PhysicsComponent>(true, Vector2f(100,200));
+		goblin->addComponent<PhysicsComponent>(true, Vector2f(100,240));
 		auto a = goblin->addComponent<AnimationComponent>();
 		a->Animation("Spritesheets/Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
@@ -87,8 +87,74 @@ vector<shared_ptr<Entity>> makeEnemies()
 		enemies.push_back(orc);
 	}
 
-	return enemies;
+	auto trolls = ls::findTiles(ls::ENEMY_TROLL);
+	for (auto tr : trolls)
+	{
+		auto troll = Engine::GetActiveScene()->makeEntity();
+		troll->setPosition(ls::getTilePosition(tr));
+		troll->addTag("troll");
 
+		troll->addComponent<StateComponent>();
+		troll->addComponent<GeneralAiComponent>();
+		troll->addComponent<PhysicsComponent>(true, Vector2f(100, 360));
+		auto a = troll->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Troll_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 360, 360), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		enemies.push_back(troll);
+	}
+
+	auto skeletons = ls::findTiles(ls::ENEMY_SKELETON);
+	for (auto sk : skeletons)
+	{
+		auto skeleton = Engine::GetActiveScene()->makeEntity();
+		skeleton->setPosition(ls::getTilePosition(sk));
+		skeleton->addTag("skeleton");
+
+		skeleton->addComponent<StateComponent>();
+		skeleton->addComponent<GeneralAiComponent>();
+		skeleton->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
+		auto a = skeleton->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Skeleton_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		enemies.push_back(skeleton);
+	}
+
+	auto slimes = ls::findTiles(ls::ENEMY_SLIME);
+	for (auto sl : slimes)
+	{
+		auto slime = Engine::GetActiveScene()->makeEntity();
+		slime->setPosition(ls::getTilePosition(sl));
+		slime->addTag("slime");
+
+		slime->addComponent<StateComponent>();
+		slime->addComponent<GeneralAiComponent>();
+		slime->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
+		auto a = slime->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Slime_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		enemies.push_back(slime);
+	}
+
+	auto ghosts = ls::findTiles(ls::ENEMY_GHOST);
+	for (auto gh : ghosts)
+	{
+		auto ghost = Engine::GetActiveScene()->makeEntity();
+		ghost->setPosition(ls::getTilePosition(gh));
+		ghost->addTag("ghost");
+
+		ghost->addComponent<StateComponent>();
+		ghost->addComponent<GeneralAiComponent>();
+		ghost->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
+		auto a = ghost->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Ghost_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		enemies.push_back(ghost);
+	}
+	return enemies;
 }
 
 vector<shared_ptr<Entity>> makeShops()
@@ -179,7 +245,6 @@ vector<shared_ptr<Entity>> makeCoins()
 		Mcoins.push_back(coin);
 		}
 		return Mcoins;
-
 }
 
 

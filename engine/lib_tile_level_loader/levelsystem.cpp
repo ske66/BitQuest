@@ -17,16 +17,23 @@ std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
 	{ FLOOR, IntRect(0,0, _tileSize, _tileSize) },
 	{ GROUND, IntRect(0,240, _tileSize, _tileSize) },
 	{ ROCKS, IntRect(480,240, _tileSize, _tileSize) },
-	{ WINDOW, IntRect(240,480, _tileSize, _tileSize) },
-	{ ALCOVE, IntRect(0,480, _tileSize, _tileSize) },
+	{ ROCKS_SMALL, IntRect(720,240, _tileSize, _tileSize) },
 	{ BONES, IntRect(480,480, _tileSize, _tileSize) },
+	{ BONES_SMALL, IntRect(720,480, _tileSize, _tileSize) },
+	{ SHOP_SIGN_LEFT, IntRect(240,720, _tileSize, _tileSize) },
+	{ SHOP_SIGN_RIGHT, IntRect(0,720, _tileSize, _tileSize) },
+	{ GAVIN_SIGN_LEFT, IntRect(720,720, _tileSize, _tileSize) },
+	{ GAVIN_SIGN_RIGHT, IntRect(480,720, _tileSize, _tileSize) },
+	{ CHAINS, IntRect(720, 0, _tileSize, _tileSize) },
+	{ WINDOW, IntRect(240,480, _tileSize, _tileSize), },
+	{ ALCOVE, IntRect(0,480, _tileSize, _tileSize) },
 	{ TORCH, IntRect(240,240, _tileSize, _tileSize) },
 	{ CHEST, IntRect(240,240, _tileSize, _tileSize) },
 	{ COIN, IntRect(240,240, _tileSize, _tileSize) },
 	{ ENEMY_GOBLIN, IntRect(240,240, _tileSize, _tileSize) },
-	{ ENEMY_ORC, IntRect(240,240, _tileSize, _tileSize) },
-	{ ENEMY_TROLL, IntRect(240,240, _tileSize, _tileSize) },
-	{ ENEMY_SLIME, IntRect(240,240, _tileSize, _tileSize) },
+	{ ENEMY_ORC, IntRect(720,240, _tileSize, _tileSize) },
+	{ ENEMY_TROLL, IntRect(480,480, _tileSize, _tileSize) },
+	{ ENEMY_SLIME, IntRect(720,480, _tileSize, _tileSize) },
 	{ ENEMY_SKELETON, IntRect(240,240, _tileSize, _tileSize) },
 	{ ENEMY_GHOST, IntRect(240,240, _tileSize, _tileSize) },
 	{ GAVIN, IntRect(240,240, _tileSize, _tileSize) },
@@ -125,7 +132,6 @@ void LevelSystem::buildSprites() {
 			tps.push_back({ getTilePosition({x,y}), getSpriteRect(t) });
 		}
 	}
-
 	tex = Resources::load<Texture>("NewTerrain.png");
 	bigMapTexture.create(_tileSize * _width, _tileSize * _height);
 	bigMapTexture.clear(Color::White);

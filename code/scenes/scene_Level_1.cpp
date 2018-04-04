@@ -14,9 +14,11 @@ Vector2f view_center;
 
 void Level1Scene::Load() {
 
-	ls::loadLevelFile("res/Tilemaps/testEnvironment.txt", 240.f);
+	ls::loadLevelFile("res/Tilemaps/level_1.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
 	TilePhysics();
+
+	makeTorches();
 
 	makeShops();
 
@@ -27,8 +29,6 @@ void Level1Scene::Load() {
 	makeChests();
 
 	makeEnemies();
-
-	makeTorches();
 
 	player = makePlayer();
 	view_center = player->getPosition();

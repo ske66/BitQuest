@@ -16,7 +16,7 @@ private:
 
 	sf::RectangleShape topBar;
 
-	int currentHealth = 180;
+	int currentHealth = 240;
 
 public:
 	UIComponent() = delete;
