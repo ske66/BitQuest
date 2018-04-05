@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <engine.h>
 
 using namespace std;
 using namespace sf;
@@ -18,7 +19,7 @@ void Level1Scene::Load() {
 	//**// Create all Entities  \\**\\
 
 
-	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //The test environment is designed to push the game to it's limit
+	ls::loadLevelFile("res/Tilemaps/Level_1.txt", 240.f);  //The test environment is designed to push the game to it's limit
 
 	TilePhysics();  //Add physics to Floor and Wall tiles
 
@@ -38,7 +39,7 @@ void Level1Scene::Load() {
 	view_center = player->getPosition(); //Set follow camera
 
 	addUI(); //Add player's HUD
-	
+
 	setLoaded(true);
 }
 

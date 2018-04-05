@@ -7,6 +7,8 @@
 #include "levelsystem.h"
 #include "../components/cmp_btn.h"
 #include "../code/Prefabs.h"
+#include "engine.h"
+#include <fstream>
 
 using namespace std;
 using namespace sf;
@@ -14,13 +16,18 @@ using namespace sf;
 static shared_ptr<Entity> btnBack;
 static shared_ptr<Entity> btnDone;
 
-static shared_ptr<Entity> btnLow;
-static shared_ptr<Entity> btnMed;
-static shared_ptr<Entity> btnHigh;
+static shared_ptr<Entity> ResLow;
+static shared_ptr<Entity> ResMed;
+static shared_ptr<Entity> ResHigh;
+static shared_ptr<Entity> btnOn;
+static shared_ptr<Entity> btnOff;
 static shared_ptr<Entity> btn30;
 static shared_ptr<Entity> btn60;
-static shared_ptr<Entity> btnWindow;
-static shared_ptr<Entity> btnFull;
+
+int FrameRate;
+string VMode;
+Vector2u Resolution;
+
 
 
 void SettingsGraphicsScene::Load() 
@@ -40,19 +47,19 @@ void SettingsGraphicsScene::Load()
 	}
 
 	{
-		auto txtQuality = makeEntity();
-		auto t = txtQuality->addComponent<TextComponent>("Quality");
+		auto txtResolution = makeEntity();
+		auto t = txtResolution->addComponent<TextComponent>("Resolution");
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
-		txtQuality->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 250.f));
+		txtResolution->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 250.f));
 
-		btnLow = makeButton("Low", Vector2f(150, 60));
-		btnLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
+		ResLow = makeButton("1280x720", Vector2f(150, 60));
+		ResLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
 
-		btnMed = makeButton("Medium", Vector2f(150, 60));
-		btnMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 250.f));
+		ResMed = makeButton("1600x900", Vector2f(150, 60));
+		ResMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 250.f));
 
-		btnHigh = makeButton("High", Vector2f(150, 60));
-		btnHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 400, 250.f));
+		ResHigh = makeButton("1920x1080", Vector2f(150, 60));
+		ResHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 460, 250.f));
 	}
 
 	{
@@ -65,21 +72,21 @@ void SettingsGraphicsScene::Load()
 		btn30->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 350.f));
 
 		btn60 = makeButton("60 FPS", Vector2f(150, 60));
-		btn60->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 350.f));
+		btn60->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 350.f));
 	}
 
 
 	{
 		auto txtMode = makeEntity();
-		auto t = txtMode->addComponent<TextComponent>("Video Mode");
+		auto t = txtMode->addComponent<TextComponent>("Vysnc");
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtMode->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 450.f));
 
-		btnWindow = makeButton("Window", Vector2f(150, 60));
-		btnWindow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
+		btnOn = makeButton("On", Vector2f(150, 60));
+		btnOn->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
 
-		btnFull = makeButton("Full", Vector2f(150, 60));
-		btnFull->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 450.f));
+		btnOff = makeButton("Off", Vector2f(150, 60));
+		btnOff->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 450.f));
 
 	}
 
@@ -104,37 +111,60 @@ void SettingsGraphicsScene::Update(const double& dt)
 	}
 	Scene::Update(dt);
 
-	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
+	if (ResLow->get_components<BtnComponent>()[0]->isSelected())
 	{
-		Engine::ChangeScene((Scene*)&settings);
+		Resolution.x = 1280;
+		Resolution.y = 720;
 	}
 
-	if (btnLow->get_components<BtnComponent>()[0]->isSelected())
+	if (ResMed->get_components<BtnComponent>()[0]->isSelected())
 	{
+		Resolution.x = 1600;
+		Resolution.y = 900;
 	}
 
-	if (btnMed->get_components<BtnComponent>()[0]->isSelected())
+	if (ResHigh->get_components<BtnComponent>()[0]->isSelected())
 	{
-	}
-
-	if (btnHigh->get_components<BtnComponent>()[0]->isSelected())
-	{
+		Resolution.x = 1920;
+		Resolution.y = 1080;
 	}
 
 	if (btn60->get_components<BtnComponent>()[0]->isSelected())
 	{
+		FrameRate = 60;
 	}
 
 	if (btn30->get_components<BtnComponent>()[0]->isSelected())
 	{
+		FrameRate = 30;
 	}
 
-	if (btnWindow->get_components<BtnComponent>()[0]->isSelected())
+	if (btnOn->get_components<BtnComponent>()[0]->isSelected())
 	{
+		VMode = "On";
 	}
 
-	if (btnFull->get_components<BtnComponent>()[0]->isSelected())
+	if (btnOff->get_components<BtnComponent>()[0]->isSelected())
 	{
+		VMode = "Off";
+	}
+
+
+	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
+	{
+		//write to file
+
+		ofstream output;
+		output.open("res/savestates/Graphics.txt");
+		output << Resolution.x << endl;
+		output << Resolution.y << endl;
+		output << FrameRate << endl;
+		output << VMode << endl;
+		output.close();
+
+		Engine::GetWindow().close();
+
+		Engine::Start(Resolution.x, Resolution.y, "Bitquest!", &menu);
 	}
 }
 

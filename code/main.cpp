@@ -7,6 +7,9 @@
 #include "scenes\scene_Settings_Audio.h"
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
+#include <SFML/Window/VideoMode.hpp>
+#include <fstream>
+#include <iostream>
 
 
 using namespace std;
@@ -20,7 +23,16 @@ SettingsGraphicsScene settingsGraphics;
 SettingsGameplayScene settingsGameplay;
 Level1Scene level1;
 
+int ResolutionX;
+int ResolutionY;
+int FPS;
+
+
+
 int main() {
 
-	Engine::Start(1280, 720, "Bitquest!", &menu);
+	ifstream Graphics("res/savestates/Graphics.txt");
+	(Graphics >> ResolutionX >> ResolutionY >> FPS);
+
+	Engine::Start(ResolutionX,ResolutionY, "Bitquest!", &menu);
 }

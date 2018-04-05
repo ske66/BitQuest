@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include <fstream>
 
 using namespace sf;
 using namespace std;
@@ -149,12 +150,31 @@ void Engine::Start(unsigned int width, unsigned int height,
 			if (event.type == Event::Closed) {
 				window.close();
 			}
+
+			if (event.type == sf::Event::Resized)
+			{
+				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+				window.setView(sf::View(visibleArea));
+			}
 		}
 
 		window.clear();
 		Update();
 		Render(window);
 		window.display();
+
+		int ResX;
+		int ResY;
+		int FrameSpeed;
+		bool Vsync;
+
+		ifstream Graphics("res/savestates/Graphics.txt");
+		(Graphics >> ResX >> ResY >> FrameSpeed >> Vsync);
+
+		Engine::GetWindow().setFramerateLimit(FrameSpeed);
+
+		Engine::setVsync(Vsync);
+
 	}
 	if (_activeScene != nullptr) {
 		_activeScene->UnLoad();
@@ -162,7 +182,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	}
 	window.close();
 	Physics::shutdown();
-	//Renderer::shutdown();
+	Renderer::shutdown();
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {

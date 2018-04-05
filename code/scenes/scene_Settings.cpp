@@ -39,7 +39,7 @@ void SettingsScene::Load()
 		btnAudio = makeButton("Audio", Vector2f(250, 60));
 		btnAudio->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
 
-		btnGameplay = makeButton("Graphics", Vector2f(250, 60));
+		btnGameplay = makeButton("Gameplay", Vector2f(250, 60));
 		btnGameplay->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 600.f));
 	}
 	
