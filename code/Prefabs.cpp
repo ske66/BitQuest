@@ -15,6 +15,36 @@
 using namespace std;
 using namespace sf;
 
+
+//**// Prefab Model \\**\\
+
+/*
+This model takes the current Entity->Component model and further enhances it, taking cues from the Unity 3D engine's prefab model. The
+model take a number of components and turns them into an entity, this entity is then stored in a list, allowing the user to place the 
+entities all across the game without duplicate code.
+
+Our code does the exact same thing, using smart pointers we can create a list of a specific entities such as an enemy and place them
+all over our level using the tile Engine to read them into the level, the order for this system goes as follows.
+
+
+shared_ptr<Entity> makeSomething()
+{
+	auto something = Engine::GetActiveScene()->makeEntity();  create the entity
+	something->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));  set the spawn location of the entity
+	something->addTag("something");  give entity a tag for the state machine
+
+	something->addComponent<SomeComponent>();  add component to the entity "something"
+	something->addComponent<OtherComponent>();  add another component to the entity "something"
+
+	return something;
+}
+
+
+We can then take this code and spawn it inside one of our levels using the line;
+
+	makeSomething();
+*/
+
 shared_ptr<Entity> makePlayer()
 {
 	auto player = Engine::GetActiveScene()->makeEntity();

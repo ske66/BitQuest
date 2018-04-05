@@ -23,6 +23,7 @@ void SettingsAudioScene::Load()
 	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
 	{
+		//Back button
 		auto txtAudio = makeEntity();
 		auto t = txtAudio->addComponent<TextComponent>("Audio");
 		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
@@ -33,6 +34,7 @@ void SettingsAudioScene::Load()
 	}
 
 	{
+		//Master audio slider
 		auto txtMaster = makeEntity();
 		auto t = txtMaster->addComponent<TextComponent>("Master Volume");
 		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
@@ -52,6 +54,8 @@ void SettingsAudioScene::Load()
 	}
 
 	{
+		//Music audio slider
+
 		auto txtMusic = makeEntity();
 		auto t = txtMusic->addComponent<TextComponent>("Music Volume");
 		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
@@ -71,6 +75,8 @@ void SettingsAudioScene::Load()
 	}
 
 	{
+		//SFX audio slider
+
 		auto txtSFX = makeEntity();
 		auto t = txtSFX->addComponent<TextComponent>("SFX Audio");
 		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
@@ -122,7 +128,7 @@ void SettingsAudioScene::Update(const double& dt)
 		}
 
 
-
+		//Slider lock, gets positon of mouse and only lets the slider move alone the x-axis, stops when it hits a certain Position Left & Right
 			if (studMaster->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().getGlobalBounds().contains(worldPos))
 			{
 

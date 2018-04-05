@@ -14,9 +14,13 @@ Vector2f view_center;
 
 void Level1Scene::Load() {
 
-	ls::loadLevelFile("res/Tilemaps/level_1.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
-	TilePhysics();
+	//**// Create all Entities  \\**\\
+
+
+	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //The test environment is designed to push the game to it's limit
+
+	TilePhysics();  //Add physics to Floor and Wall tiles
 
 	makeTorches();
 
@@ -31,24 +35,28 @@ void Level1Scene::Load() {
 	makeEnemies();
 
 	player = makePlayer();
-	view_center = player->getPosition();
+	view_center = player->getPosition(); //Set follow camera
 
-	addUI();
+	addUI(); //Add player's HUD
 	
 	setLoaded(true);
 }
 
 void Level1Scene::UnLoad() {
-	player.reset();
+	player.reset(); //Reset player's position
 	ls::unload();
 	Scene::UnLoad();
 }
 
 void Level1Scene::Update(const double& dt) {
 	
-	if (ls::getTileAt(player->getPosition()) == ls::END) {
+	if (ls::getTileAt(player->getPosition()) == ls::END) { //If player reaches the end, go to Menu Scene
 		Engine::ChangeScene((Scene*)&menu);
 	}
+
+
+	// Create and Update Player Camera \\
+
 
 	View view(FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
 	float view_player_distance = sqrt(((player->getPosition().x - view_center.x) * (player->getPosition().x - view_center.x)) + ((player->getPosition().y - view_center.y) * (player->getPosition().y - view_center.y)));
@@ -56,11 +64,12 @@ void Level1Scene::Update(const double& dt) {
 		view_center += (player->getPosition() - view_center) *(float)dt * 3.5f;
 	view.setCenter(view_center);
 
-	Engine::GetWindow().setView(view);
+	Engine::GetWindow().setView(view); //set camera view
 
 	
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	if (Keyboard::isKeyPressed(Keyboard::Escape))  //If Escape button pressed, pause game
 	{
+		/*
 		Vector2f currentPos = player->getPosition();
 
 		int posX = currentPos.x;
@@ -80,6 +89,8 @@ void Level1Scene::Update(const double& dt) {
 		outFile << inFile.rdbuf();
 
 		Engine::ChangeScene(&menu);
+		*/
+
 	}
 	Scene::Update(dt);
 

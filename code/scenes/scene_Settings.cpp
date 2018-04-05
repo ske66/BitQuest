@@ -19,9 +19,12 @@ static shared_ptr<Entity> btnGameplay;
 void SettingsScene::Load() 
 {
 
-	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
+	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f); //load the background texture
 
 	{
+
+		//Create buttons and place them around the level
+
 		auto txtSettings = makeEntity();
 		auto t = txtSettings->addComponent<TextComponent>("Settings");
 		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
@@ -50,6 +53,8 @@ void SettingsScene::UnLoad() {
 
 void SettingsScene::Update(const double& dt) 
 {
+	
+	//if button clicked, change scene
 
 	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
 	{

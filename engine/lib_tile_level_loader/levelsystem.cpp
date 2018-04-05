@@ -7,7 +7,7 @@ using namespace sf;
 
 float LevelSystem::_tileSize(240.f);
 
-
+//Create textures for all tiles and spawn points
 std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
 	{ WAYPOINT, IntRect(240,240, _tileSize, _tileSize) },
 	{ EMPTY, IntRect(240,240, _tileSize, _tileSize) },
@@ -39,7 +39,7 @@ std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
 	{ GAVIN, IntRect(240,240, _tileSize, _tileSize) },
 	{ SHOP, IntRect(240,240, _tileSize, _tileSize) } };
 
-
+//get and set sprite to each tile
 sf::IntRect LevelSystem::getSpriteRect(LevelSystem::Tile t)
 {
 	auto it = _rectMap.find(t);
@@ -62,6 +62,7 @@ size_t LevelSystem::_height;
 Vector2f LevelSystem::_offset(0.f,0.f);
 Sprite LevelSystem::_map;
 
+//Check to make sure the txt file can be parsed
 void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 	
 	_tileSize = tileSize;
@@ -118,7 +119,7 @@ void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 shared_ptr<Texture> tex;
 RenderTexture bigMapTexture;
 
-
+//Take all individual tiles and convert them into a MegaTexture
 void LevelSystem::buildSprites() {
 
 	struct tp {
@@ -132,6 +133,7 @@ void LevelSystem::buildSprites() {
 			tps.push_back({ getTilePosition({x,y}), getSpriteRect(t) });
 		}
 	}
+	//read from Tileset
 	tex = Resources::load<Texture>("NewTerrain.png");
 	bigMapTexture.create(_tileSize * _width, _tileSize * _height);
 	bigMapTexture.clear(Color::White);
@@ -150,7 +152,7 @@ void LevelSystem::buildSprites() {
 	bigMapTexture.display();
 	_map = Sprite(bigMapTexture.getTexture());
 }
-
+//draw Megatexture
 void LevelSystem::render(RenderWindow& window)
 {
 	window.draw(_map);

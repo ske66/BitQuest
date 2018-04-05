@@ -11,6 +11,7 @@
 
 using namespace std;
 
+//List of all scenes
 MainMenuScene menu;
 LoadGameScene loadgame;
 SettingsScene settings;

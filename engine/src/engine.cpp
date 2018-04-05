@@ -32,6 +32,7 @@ sf::Vector2u currentimage;
 float totalTime;
 sf::Vector2u imagecount(8,8);
 
+//Loading screen animation
 
 void Loading_Load()
 {
@@ -245,6 +246,7 @@ namespace timing {
 
 Scene::~Scene() { UnLoad(); }
 
+//get active scene for prefabs
 Scene* Engine::GetActiveScene()
 	{
 		return _activeScene;
