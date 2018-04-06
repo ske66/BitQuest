@@ -14,7 +14,10 @@ Vector2f view_center;
 
 void Level1Scene::Load() {
 
-	ls::loadLevelFile("res/Tilemaps/level_1.txt", 240.f);  //the test environment is designed to push the game to it's limit
+	ls::loadLevelFile("res/Tilemaps/Level_1.txt", 240.f);  //the test environment is designed to push the game to it's limit
+
+	player = makePlayer();
+	view_center = player->getPosition();
 
 	TilePhysics();
 
@@ -30,11 +33,8 @@ void Level1Scene::Load() {
 
 	makeEnemies();
 
-	player = makePlayer();
-	view_center = player->getPosition();
-
 	addUI();
-	
+
 	setLoaded(true);
 }
 
@@ -45,7 +45,7 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
-	
+
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
@@ -58,7 +58,7 @@ void Level1Scene::Update(const double& dt) {
 
 	Engine::GetWindow().setView(view);
 
-	
+
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
 	{
 		Vector2f currentPos = player->getPosition();
@@ -70,7 +70,7 @@ void Level1Scene::Update(const double& dt) {
 
 		Vector2u saveTile = Vector2u(saveCoords.x / 240, saveCoords.y / 240);
 		cout << saveTile << endl;
-		
+
 		std::ifstream inFile("res/Tilemaps/testEnvironment.txt");
 
 		std::ofstream outFile("res/Tilemaps/testEnvironment(save1).txt");
@@ -89,4 +89,3 @@ void Level1Scene::Render() {
 	ls::render(Engine::GetWindow());
 	Scene::Render();
 }
-

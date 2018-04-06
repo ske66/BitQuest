@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
+#include <fstream>
 
 using namespace sf;
 using namespace std;
@@ -30,7 +31,9 @@ float switchtime;
 IntRect uvRect = IntRect(240, 0, 240, 240);
 sf::Vector2u currentimage;
 float totalTime;
-sf::Vector2u imagecount(8,8);
+sf::Vector2u imagecount(8, 8);
+
+//Loading screen animation
 
 
 void Loading_Load()
@@ -46,7 +49,7 @@ void Loading_Load()
 
 	uvRect.width = spritesheet.getSize().x / (imagecount.x);
 	uvRect.width = spritesheet.getSize().y / (imagecount.y);
-	
+
 }
 
 void Loading_update(float dt, const Scene* const scn) {
@@ -55,7 +58,7 @@ void Loading_update(float dt, const Scene* const scn) {
 	if (scn->isLoaded()) {
 		loading = false;
 	}
-	
+
 	else {
 
 		totalTime += dt;
@@ -69,7 +72,7 @@ void Loading_update(float dt, const Scene* const scn) {
 			if (currentimage.x >= imagecount.x)
 			{
 				currentimage.x = 0;
-							}
+			}
 		}
 
 		uvRect.left = currentimage.x * uvRect.width;
@@ -80,7 +83,7 @@ void Loading_update(float dt, const Scene* const scn) {
 		goblin.setPosition(Engine::GetWindow().getSize().x - 125, Engine::GetWindow().getSize().y / 2 + 200);
 
 	}
-	
+
 }
 void Loading_render() {
 
@@ -102,15 +105,15 @@ void Engine::Update() {
 		frametimes[++ftc] = dt;
 		static string avg = _gameName + " FPS:";
 		//if (ftc % 60 == 0) {
-			double davg = 0;
-			for (const auto t : frametimes) {
-				davg += t;
-			}
-			davg = 1.0 / (davg / 255.0);
-			_window->setTitle(avg + toStrDecPt(2, davg));
+		double davg = 0;
+		for (const auto t : frametimes) {
+			davg += t;
+		}
+		davg = 1.0 / (davg / 255.0);
+		_window->setTitle(avg + toStrDecPt(2, davg));
 		//}
 	}
-	
+
 
 	if (loading) {
 		Loading_update(dt, _activeScene);
@@ -132,36 +135,110 @@ void Engine::Render(RenderWindow& window) {
 	Renderer::render();
 }
 
+
+
 void Engine::Start(unsigned int width, unsigned int height,
 	const std::string& gameName, Scene* scn) {
-	RenderWindow window(VideoMode(width, height), gameName);
-	_gameName = gameName;
-	_window = &window;
-	Renderer::initialise(window);
-	Physics::initialise();
-	ChangeScene(scn);
 
-	while (window.isOpen()) {
-		Event event;
+	int ResX;
+	int ResY;
+	int FrameSpeed;
+	string ScreenType;
 
-		while (window.pollEvent(event)) {
-			if (event.type == Event::Closed) {
-				window.close();
+	ifstream Graphics("res/savestates/Graphics.txt");
+	(Graphics >> ResX >> ResY >> FrameSpeed >> ScreenType);
+	
+	RenderWindow window;
+
+	if (ScreenType == "Fullscreen")
+	{
+		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Fullscreen);
+
+		window.setFramerateLimit(FrameSpeed);
+
+		window.setVerticalSyncEnabled(true);
+
+
+		_gameName = gameName;
+		_window = &window;
+		Renderer::initialise(window);
+		Physics::initialise();
+		ChangeScene(scn);
+
+		while (window.isOpen()) {
+			Event event;
+
+			while (window.pollEvent(event)) {
+				if (event.type == Event::Closed) {
+					window.close();
+				}
+
+				if (event.type == sf::Event::Resized)
+				{
+					sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+					window.setView(sf::View(visibleArea));
+				}
 			}
-		}
 
-		window.clear();
-		Update();
-		Render(window);
-		window.display();
+			window.clear();
+			Update();
+			Render(window);
+			window.display();
+
+		}
+		if (_activeScene != nullptr) {
+			_activeScene->UnLoad();
+			_activeScene = nullptr;
+		}
+		window.close();
+		Physics::shutdown();
+		Renderer::shutdown();
+
 	}
-	if (_activeScene != nullptr) {
-		_activeScene->UnLoad();
-		_activeScene = nullptr;
+	else if (ScreenType == "Windowed")
+	{
+		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Resize);
+
+		window.setFramerateLimit(FrameSpeed);
+
+		window.setVerticalSyncEnabled(true);
+
+		_gameName = gameName;
+		_window = &window;
+		Renderer::initialise(window);
+		Physics::initialise();
+		ChangeScene(scn);
+
+		while (window.isOpen()) {
+			Event event;
+
+			while (window.pollEvent(event)) {
+				if (event.type == Event::Closed) {
+					window.close();
+				}
+
+				if (event.type == sf::Event::Resized)
+				{
+					sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+					window.setView(sf::View(visibleArea));
+				}
+			}
+
+			window.clear();
+			Update();
+			Render(window);
+			window.display();
+
+		}
+		if (_activeScene != nullptr) {
+			_activeScene->UnLoad();
+			_activeScene = nullptr;
+		}
+		window.close();
+		Physics::shutdown();
+		Renderer::shutdown();
+
 	}
-	window.close();
-	Physics::shutdown();
-	//Renderer::shutdown();
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {
@@ -245,7 +322,8 @@ namespace timing {
 
 Scene::~Scene() { UnLoad(); }
 
+//get active scene for prefabs
 Scene* Engine::GetActiveScene()
-	{
-		return _activeScene;
-	}
+{
+	return _activeScene;
+}

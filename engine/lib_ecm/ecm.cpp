@@ -64,11 +64,11 @@ Entity::~Entity() {
 
 	int deli = 0;
 	while (deli != _components.size()) {
-	deli = _components.size();
-	_components.erase(
-		remove_if(_components.begin(), _components.end(),
-			[](auto& sp) { return (sp.use_count() <= 1); }),
-		_components.end());
+		deli = _components.size();
+		_components.erase(
+			remove_if(_components.begin(), _components.end(),
+				[](auto& sp) { return (sp.use_count() <= 1); }),
+			_components.end());
 	}
 
 	if (_components.size() > 0) {
@@ -122,7 +122,7 @@ EntityManager::find(const vector<string>& tags) const {
 	for (auto& e : list) {
 		const auto tgs = e->_tags;
 		if (any_of(tags.begin(), tags.end(),
-			[&tgs](auto t) { return tgs.find(t) != tgs.end(); })) 
+			[&tgs](auto t) { return tgs.find(t) != tgs.end(); }))
 		{
 			ret.push_back(e);
 		}

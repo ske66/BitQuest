@@ -1,10 +1,10 @@
 #pragma once
-#include "cmp_state.h"
 #include "ecm.h"
 #include "engine.h"
 #include <SFML/Graphics/Shape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <iostream>
+#include "cmp_state_machine.h"
 #include <../engine/src/System_Renderer.h>
 #include <../engine/src/system_resources.h>
 
@@ -40,7 +40,7 @@ public:
 	template <typename... Targs> void setSprite(Targs... params) {
 		_sprite.reset(new sf::Sprite(params...));
 
-	AnimationComponent() = delete;
+		AnimationComponent() = delete;
 	}
 
 };

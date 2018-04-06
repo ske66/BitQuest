@@ -18,7 +18,7 @@ public:
 	bool isLoaded() const;
 	std::shared_ptr<Entity> makeEntity();
 
-	
+
 
 	EntityManager ents;
 
@@ -51,7 +51,7 @@ private:
 	static std::string _gameName;
 	static void Update();
 	static void Render(sf::RenderWindow& window);
-	
+
 };
 
 namespace timing {

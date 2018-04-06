@@ -7,39 +7,39 @@ using namespace sf;
 
 float LevelSystem::_tileSize(240.f);
 
-
+//Create textures for all tiles and spawn points
 std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
 	{ WAYPOINT, IntRect(240,240, _tileSize, _tileSize) },
-	{ EMPTY, IntRect(240,240, _tileSize, _tileSize) },
-	{ START, IntRect(480,0, _tileSize, _tileSize)	},
-	{ END, IntRect(240,240, _tileSize, _tileSize) },
-	{ WALL, IntRect(240, 0, _tileSize, _tileSize) },
-	{ FLOOR, IntRect(0,0, _tileSize, _tileSize) },
-	{ GROUND, IntRect(0,240, _tileSize, _tileSize) },
-	{ ROCKS, IntRect(480,240, _tileSize, _tileSize) },
-	{ ROCKS_SMALL, IntRect(720,240, _tileSize, _tileSize) },
-	{ BONES, IntRect(480,480, _tileSize, _tileSize) },
-	{ BONES_SMALL, IntRect(720,480, _tileSize, _tileSize) },
-	{ SHOP_SIGN_LEFT, IntRect(240,720, _tileSize, _tileSize) },
-	{ SHOP_SIGN_RIGHT, IntRect(0,720, _tileSize, _tileSize) },
-	{ GAVIN_SIGN_LEFT, IntRect(720,720, _tileSize, _tileSize) },
-	{ GAVIN_SIGN_RIGHT, IntRect(480,720, _tileSize, _tileSize) },
-	{ CHAINS, IntRect(720, 0, _tileSize, _tileSize) },
-	{ WINDOW, IntRect(240,480, _tileSize, _tileSize), },
-	{ ALCOVE, IntRect(0,480, _tileSize, _tileSize) },
-	{ TORCH, IntRect(240,240, _tileSize, _tileSize) },
-	{ CHEST, IntRect(240,240, _tileSize, _tileSize) },
-	{ COIN, IntRect(240,240, _tileSize, _tileSize) },
-	{ ENEMY_GOBLIN, IntRect(240,240, _tileSize, _tileSize) },
-	{ ENEMY_ORC, IntRect(720,240, _tileSize, _tileSize) },
-	{ ENEMY_TROLL, IntRect(480,480, _tileSize, _tileSize) },
-	{ ENEMY_SLIME, IntRect(720,480, _tileSize, _tileSize) },
-	{ ENEMY_SKELETON, IntRect(240,240, _tileSize, _tileSize) },
-	{ ENEMY_GHOST, IntRect(240,240, _tileSize, _tileSize) },
-	{ GAVIN, IntRect(240,240, _tileSize, _tileSize) },
-	{ SHOP, IntRect(240,240, _tileSize, _tileSize) } };
+{ EMPTY, IntRect(240,240, _tileSize, _tileSize) },
+{ START, IntRect(480,0, _tileSize, _tileSize) },
+{ END, IntRect(240,240, _tileSize, _tileSize) },
+{ WALL, IntRect(240, 0, _tileSize, _tileSize) },
+{ FLOOR, IntRect(0,0, _tileSize, _tileSize) },
+{ GROUND, IntRect(0,240, _tileSize, _tileSize) },
+{ ROCKS, IntRect(480,240, _tileSize, _tileSize) },
+{ ROCKS_SMALL, IntRect(720,240, _tileSize, _tileSize) },
+{ BONES, IntRect(480,480, _tileSize, _tileSize) },
+{ BONES_SMALL, IntRect(720,480, _tileSize, _tileSize) },
+{ SHOP_SIGN_LEFT, IntRect(240,720, _tileSize, _tileSize) },
+{ SHOP_SIGN_RIGHT, IntRect(0,720, _tileSize, _tileSize) },
+{ GAVIN_SIGN_LEFT, IntRect(720,720, _tileSize, _tileSize) },
+{ GAVIN_SIGN_RIGHT, IntRect(480,720, _tileSize, _tileSize) },
+{ CHAINS, IntRect(720, 0, _tileSize, _tileSize) },
+{ WINDOW, IntRect(240,480, _tileSize, _tileSize), },
+{ ALCOVE, IntRect(0,480, _tileSize, _tileSize) },
+{ TORCH, IntRect(240,240, _tileSize, _tileSize) },
+{ CHEST, IntRect(240,240, _tileSize, _tileSize) },
+{ COIN, IntRect(240,240, _tileSize, _tileSize) },
+{ ENEMY_GOBLIN, IntRect(240,240, _tileSize, _tileSize) },
+{ ENEMY_ORC, IntRect(720,240, _tileSize, _tileSize) },
+{ ENEMY_TROLL, IntRect(480,480, _tileSize, _tileSize) },
+{ ENEMY_SLIME, IntRect(720,480, _tileSize, _tileSize) },
+{ ENEMY_SKELETON, IntRect(240,240, _tileSize, _tileSize) },
+{ ENEMY_GHOST, IntRect(240,240, _tileSize, _tileSize) },
+{ GAVIN, IntRect(240,240, _tileSize, _tileSize) },
+{ SHOP, IntRect(240,240, _tileSize, _tileSize) } };
 
-
+//get and set sprite to each tile
 sf::IntRect LevelSystem::getSpriteRect(LevelSystem::Tile t)
 {
 	auto it = _rectMap.find(t);
@@ -59,11 +59,12 @@ std::unique_ptr<LevelSystem::Tile[]> LevelSystem::_tiles;
 size_t LevelSystem::_width;
 size_t LevelSystem::_height;
 
-Vector2f LevelSystem::_offset(0.f,0.f);
+Vector2f LevelSystem::_offset(0.f, 0.f);
 Sprite LevelSystem::_map;
 
+//Check to make sure the txt file can be parsed
 void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
-	
+
 	_tileSize = tileSize;
 	size_t w = 0, h = 0;
 	string buffer;
@@ -85,9 +86,9 @@ void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 	int widthCheck = 0;
 	for (int i = 0; i < buffer.size(); ++i) {
 		const char c = buffer[i];
-		if (c == '\0'){
+		if (c == '\0') {
 			break;
-	}
+		}
 		if (c == '\n') {
 			if (w == 0) {
 				w = i;
@@ -118,7 +119,7 @@ void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 shared_ptr<Texture> tex;
 RenderTexture bigMapTexture;
 
-
+//Take all individual tiles and convert them into a MegaTexture
 void LevelSystem::buildSprites() {
 
 	struct tp {
@@ -129,9 +130,10 @@ void LevelSystem::buildSprites() {
 	for (size_t y = 0; y < _height; ++y) {
 		for (size_t x = 0; x < _width; ++x) {
 			Tile t = getTile({ x, y });
-			tps.push_back({ getTilePosition({x,y}), getSpriteRect(t) });
+			tps.push_back({ getTilePosition({ x,y }), getSpriteRect(t) });
 		}
 	}
+	//read from Tileset
 	tex = Resources::load<Texture>("NewTerrain.png");
 	bigMapTexture.create(_tileSize * _width, _tileSize * _height);
 	bigMapTexture.clear(Color::White);
@@ -150,7 +152,7 @@ void LevelSystem::buildSprites() {
 	bigMapTexture.display();
 	_map = Sprite(bigMapTexture.getTexture());
 }
-
+//draw Megatexture
 void LevelSystem::render(RenderWindow& window)
 {
 	window.draw(_map);
@@ -168,7 +170,7 @@ size_t LevelSystem::getWidth() { return _width; }
 
 size_t LevelSystem::getHeight() { return _height; }
 
-sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p) 
+sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
 {
 	return (Vector2f(p.x, p.y) * _tileSize) + _offset;
 }
@@ -186,7 +188,7 @@ std::vector<sf::Vector2ul> LevelSystem::findTiles(LevelSystem::Tile type)
 	return v;
 }
 
-LevelSystem::Tile LevelSystem::getTileAt(Vector2f v) 
+LevelSystem::Tile LevelSystem::getTileAt(Vector2f v)
 {
 	auto a = v - _offset;
 	if (a.x < 0 || a.y < 0)
