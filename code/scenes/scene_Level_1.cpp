@@ -1,6 +1,7 @@
 #include "scene_level_1.h"
 #include "../GameState.h"
 #include "../code/Prefabs.h"
+#include "../code/components/cmp_btn.h"
 #include <levelsystem.h>
 #include <iostream>
 #include <string>
@@ -10,6 +11,9 @@ using namespace std;
 using namespace sf;
 
 static shared_ptr<Entity> player;
+static shared_ptr<Entity> Save;
+static shared_ptr<Entity> Quit;
+static shared_ptr<Entity> Resume;
 Vector2f view_center;
 
 void Level1Scene::Load() {
@@ -59,8 +63,22 @@ void Level1Scene::Update(const double& dt) {
 	Engine::GetWindow().setView(view);
 
 
-	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	if (Keyboard::isKeyPressed(Keyboard::H))
 	{
+
+		//Started Save Game/Load Game
+
+		cout << "Menu loaded" << endl;
+
+		Save = makeButton("Save Game", Vector2f(230, 200));
+		Save->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 1.5));
+
+		//sf::RectangleShape overlay;
+		//overlay.setSize(sf::Vector2f(2000, 1100));
+		//overlay.setFillColor(Color::Red);
+		//overlay.setPosition(200, 400);
+
+		/*
 		Vector2f currentPos = player->getPosition();
 
 		int posX = currentPos.x;
@@ -79,7 +97,11 @@ void Level1Scene::Update(const double& dt) {
 
 		outFile << inFile.rdbuf();
 
-		Engine::ChangeScene(&menu);
+		*/
+
+		//Engine::ChangeScene(&menu);
+
+		
 	}
 	Scene::Update(dt);
 

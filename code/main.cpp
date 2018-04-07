@@ -2,7 +2,6 @@
 #include "gameState.h"
 #include "scenes\scene_Level_1.h"
 #include "scenes\scene_MainMenu.h"
-#include "scenes\scene_LoadGame.h"
 #include "scenes\scene_Settings.h"
 #include "scenes\scene_Settings_Audio.h"
 #include "scenes\scene_Settings_Gameplay.h"
@@ -16,7 +15,6 @@ using namespace std;
 
 //List of all scenes
 MainMenuScene menu;
-LoadGameScene loadgame;
 SettingsScene settings;
 SettingsAudioScene settingsAudio;
 SettingsGraphicsScene settingsGraphics;

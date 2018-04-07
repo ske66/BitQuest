@@ -105,7 +105,7 @@ void MainMenuScene::Update(const double& dt)
 
 		if (btnLoadGame->get_components<BtnComponent>()[0]->isSelected())
 		{
-			Engine::ChangeScene((Scene*)&loadgame);
+			//Load Game
 		}
 
 		if (btnSettings->get_components<BtnComponent>()[0]->isSelected())

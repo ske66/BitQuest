@@ -9,7 +9,6 @@
 #include "components\cmp_btn.h"
 #include "components\cmp_animation.h"
 #include "components\cmp_player_controller.h"
-#include "components\cmp_general_AI.h"
 #include "components\cmp_gavin_AI.h"
 #include "components\cmp_UI.h"
 #include "gavin_states.h"
@@ -116,9 +115,9 @@ vector<shared_ptr<Entity>> makeEnemies()
 
 
 		goblin->addComponent<PhysicsComponent>(true, Vector2f(100, 240));
-		//auto a = goblin->addComponent<AnimationComponent>();
-		//a->Animation("Spritesheets/Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
-		//a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		auto a = goblin->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 		enemies.push_back(goblin);
 	}
