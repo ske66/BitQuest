@@ -59,12 +59,12 @@ std::unique_ptr<LevelSystem::Tile[]> LevelSystem::_tiles;
 size_t LevelSystem::_width;
 size_t LevelSystem::_height;
 
-Vector2f LevelSystem::_offset(0.f,0.f);
+Vector2f LevelSystem::_offset(0.f, 0.f);
 Sprite LevelSystem::_map;
 
 //Check to make sure the txt file can be parsed
 void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
-	
+
 	_tileSize = tileSize;
 	size_t w = 0, h = 0;
 	string buffer;
@@ -86,9 +86,9 @@ void LevelSystem::loadLevelFile(const std::string &path, float tileSize) {
 	int widthCheck = 0;
 	for (int i = 0; i < buffer.size(); ++i) {
 		const char c = buffer[i];
-		if (c == '\0'){
+		if (c == '\0') {
 			break;
-	}
+		}
 		if (c == '\n') {
 			if (w == 0) {
 				w = i;
@@ -130,7 +130,7 @@ void LevelSystem::buildSprites() {
 	for (size_t y = 0; y < _height; ++y) {
 		for (size_t x = 0; x < _width; ++x) {
 			Tile t = getTile({ x, y });
-			tps.push_back({ getTilePosition({x,y}), getSpriteRect(t) });
+			tps.push_back({ getTilePosition({ x,y }), getSpriteRect(t) });
 		}
 	}
 	//read from Tileset
@@ -170,7 +170,7 @@ size_t LevelSystem::getWidth() { return _width; }
 
 size_t LevelSystem::getHeight() { return _height; }
 
-sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p) 
+sf::Vector2f LevelSystem::getTilePosition(sf::Vector2ul p)
 {
 	return (Vector2f(p.x, p.y) * _tileSize) + _offset;
 }
@@ -188,7 +188,7 @@ std::vector<sf::Vector2ul> LevelSystem::findTiles(LevelSystem::Tile type)
 	return v;
 }
 
-LevelSystem::Tile LevelSystem::getTileAt(Vector2f v) 
+LevelSystem::Tile LevelSystem::getTileAt(Vector2f v)
 {
 	auto a = v - _offset;
 	if (a.x < 0 || a.y < 0)

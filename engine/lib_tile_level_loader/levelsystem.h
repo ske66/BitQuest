@@ -8,7 +8,7 @@
 
 #define ls LevelSystem
 
-class LevelSystem{
+class LevelSystem {
 
 public:
 	static void loadLevelFile(const std::string&, float tileSize = 100.f);
@@ -38,7 +38,7 @@ public:
 		GAVIN_SIGN_RIGHT = '{',
 		CHEST = 'C',
 		COIN = 'c',
-		ENEMY_GOBLIN = '1', 
+		ENEMY_GOBLIN = '1',
 		ENEMY_ORC = '2',
 		ENEMY_TROLL = '3', 
 		ENEMY_SKELETON = '4',
@@ -50,7 +50,7 @@ public:
 	};
 
 	static Tile getTile(sf::Vector2ul);
-	
+
 	static Tile getTileAt(sf::Vector2f);
 
 	static bool isOnGrid(sf::Vector2f);
@@ -72,8 +72,8 @@ public:
 	static const sf::Vector2f& getOffset();
 
 	static float getTileSize();
-	
-	
+
+
 
 protected:
 	static std::unique_ptr<Tile[]> _tiles;
@@ -87,7 +87,7 @@ protected:
 
 	static float _tileSize;
 	static std::map<Tile, sf::IntRect> _rectMap;
-	
+
 private:
 	LevelSystem() = delete;
 

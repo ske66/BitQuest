@@ -8,9 +8,9 @@
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
 #include <SFML/Window/VideoMode.hpp>
+#include <SFML\Graphics.hpp>
 #include <fstream>
 #include <iostream>
-
 
 using namespace std;
 
@@ -26,8 +26,6 @@ Level1Scene level1;
 int ResolutionX;
 int ResolutionY;
 int FPS;
-
-
 
 int main() {
 

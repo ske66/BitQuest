@@ -30,7 +30,7 @@ Vector2u Resolution;
 
 
 
-void SettingsGraphicsScene::Load() 
+void SettingsGraphicsScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
@@ -82,10 +82,10 @@ void SettingsGraphicsScene::Load()
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtMode->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 450.f));
 
-		btnOn = makeButton("On", Vector2f(150, 60));
+		btnOn = makeButton("Fullscreen", Vector2f(150, 60));
 		btnOn->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
 
-		btnOff = makeButton("Off", Vector2f(150, 60));
+		btnOff = makeButton("Windowed", Vector2f(150, 60));
 		btnOff->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 450.f));
 
 	}
@@ -97,13 +97,13 @@ void SettingsGraphicsScene::Load()
 	setLoaded(true);
 }
 
-void SettingsGraphicsScene::UnLoad() 
+void SettingsGraphicsScene::UnLoad()
 {
 	ls::unload();
 	Scene::UnLoad();
 }
 
-void SettingsGraphicsScene::Update(const double& dt) 
+void SettingsGraphicsScene::Update(const double& dt)
 {
 	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
 	{
@@ -141,12 +141,12 @@ void SettingsGraphicsScene::Update(const double& dt)
 
 	if (btnOn->get_components<BtnComponent>()[0]->isSelected())
 	{
-		VMode = "On";
+		VMode = "Fullscreen";
 	}
 
 	if (btnOff->get_components<BtnComponent>()[0]->isSelected())
 	{
-		VMode = "Off";
+		VMode = "Windowed";
 	}
 
 
@@ -168,7 +168,7 @@ void SettingsGraphicsScene::Update(const double& dt)
 	}
 }
 
-void SettingsGraphicsScene::Render() 
+void SettingsGraphicsScene::Render()
 {
 	ls::render(Engine::GetWindow());
 	Scene::Render();

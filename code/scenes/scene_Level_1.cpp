@@ -15,7 +15,6 @@ Vector2f view_center;
 
 void Level1Scene::Load() {
 
-
 	//**// Create all Entities  \\**\\
 
 
@@ -50,8 +49,8 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
-	
-	if (ls::getTileAt(player->getPosition()) == ls::END) { //If player reaches the end, go to Menu Scene
+
+	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
@@ -66,7 +65,6 @@ void Level1Scene::Update(const double& dt) {
 	view.setCenter(view_center);
 
 	Engine::GetWindow().setView(view); //set camera view
-
 	
 	if (Keyboard::isKeyPressed(Keyboard::Escape))  //If Escape button pressed, pause game
 	{
@@ -80,7 +78,7 @@ void Level1Scene::Update(const double& dt) {
 
 		Vector2u saveTile = Vector2u(saveCoords.x / 240, saveCoords.y / 240);
 		cout << saveTile << endl;
-		
+
 		std::ifstream inFile("res/Tilemaps/testEnvironment.txt");
 
 		std::ofstream outFile("res/Tilemaps/testEnvironment(save1).txt");
@@ -101,4 +99,3 @@ void Level1Scene::Render() {
 	ls::render(Engine::GetWindow());
 	Scene::Render();
 }
-

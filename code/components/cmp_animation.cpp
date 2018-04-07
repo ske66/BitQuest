@@ -27,73 +27,45 @@ AnimationComponent::AnimationComponent(Entity* p)
 
 }
 
+
 void AnimationComponent::update(double dt) {
+
 	_sprite->setPosition(_parent->getPosition());
 	_sprite->setRotation(_parent->getRotation());
 
-	auto c = _parent->get_components<StateComponent>()[0];
+	auto c = _parent->get_components<StateMachineComponent>()[0];
 
 
-	if (c->getAttacking() == true)
+	if (c->currentState() == "Attack")
 	{
 		currentimage.y = 7;
 		attackAnim(dt);
 
 		if (attackImgNo == 7)
 		{
-			c->setIdle();
 			attackImgNo = 0;
 		}
 	}
-	else if (c->getWalkingRight() == true )
+	else if (c->currentState() == "chase" || c->currentState() == "walk_right" || c->currentState() == "walk_left")
 	{
-		if (attackImgNo != 0)
-		{
-			c->setAttacking();
-		}
-		else
-		{
-			faceRight = true;
-			currentimage.y = 0;
-			Anim(dt);
-		}
+
+		currentimage.y = 0;
+		Anim(dt);
 
 	}
-	else if (c->getWalkingLeft() == true)
+	else if (c->currentState() == "idle")
 	{
-		if (attackImgNo != 0)
-		{
-			c->setAttacking();
-		}
-		else
-		{
-			faceRight = false;
-			currentimage.y = 0;
-			Anim(dt);
-		}
-
-	}
-	else if (c->getJumping() == true || c->getIdle() == true)
-	{
-		if (attackImgNo != 0)
-		{
-			c->setAttacking();
-		}
-		else
-		{
-			currentimage.y = 2;
-			Anim(dt);
-		}
+		currentimage.y = 2;
+		Anim(dt);
 	}
 
-	else if (c->getAttacking() == true)
+	else if (c->currentState() == "idle")
 	{
 		currentimage.y = 7;
 		attackAnim(dt);
 
 		if (attackImgNo == 7)
 		{
-			c->setIdle();
 			attackImgNo = 0;
 		}
 	}
@@ -102,7 +74,6 @@ void AnimationComponent::update(double dt) {
 		Anim(dt);
 	}
 
-	
 }
 
 void AnimationComponent::render() { Renderer::queue(_sprite.get()); }
@@ -110,7 +81,7 @@ void AnimationComponent::render() { Renderer::queue(_sprite.get()); }
 void AnimationComponent::Anim(double dt)
 {
 
-	
+
 	totaltime += dt;
 
 	if (totaltime >= switchtime)
@@ -125,7 +96,7 @@ void AnimationComponent::Anim(double dt)
 		}
 	}
 
-	
+
 	animUvRect.top = currentimage.y *  animUvRect.height;
 
 
@@ -143,12 +114,12 @@ void AnimationComponent::Anim(double dt)
 
 
 	_sprite->setTextureRect(animUvRect);
-	
+
 }
 
 void AnimationComponent::attackAnim(double dt)
 {
-	
+
 	totaltime += dt;
 
 
@@ -163,7 +134,7 @@ void AnimationComponent::attackAnim(double dt)
 		}
 	}
 
-	
+
 	animUvRect.top = currentimage.y *  animUvRect.height;
 
 	if (faceRight)

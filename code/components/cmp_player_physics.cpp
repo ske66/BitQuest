@@ -1,5 +1,6 @@
 #include "cmp_player_physics.h"
 
+
 using namespace std;
 using namespace sf;
 using namespace Physics;
@@ -31,27 +32,20 @@ void PlayerPhysicsComponent::update(double dt) {
 
 	const auto pos = _parent->getPosition();
 
-	auto me = _parent->get_components<StateComponent>()[0];
-	
 	if (pos.y > ls::getHeight() * ls::getTileSize())
 	{
 		teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	}
-	
 
-	if (getVelocity().x == 0 && isGrounded() == true && me->getAttacking() == false)
-	{
-		me->setIdle();
-	}
-	
+
 
 	// Handle Jump
-	if (Keyboard::isKeyPressed(Keyboard::Space)) 
+	if (Keyboard::isKeyPressed(Keyboard::Space))
 	{
 		_grounded = isGrounded();
 		if (_grounded) {
-			me->setJumping();
-			setVelocity(Vector2f(getVelocity().x,  300.f));
+			//me->setJumping();
+			setVelocity(Vector2f(getVelocity().x, 300.f));
 			teleport(Vector2f(pos.x, pos.y - 5.0f));
 			impulse(Vector2f(0, -100.f));
 
@@ -59,14 +53,14 @@ void PlayerPhysicsComponent::update(double dt) {
 	}
 
 	//Are we in air?
-	if (!_grounded) 
+	if (!_grounded)
 	{
 		// Check to see if we have landed yet
 		_grounded = isGrounded();
 		// disable friction while jumping
 		setFriction(0.f);
 	}
-	else 
+	else
 	{
 		setFriction(0.1f);
 	}
@@ -87,7 +81,7 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 	: PhysicsComponent(p, true, size) {
 	_size = sv2_to_bv2(size, true);
 	_maxVelocity = Vector2f(400.f, 800.f);
-//	_fixture->SetDensity(0.2);
+	//	_fixture->SetDensity(0.2);
 	_groundspeed = 200.f;
 	_grounded = false;
 	_body->SetSleepingAllowed(false);
@@ -106,6 +100,6 @@ void PlayerPhysicsComponent::MoveLeft(double dt)
 
 void PlayerPhysicsComponent::MoveRight(double dt)
 {
-	if(getVelocity().x < _maxVelocity.x)
+	if (getVelocity().x < _maxVelocity.x)
 		impulse({ (float)(dt * _groundspeed), 0 });
 }

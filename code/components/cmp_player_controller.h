@@ -1,7 +1,6 @@
 #include "ecm.h"
 #include "engine.h"
 #include <SFML/Window/Keyboard.hpp>
-#include "cmp_state.h"
 #include "cmp_player_physics.h"
 #include "cmp_gavin_physics.h"
 #include "cmp_animation.h"
