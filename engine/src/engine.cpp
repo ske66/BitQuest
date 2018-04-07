@@ -180,14 +180,6 @@ void Engine::Start(unsigned int width, unsigned int height,
 					window.setView(sf::View(visibleArea));
 				}
 			}
-
-<<<<<<< HEAD
-			if (event.type == sf::Event::Resized)
-			{
-				sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-				window.setView(sf::View(visibleArea));
-			}
-=======
 			window.clear();
 			Update();
 			Render(window);
@@ -197,32 +189,11 @@ void Engine::Start(unsigned int width, unsigned int height,
 		if (_activeScene != nullptr) {
 			_activeScene->UnLoad();
 			_activeScene = nullptr;
->>>>>>> NewStateMachine
 		}
 		window.close();
 		Physics::shutdown();
 		Renderer::shutdown();
 
-<<<<<<< HEAD
-		window.clear();
-		Update();
-		Render(window);
-		window.display();
-
-		int ResX;
-		int ResY;
-		int FrameSpeed;
-		bool Vsync;
-
-		ifstream Graphics("res/savestates/Graphics.txt");
-		(Graphics >> ResX >> ResY >> FrameSpeed >> Vsync);
-
-		Engine::GetWindow().setFramerateLimit(FrameSpeed);
-
-		Engine::setVsync(Vsync);
-
-=======
->>>>>>> NewStateMachine
 	}
 	else if (ScreenType == "Windowed")
 	{
@@ -268,12 +239,6 @@ void Engine::Start(unsigned int width, unsigned int height,
 		Renderer::shutdown();
 
 	}
-<<<<<<< HEAD
-	window.close();
-	Physics::shutdown();
-	Renderer::shutdown();
-=======
->>>>>>> NewStateMachine
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {
