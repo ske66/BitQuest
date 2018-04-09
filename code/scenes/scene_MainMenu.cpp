@@ -25,14 +25,6 @@ void MainMenuScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
-	 sf::SoundBuffer buffer;
-	 buffer.loadFromFile("Click.wav");
-
-	 sf::Sound sound;
-     sound.setBuffer(buffer);
-
-	 sound.play();
-
 
 	{
 		//Position the game's Logo

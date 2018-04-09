@@ -1,5 +1,6 @@
 #include "cmp_player_controller.h"
 #include "cmp_state_Machine.h"
+#include "cmp_UI.h"
 
 PlayerControlerComponent::PlayerControlerComponent(Entity* p)
 	: Component(p)
@@ -28,8 +29,64 @@ void PlayerControlerComponent::collectCoin()
 
 void PlayerControlerComponent::update(double dt)
 {
+	auto UI = _parent->scene->ents.find("UI")[0]->get_components<UIComponent>()[0];
 
+		UI->setHealthDisplay(checkHealth());
+		collisionCheck();
+}
 
+sf::IntRect PlayerControlerComponent::checkHealth()
+{
+	if (_health == 10)
+	{
+		return sf::IntRect(0, 0, 400, 50);
+	}
+
+	if (_health == 9)
+	{
+		return sf::IntRect(0, 0, 360, 50);
+	}
+	if (_health == 8)
+	{
+		return sf::IntRect(0, 0, 320, 50);
+	}
+
+	if (_health == 7)
+	{
+		return sf::IntRect(0, 0, 280, 50);
+	}
+	if (_health == 6)
+	{
+		return sf::IntRect(0, 0, 240, 50);
+	}
+
+	if (_health == 5)
+	{
+		return sf::IntRect(0, 0, 200, 50);
+	}
+	if (_health == 4)
+	{
+		return sf::IntRect(0, 0, 160, 50);
+	}
+
+	if (_health == 3)
+	{
+		return sf::IntRect(0, 0, 120, 50);
+	}
+	if (_health == 2)
+	{
+		return sf::IntRect(0, 0, 80, 50);
+	}
+
+	if (_health == 1)
+	{
+		return sf::IntRect(0, 0, 40, 50);
+	}
+	if (_health == 0)
+	{
+		std::cout << "dead" << std::endl;
+		return sf::IntRect(0, 0, 0, 50);
+	}
 
 }
 
@@ -42,6 +99,8 @@ void PlayerControlerComponent::takeDamage(double d)
 {
 	_health = _health - d;
 }
+
+
 void PlayerControlerComponent::collisionCheck()
 {
 	auto g = _parent->scene->ents.find("gavin")[0];
@@ -54,10 +113,10 @@ void PlayerControlerComponent::collisionCheck()
 	{
 		if (c->GetFixtureB() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
 		{
-			if (gavin->getState("Attack") != nullptr)
+			if (gavin->currentState() == "Attack")
 			{
 
-				takeDamage(1.0);
+				takeDamage(0.01);
 			}
 
 		}

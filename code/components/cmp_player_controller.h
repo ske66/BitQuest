@@ -8,12 +8,13 @@
 class PlayerControlerComponent : public Component
 {
 protected:
-	double _health = 10;
+	float _health = 3;
 	int coins = 0;
 
 public:
 
 	explicit PlayerControlerComponent(Entity* p);
+	sf::IntRect checkHealth();
 	PlayerControlerComponent() = delete;
 	double getHealth();
 	void setHealth(double b);

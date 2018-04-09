@@ -57,7 +57,7 @@ void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 	if (_player->getPosition().x > owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = true;
-		g->impulse({ 9.0f , 0.0f });
+		g->impulse({ 4.0f , 0.0f });
 		g->dampen({ 0.7f , 1.0f });
 	}
 
@@ -65,7 +65,7 @@ void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 	if (_player->getPosition().x < owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = false;
-		g->impulse({ -9.0f , 0.0f });
+		g->impulse({ -4.0f , 0.0f });
 		g->dampen({ 0.7f , 1.0f });
 		
 	}

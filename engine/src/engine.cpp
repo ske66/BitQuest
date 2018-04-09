@@ -155,7 +155,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	{
 		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Fullscreen);
 
-		window.setFramerateLimit(FrameSpeed);
+		//window.setFramerateLimit(FrameSpeed);
 
 		window.setVerticalSyncEnabled(true);
 
@@ -199,7 +199,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	{
 		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Resize);
 
-		window.setFramerateLimit(FrameSpeed);
+	//	window.setFramerateLimit(FrameSpeed);
 
 		window.setVerticalSyncEnabled(true);
 

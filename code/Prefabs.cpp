@@ -3,7 +3,7 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
-
+#include "goblin_states.h"
 #include"components\cmp_object_anim.h"
 #include "components\cmp_state_Machine.h"
 #include "components\cmp_btn.h"
@@ -60,8 +60,9 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 	sm->addState("walk_right", make_shared<Player_MoveRightState>());
 	sm->addState("Attack", make_shared<Player_AttackState>());
 	sm->changeState("idle");
+
 	player->addComponent<PlayerControlerComponent>();
-	player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 220));
+	player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 160));
 	auto a = player->addComponent<AnimationComponent>();
 	a->Animation("spritesheets/Bob_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
@@ -90,7 +91,7 @@ shared_ptr<Entity> makeGavin()
 	sm->addState("prepAttack", make_shared<Gavin_PrepAttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
 	sm->addState("Attack", make_shared<Gavin_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
 
-	gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 240));
+	gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 160));
 	auto a = gavin->addComponent<AnimationComponent>();
 	a->Animation("spritesheets/Gavin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
@@ -112,9 +113,17 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto goblin = Engine::GetActiveScene()->makeEntity();
 		goblin->setPosition(ls::getTilePosition(go));
 		goblin->addTag("goblin");
+		
+		auto p = goblin->addComponent<PhysicsComponent>(true, Vector2f(50, 80));
+		auto sm = goblin->addComponent<StateMachineComponent>();
+		p->getFixture()->GetBody()->SetBullet(true);
+	
 
+		sm->addState("chase", make_shared<Goblin_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("idle", make_shared<Goblin_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("Attack", make_shared<Goblin_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->changeState("idle");
 
-		goblin->addComponent<PhysicsComponent>(true, Vector2f(100, 240));
 		auto a = goblin->addComponent<AnimationComponent>();
 		a->Animation("Spritesheets/Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
@@ -346,5 +355,10 @@ shared_ptr<Entity>addUI()
 {
 	auto e = Engine::GetActiveScene()->makeEntity();
 	e->addComponent<UIComponent>();
+	e->addTag("UI");
+
+	auto t = e->addComponent<TextComponent>("0");
+	t->getText().setOrigin( Vector2f(Engine::getWindowSize().x * 0.5 ,  Engine::getWindowSize().y * 0.5 ));
+	
 	return e;
 }

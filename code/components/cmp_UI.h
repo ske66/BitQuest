@@ -16,10 +16,10 @@ private:
 
 	sf::RectangleShape topBar;
 
-	int currentHealth = 240;
-
 public:
 	UIComponent() = delete;
+
+	void setHealthDisplay(sf::IntRect s);
 	explicit UIComponent(Entity* p);
 	void update(double dt) override;
 	void render() override;
