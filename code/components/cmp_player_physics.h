@@ -20,10 +20,11 @@ protected:
 	float _groundspeed;
 	double switchtime;
 	double totaltime;
-	bool isGrounded() const;
+	
 
 public:
 
+	bool isGrounded() const;
 	void MoveRight(double dt);
 	void MoveLeft(double dt);
 
