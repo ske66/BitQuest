@@ -73,6 +73,14 @@ void AnimationComponent::update(double dt) {
 	{
 		Anim(dt);
 	}
+	if (attackImgNo != 0)
+	{
+		animDone = false;
+	}
+	if (attackImgNo == 0)
+	{
+		animDone = true;
+	}
 
 }
 
