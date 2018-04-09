@@ -9,6 +9,7 @@
 #include "levelsystem.h"
 #include <SFML\Graphics.hpp>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace sf;
@@ -84,6 +85,8 @@ void MainMenuScene::Load()
 		door->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 4, Engine::GetWindow().getSize().y / 2 * 1.3));
 	}
 
+	Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
+
 	setLoaded(true);
 }
 
@@ -95,17 +98,18 @@ void MainMenuScene::UnLoad() {
 
 
 void MainMenuScene::Update(const double& dt) 
-
 {
 
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
-				Engine::ChangeScene((Scene*)&level1);
+			Engine::ChangeScene((Scene*)&level1);
+			loadGame = false;
 		}
 
 		if (btnLoadGame->get_components<BtnComponent>()[0]->isSelected())
 		{
-			//Load Game
+			Engine::ChangeScene((Scene*)&level1);
+			loadGame = true;
 		}
 
 		if (btnSettings->get_components<BtnComponent>()[0]->isSelected())

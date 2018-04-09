@@ -20,6 +20,7 @@ SettingsAudioScene settingsAudio;
 SettingsGraphicsScene settingsGraphics;
 SettingsGameplayScene settingsGameplay;
 Level1Scene level1;
+bool loadGame;
 
 int ResolutionX;
 int ResolutionY;

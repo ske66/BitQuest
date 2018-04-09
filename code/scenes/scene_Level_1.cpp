@@ -16,11 +16,33 @@ static shared_ptr<Entity> Quit;
 static shared_ptr<Entity> Resume;
 Vector2f view_center;
 
+
 void Level1Scene::Load() {
 
 	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
-	player = makePlayer();
+
+
+	int loadPosX;
+	int loadPosY;
+
+	ifstream InFile("res/SaveStates/TestLevelSave.txt");
+	(InFile >> loadPosX >> loadPosY);
+
+	cout << loadPosX << endl;
+
+	cout << loadPosY << endl;
+
+
+	if (loadGame == true)
+	{
+		player = makePlayer(Vector2f(loadPosX,loadPosY-240));
+	}
+	else
+	{
+		player = makePlayer(Vector2f(1200, 15360));
+	}
+
 	view_center = player->getPosition();
 
 	TilePhysics();
@@ -67,40 +89,23 @@ void Level1Scene::Update(const double& dt) {
 	{
 
 		//Started Save Game/Load Game
-
-		cout << "Menu loaded" << endl;
-
-		Save = makeButton("Save Game", Vector2f(230, 200));
-		Save->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 1.5));
-
-		//sf::RectangleShape overlay;
-		//overlay.setSize(sf::Vector2f(2000, 1100));
-		//overlay.setFillColor(Color::Red);
-		//overlay.setPosition(200, 400);
-
-		/*
+		
 		Vector2f currentPos = player->getPosition();
 
 		int posX = currentPos.x;
 		int posY = currentPos.y;
 
-		Vector2f saveCoords = Vector2f(((posX + 240 / 2) / 240) * 240, ((posY + 240) / 240) * 240);
+		Vector2u saveCoords = Vector2u(((posX + 240 / 2) / 240) * 240, ((posY + 240) / 240) * 240);
 
-		Vector2u saveTile = Vector2u(saveCoords.x / 240, saveCoords.y / 240);
-		cout << saveTile << endl;
+		cout << saveCoords << endl;
 
-		std::ifstream inFile("res/Tilemaps/testEnvironment.txt");
-
-		std::ofstream outFile("res/Tilemaps/testEnvironment(save1).txt");
-
-		string s = "s";
-
-		outFile << inFile.rdbuf();
-
-		*/
-
-		//Engine::ChangeScene(&menu);
-
+		std::ofstream outFile("res/SaveStates/TestLevelSave.txt");
+		outFile << saveCoords.x << endl;
+		outFile << saveCoords.y << endl;
+		outFile.close();
+		//Position Saved
+		
+		Engine::ChangeScene(&menu);
 		
 	}
 	Scene::Update(dt);

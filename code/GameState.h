@@ -13,3 +13,4 @@ extern SettingsAudioScene settingsAudio;
 extern SettingsGraphicsScene settingsGraphics;
 extern SettingsGameplayScene settingsGameplay;
 extern Level1Scene level1;
+extern bool loadGame;

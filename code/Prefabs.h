@@ -4,7 +4,7 @@
 #include <string>
 
 std::shared_ptr<Entity> makeButton(std::string, sf::Vector2f bounds);
-std::shared_ptr<Entity> makePlayer();
+std::shared_ptr<Entity> makePlayer(sf::Vector2f _pos);
 std::shared_ptr<Entity> makeGavin();
 std::shared_ptr<Entity> addUI();
 

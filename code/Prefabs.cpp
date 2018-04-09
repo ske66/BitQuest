@@ -47,10 +47,10 @@ We can then take this code and spawn it inside one of our levels using the line;
 	makeSomething();
 */
 
-shared_ptr<Entity> makePlayer()
+shared_ptr<Entity> makePlayer(Vector2f _pos)
 {
 	auto player = Engine::GetActiveScene()->makeEntity();
-	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+	player->setPosition(_pos);
 	player->addTag("player");
 
 	auto sm = player->addComponent<StateMachineComponent>();
