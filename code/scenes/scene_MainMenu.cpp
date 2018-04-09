@@ -19,9 +19,20 @@ static shared_ptr<Entity> btnLoadGame;
 static shared_ptr<Entity> btnSettings;
 static shared_ptr<Entity> btnExit;
 
+
+
 void MainMenuScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
+
+	 sf::SoundBuffer buffer;
+	 buffer.loadFromFile("Click.wav");
+
+	 sf::Sound sound;
+     sound.setBuffer(buffer);
+
+	 sound.play();
+
 
 	{
 		//Position the game's Logo
@@ -102,6 +113,7 @@ void MainMenuScene::Update(const double& dt)
 
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
+
 			Engine::ChangeScene((Scene*)&level1);
 			loadGame = false;
 		}
