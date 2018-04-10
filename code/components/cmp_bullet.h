@@ -4,14 +4,14 @@
 class BulletComponent : public Component
 {
 protected:
-	float _bulletSpeed; 
-	float _bulletDamage;
+	double _bulletSpeed; 
+	double _bulletDamage;
 
 public:
 
 	explicit BulletComponent(Entity* p);
 	
-
+	void moveBullet(double dt);
 	void update(double dt);
 	void render();
 

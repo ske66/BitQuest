@@ -3,6 +3,7 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
+#include "components\cmp_bullet.h"
 #include "components\cmp_hurt.h"
 #include "goblin_states.h"
 #include"components\cmp_object_anim.h"
@@ -372,8 +373,23 @@ shared_ptr<Entity>GavinBlast()
 {
 	auto gb = Engine::GetActiveScene()->makeEntity();
 	auto a = gb->addComponent<SpriteComponent>();
-	a->Sprite("magic.png", IntRect(0, 0, 40, 40));
-	gb->addComponent<PhysicsComponent>(true, Vector2f(40, 40));
+	//a->Sprite("magic.png", IntRect(0, 0, 500, 500));
+
+	if (gb->scene->ents.find("player")[0]->getPosition().x < gb->scene->ents.find("gavin")[0]->getPosition().x)
+	{
+		a->Sprite("magic.png", IntRect(40, 0, -40, 40));
+		gb->setPosition(Vector2f(gb->scene->ents.find("gavin")[0]->getPosition().x - 200 , gb->scene->ents.find("gavin")[0]->getPosition().y));
+		gb->setRotation(180.f);
+	}
+	else
+	{
+		gb->setPosition(Vector2f(gb->scene->ents.find("gavin")[0]->getPosition().x + 200, gb->scene->ents.find("gavin")[0]->getPosition().y));
+		a->Sprite("magic.png", IntRect(0, 0, 40, 40));
+	}
+	
+	std::cout << "gavin shooty shoot" << std::endl;
+	//gb->addComponent<PhysicsComponent>(false, Vector2f(40, 40));
+	gb->addComponent<BulletComponent>();
 
 	return gb;
 }

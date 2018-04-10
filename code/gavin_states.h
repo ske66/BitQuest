@@ -39,7 +39,7 @@ class Gavin_AttackState : public State
 {
 private:
 	std::shared_ptr<Entity> _player;
-
+	bool shot = false;
 public:
 
 	Gavin_AttackState(std::shared_ptr<Entity> player)

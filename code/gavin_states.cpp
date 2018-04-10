@@ -19,7 +19,7 @@ void  Gavin_IdleState::execute(Entity *owner, double dt) noexcept
 
 	
 	 //Chase player when in range
-	if(length(owner->getPosition() - _player->getPosition()) < 400.0f)
+	if(length(owner->getPosition() - _player->getPosition()) < 600.0f)
 	{
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("chase");
@@ -30,7 +30,7 @@ void  Gavin_IdleState::execute(Entity *owner, double dt) noexcept
 void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 {
 	//out of range
-	if (!(length(owner->getPosition() - _player->getPosition()) < 400.0f))
+	if (!(length(owner->getPosition() - _player->getPosition()) < 600.0f))
 	{
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("idle");
@@ -57,7 +57,7 @@ void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 	}
 
 	//in attack range
-	if (length(owner->getPosition() - _player->getPosition()) < 150.0f)
+	if (length(owner->getPosition() - _player->getPosition()) < 400.0f)
 	{
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("Attack");
@@ -70,7 +70,12 @@ void  Gavin_AttackState::execute(Entity *owner, double dt) noexcept
 
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	
-	GavinBlast();
+	if (shot == false)
+	{
+		GavinBlast();
+		shot = true;
+	}
+	
 
 	if (me_anim->attackImgNo >= 6)
 	{
@@ -81,7 +86,7 @@ void  Gavin_AttackState::execute(Entity *owner, double dt) noexcept
 	if (me_anim->attackImgNo == 0)
 	{
 		//out of attack range
-		if (!(length(owner->getPosition() - _player->getPosition()) < 150.0f))
+		if (!(length(owner->getPosition() - _player->getPosition()) < 400.0f))
 		{
 			auto sm = owner->get_components<StateMachineComponent>()[0];
 			sm->changeState("idle");
