@@ -1,5 +1,4 @@
 #include "system_resources.h"
-#include "SFML\System\InputStream.hpp"
 
 namespace Resources {
 
@@ -20,23 +19,22 @@ namespace Resources {
 		};
 		return tex;
 	};
-#ifdef SOUND
+
 	template <> // explicit specialisation for T = SoundBuffer
 	std::shared_ptr<sf::SoundBuffer> load(const std::string& name) {
 		auto buf = std::make_shared<sf::SoundBuffer>();
-		if (!buf->loadFromLevel("res/sound/" + name)) {
+		if (!buf->loadFromFile("res/sound/" + name)) {
 			throw("not found: " + name);
 		};
 		return buf;
 	};
 
-	template <> // explicit specialisation for T = Music
+	template <> // explicit specialization for T = Music
 	std::shared_ptr<sf::Music> load(const std::string& name) {
 		auto music = std::make_shared<sf::Music>();
-		if (!music->openFromFile("res/sound/music/" + name)) {
+		if (!music->openFromFile("res/sound/Game_Music/" + name)) {
 			throw("not found: " + name);
 		};
 		return music;
 	};
-#endif // SOUND
 }

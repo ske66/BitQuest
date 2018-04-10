@@ -21,8 +21,6 @@ void Level1Scene::Load() {
 
 	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
-
-
 	int loadPosX;
 	int loadPosY;
 
@@ -60,6 +58,12 @@ void Level1Scene::Load() {
 	makeEnemies();
 
 	addUI();
+
+
+	_music_level1 = Resources::get<Music>("Level_Music.wav");
+	_music_level1->play();
+	_music_level1->setLoop(true);
+
 
 	setLoaded(true);
 }

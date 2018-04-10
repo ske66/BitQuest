@@ -23,17 +23,11 @@ static shared_ptr<Entity> btnExit;
 
 void MainMenuScene::Load()
 {
+	_music_menu = Resources::get<Music>("menu_music.wav");
+	_music_menu->play();
+	_music_menu->setLoop(true);
+
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
-
-	 sf::SoundBuffer buffer;
-	 buffer.loadFromFile("Click.wav");
-
-	 sf::Sound sound;
-     sound.setBuffer(buffer);
-
-	 sound.play();
-
-
 	{
 		//Position the game's Logo
 		auto Logo = makeEntity();
@@ -105,14 +99,20 @@ void MainMenuScene::Load()
 void MainMenuScene::UnLoad() {
 	ls::unload();
 	Scene::UnLoad();
+	_music_menu->stop();
+	_music_menu.reset();
 }
 
 
 void MainMenuScene::Update(const double& dt) 
 {
 
+
+
+
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
+
 
 			Engine::ChangeScene((Scene*)&level1);
 			loadGame = false;
@@ -120,17 +120,20 @@ void MainMenuScene::Update(const double& dt)
 
 		if (btnLoadGame->get_components<BtnComponent>()[0]->isSelected())
 		{
+
 			Engine::ChangeScene((Scene*)&level1);
 			loadGame = true;
 		}
 
 		if (btnSettings->get_components<BtnComponent>()[0]->isSelected())
 		{
+
 			Engine::ChangeScene((Scene*)&settings);
 		}
 
 		if (btnExit->get_components<BtnComponent>()[0]->isSelected())
 		{
+
 			Engine::GetWindow().close();
 		}
 
