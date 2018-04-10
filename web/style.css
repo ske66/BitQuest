@@ -1,7 +1,7 @@
 @font-face
 {
     font-family: "Wonder";
-    src: url("../res/fonts/Wonder.ttf");
+    src: url(fonts/Wonder.ttf);
 }
 
 body
@@ -19,14 +19,6 @@ body
     background-size: cover;
 }
 
-.content
-{
-    position:absolute;
-    width:100%;
-    top:100%;
-    height:auto;
-}
-
 .logo-container
 {
     display:block;
@@ -42,7 +34,7 @@ body
     
     width: 120px;
     height: 120px;
-    background-image: url("../res/textures/SpriteSheets/Torch.png");
+    background-image: url(images/Torch.png);
     
     -webkit-animation: play .8s steps(8) infinite;
     -moz-animation: play .8s steps(8) infinite;
@@ -58,7 +50,7 @@ body
     
     width: 120px;
     height: 120px;
-    background-image: url("../res/textures/SpriteSheets/Torch.png");
+    background-image: url(images/Torch.png);
     
     -webkit-animation: play .8s steps(8) infinite;
     -moz-animation: play .8s steps(8) infinite;
@@ -134,13 +126,23 @@ body
 }
 
 
+.content
+{
+    position:absolute;
+    width:100%;
+    height: 100%;
+    top:230%;
+    background-image: linear-gradient(rgba(0,0,0,1),rgba(0,0,00,0)),url(images/Background-Wall.png);
+    background-repeat: repeat-y;
+   background-size: cover;
+}
 
 .details-container
 {
-    margin-top: 700px;
     color: #ffe001;
     margin-left: 20%;
     margin-right: 20%;
+    margin-top: -25%;
 
 }
 
@@ -154,7 +156,8 @@ body
 
 .info
 {
-        margin-top: 80px;
+    margin-top: 80px;
+    text-align: center;
 }
 
 .details-container p
@@ -168,7 +171,7 @@ body
 {
     padding-top: 80px;
     text-align: center;
-    padding-bottom: 200px;
+    padding-bottom: 80px;
 }
 
 .btn {
@@ -189,17 +192,55 @@ font-weight: 600;
   text-decoration: none;
 }
 
-.dev-info
+.Developers-container
 {
-    margin-left: 30%;
-}
-.img-container
-{
-    float: left;
+    margin-top: 5%;
+    width: 100%;
+    height: auto;
 }
 
-.mark
+.Developers-container h1
 {
-    padding-left: 250px;
+    font-family: "Wonder";
+    color: #ffe001;
+    font-size: 32pt;
+    text-align: center;
+    
 }
+
+.img-container
+{
+    margin-top: 6%;
+    text-align: center;
+}
+
+.Dev
+{
+
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left:150px;
+    padding-right:150px;
+    height:auto;
+}
+
+.Name-Container
+{
+    text-align: center;
+}
+
+.name
+{
+    font-family: "Wonder";
+    color: #ffe001;
+    font-size: 14pt;    
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left:175px;
+    padding-right:175px;
+    height:auto;
+}
+
 
