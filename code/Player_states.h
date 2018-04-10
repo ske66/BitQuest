@@ -47,3 +47,17 @@ public:
 	void enterState(Entity*) noexcept override {};
 	void execute(Entity*, double) noexcept override;
 };
+
+class Player_DeadState : public State
+{
+
+public:
+	
+	Player_DeadState() {}
+
+	double totalTime = 0;
+	double deathHold = 1;
+
+	void enterState(Entity*) noexcept override {};
+	void execute(Entity*, double) noexcept override;
+};

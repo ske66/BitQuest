@@ -33,55 +33,63 @@ void AnimationComponent::update(double dt) {
 	_sprite->setPosition(_parent->getPosition());
 	_sprite->setRotation(_parent->getRotation());
 
-	auto c = _parent->get_components<StateMachineComponent>()[0];
 
-
-	if (c->currentState() == "Attack")
+	if (pause != true)
 	{
-		currentimage.y = 7;
-		attackAnim(dt);
+		auto c = _parent->get_components<StateMachineComponent>()[0];
 
-		if (attackImgNo == 7)
+
+		if (c->currentState() == "Attack")
 		{
-			attackImgNo = 0;
+			currentimage.y = 7;
+			attackAnim(dt);
+
+			if (attackImgNo == 7)
+			{
+				attackImgNo = 0;
+			}
+		}
+		else if (c->currentState() == "chase" || c->currentState() == "walk_right" || c->currentState() == "walk_left")
+		{
+
+			currentimage.y = 0;
+			Anim(dt);
+
+		}
+		else if (c->currentState() == "idle")
+		{
+			currentimage.y = 2;
+			Anim(dt);
+		}
+
+		else if (c->currentState() == "idle")
+		{
+			currentimage.y = 7;
+			attackAnim(dt);
+
+			if (attackImgNo == 7)
+			{
+				attackImgNo = 0;
+			}
+		}
+		else if (c->currentState() == "dead")
+		{
+			currentimage.y = 4;
+			Anim(dt);
+		}
+		else
+		{
+			Anim(dt);
+		}
+		if (attackImgNo != 0)
+		{
+			animDone = false;
+		}
+		if (attackImgNo == 0)
+		{
+			animDone = true;
 		}
 	}
-	else if (c->currentState() == "chase" || c->currentState() == "walk_right" || c->currentState() == "walk_left")
-	{
-
-		currentimage.y = 0;
-		Anim(dt);
-
-	}
-	else if (c->currentState() == "idle")
-	{
-		currentimage.y = 2;
-		Anim(dt);
-	}
-
-	else if (c->currentState() == "idle")
-	{
-		currentimage.y = 7;
-		attackAnim(dt);
-
-		if (attackImgNo == 7)
-		{
-			attackImgNo = 0;
-		}
-	}
-	else
-	{
-		Anim(dt);
-	}
-	if (attackImgNo != 0)
-	{
-		animDone = false;
-	}
-	if (attackImgNo == 0)
-	{
-		animDone = true;
-	}
-
 }
 
 void AnimationComponent::render() { Renderer::queue(_sprite.get()); }

@@ -5,7 +5,9 @@
 #include "components/cmp_animation.h"
 #include <iostream>
 #include "Player_states.h"
-
+#include "components\cmp_player_controller.h"
+#include "components\cmp_hurt.h"
+#include "GameState.h"
 
 using namespace sf;
 using namespace std;
@@ -13,8 +15,10 @@ using namespace std;
 
 void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 {
+	//auto me_dmg = owner->get_components<HurtComponent>()[0];
 	auto me = owner->get_components<StateMachineComponent>()[0]; 
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
+
 
 	//dampen if not jumping
 	if (p->isGrounded() == true)
@@ -39,10 +43,16 @@ void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 		me->changeState("jump");
 	}
 
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
 }
 
 void  Player_MoveLeftState::execute(Entity *owner, double dt) noexcept
 {
+
+	owner->get_components<AnimationComponent>()[0]->faceRight = false;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 	{
@@ -57,12 +67,17 @@ void  Player_MoveLeftState::execute(Entity *owner, double dt) noexcept
 	}
 	p->impulse({ -9.0f , 0.0f });
 	p->dampen({ 1.7f , 1.0f });
-	cout << "ml" << endl;
-
+	
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
 }
 
 void  Player_MoveRightState::execute(Entity *owner, double dt) noexcept
 {
+	owner->get_components<AnimationComponent>()[0]->faceRight = true;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
@@ -78,7 +93,11 @@ void  Player_MoveRightState::execute(Entity *owner, double dt) noexcept
 	p->impulse({ 9.0f , 0.0f });
 	p->dampen({ 1.7f , 1.0f });
 	
-	cout << "mr" << endl;
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
+	
 }
 
 void  Player_AttackState::execute(Entity *owner, double dt) noexcept
@@ -89,7 +108,7 @@ void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 
 	//p->setVelocity({ 0.f , 0.f });
-	cout << "attack" << endl;
+	
 
 	//reset attack animation when done
 	if (me_anim->attackImgNo >= 6)
@@ -130,5 +149,22 @@ void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 			me->changeState("jump");
 		}
 	}
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	{
+		me->changeState("dead");
+	}
+}
+
+void  Player_DeadState::execute(Entity *owner, double dt) noexcept
+{
+
+	auto me_anim = owner->get_components<AnimationComponent>()[0];
+
+	if (me_anim->currentimage.x >= 5)
+	{
+		me_anim->pause = true;
+		
+	}
 	
+
 }

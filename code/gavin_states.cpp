@@ -1,7 +1,5 @@
 #include "gavin_states.h"
 #include "prefabs.h"
-#include <random>
-#include <chrono>
 #include "components/cmp_sprite.h"
 #include "components/cmp_gavin_physics.h"
 #include "components/cmp_animation.h"
@@ -28,18 +26,6 @@ void  Gavin_IdleState::execute(Entity *owner, double dt) noexcept
 	}
 }
 
-void  Gavin_PrepAttackState::execute(Entity *owner, double dt) noexcept
-{
-	_timer -= dt;
-
-	if (_timer <= 0)
-	{
-		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
-		
-	}
-}
-
-
 
 void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 {
@@ -57,7 +43,7 @@ void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 	if (_player->getPosition().x > owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = true;
-		g->impulse({ 4.0f , 0.0f });
+		g->impulse({ 2.0f , 0.0f });
 		g->dampen({ 0.7f , 1.0f });
 	}
 
@@ -65,7 +51,7 @@ void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 	if (_player->getPosition().x < owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = false;
-		g->impulse({ -4.0f , 0.0f });
+		g->impulse({ -2.0f , 0.0f });
 		g->dampen({ 0.7f , 1.0f });
 		
 	}
@@ -74,18 +60,31 @@ void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 	if (length(owner->getPosition() - _player->getPosition()) < 150.0f)
 	{
 		auto sm = owner->get_components<StateMachineComponent>()[0];
-		sm->changeState("prepAttack");
+		sm->changeState("Attack");
 	}
 	
 }
 
 void  Gavin_AttackState::execute(Entity *owner, double dt) noexcept
 {
-	//out of attack range
-	if(!(length(owner->getPosition() - _player->getPosition()) < 150.0f))
+
+	auto me_anim = owner->get_components<AnimationComponent>()[0];
+	
+	GavinBlast();
+
+	if (me_anim->attackImgNo >= 6)
 	{
-		auto sm = owner->get_components<StateMachineComponent>()[0];
-		sm->changeState("idle");
+		me_anim->attackImgNo = 0;
 	}
 
+
+	if (me_anim->attackImgNo == 0)
+	{
+		//out of attack range
+		if (!(length(owner->getPosition() - _player->getPosition()) < 150.0f))
+		{
+			auto sm = owner->get_components<StateMachineComponent>()[0];
+			sm->changeState("idle");
+		}
+	}
 }

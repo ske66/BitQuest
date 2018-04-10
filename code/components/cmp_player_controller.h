@@ -8,20 +8,24 @@
 class PlayerControlerComponent : public Component
 {
 protected:
-	float _health = 3;
+	int _health = 10;
 	int coins = 0;
+	double damageDelay = 2;
+	double totalTime = 0 ;
+	bool immortal = true;
 
 public:
 
 	explicit PlayerControlerComponent(Entity* p);
+	double playerDamage();
 	sf::IntRect checkHealth();
 	PlayerControlerComponent() = delete;
 	double getHealth();
 	void setHealth(double b);
-	void takeDamage(double);
+	void takeDamage(double, double dt);
 	void collectCoin();
 	int getCoins();
-	void collisionCheck();
+	void collisionCheck(double dt);
 	void update(double dt);
 	void render() override;
 

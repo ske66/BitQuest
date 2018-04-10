@@ -1,6 +1,7 @@
 #include "goblin_states.h"
 #include "components\cmp_physics.h"
 #include "components\cmp_animation.h"
+#include "components\cmp_hurt.h"
 
 void  Goblin_IdleState::execute(Entity *owner, double dt) noexcept
 {

@@ -3,13 +3,13 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
+#include "components\cmp_hurt.h"
 #include "goblin_states.h"
 #include"components\cmp_object_anim.h"
 #include "components\cmp_state_Machine.h"
 #include "components\cmp_btn.h"
 #include "components\cmp_animation.h"
 #include "components\cmp_player_controller.h"
-#include "components\cmp_gavin_AI.h"
 #include "components\cmp_UI.h"
 #include "gavin_states.h"
 #include "Player_states.h"
@@ -59,6 +59,7 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 	sm->addState("walk_left", make_shared<Player_MoveLeftState>());
 	sm->addState("walk_right", make_shared<Player_MoveRightState>());
 	sm->addState("Attack", make_shared<Player_AttackState>());
+	sm->addState("dead", make_shared<Player_DeadState>());
 	sm->changeState("idle");
 
 	player->addComponent<PlayerControlerComponent>();
@@ -67,6 +68,7 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 	a->Animation("spritesheets/Bob_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
+//	auto h = player->addComponent<HurtComponent>("player");
 
 	return player;
 }
@@ -79,16 +81,12 @@ shared_ptr<Entity> makeGavin()
 	gavin->setPosition(ls::getTilePosition(ls::findTiles(ls::GAVIN)[0]));
 	gavin->addTag("gavin");
 
-
-	gavin->addComponent<GavinAiComponent>();
-
 	auto sm = gavin->addComponent<StateMachineComponent>();
 
 	Engine::GetActiveScene()->ents.find("player")[0];
 
 	sm->addState("idle", make_shared<Gavin_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
 	sm->addState("chase", make_shared<Gavin_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
-	sm->addState("prepAttack", make_shared<Gavin_PrepAttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
 	sm->addState("Attack", make_shared<Gavin_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
 
 	gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 160));
@@ -114,7 +112,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		goblin->setPosition(ls::getTilePosition(go));
 		goblin->addTag("goblin");
 		
-		auto p = goblin->addComponent<PhysicsComponent>(true, Vector2f(50, 80));
+		auto p = goblin->addComponent<PhysicsComponent>(true, Vector2f(20, 80));
 		auto sm = goblin->addComponent<StateMachineComponent>();
 		p->getFixture()->GetBody()->SetBullet(true);
 	
@@ -353,12 +351,29 @@ void TilePhysics()
 
 shared_ptr<Entity>addUI()
 {
+
 	auto e = Engine::GetActiveScene()->makeEntity();
 	e->addComponent<UIComponent>();
 	e->addTag("UI");
-
-	auto t = e->addComponent<TextComponent>("0");
-	t->getText().setOrigin( Vector2f(Engine::getWindowSize().x * 0.5 ,  Engine::getWindowSize().y * 0.5 ));
 	
 	return e;
+}
+
+shared_ptr<Entity>makeUIText()
+{
+	auto t = Engine::GetActiveScene()->makeEntity();
+	auto tt = t->addComponent<TextComponent>("x 0");
+	tt->getText().setColor(Color::White);
+
+	return t;
+}
+
+shared_ptr<Entity>GavinBlast()
+{
+	auto gb = Engine::GetActiveScene()->makeEntity();
+	auto a = gb->addComponent<SpriteComponent>();
+	a->Sprite("magic.png", IntRect(0, 0, 40, 40));
+	gb->addComponent<PhysicsComponent>(true, Vector2f(40, 40));
+
+	return gb;
 }

@@ -32,11 +32,26 @@ void PlayerControlerComponent::update(double dt)
 	auto UI = _parent->scene->ents.find("UI")[0]->get_components<UIComponent>()[0];
 
 		UI->setHealthDisplay(checkHealth());
-		collisionCheck();
+		collisionCheck(dt);
+
+
+
+		if (immortal == true)
+		{
+			totalTime += dt;
+			std::cout << totalTime << std::endl;
+			
+			if (totalTime >= damageDelay)
+			{
+				totalTime -= damageDelay;
+				immortal = false;
+			}
+		}
 }
 
 sf::IntRect PlayerControlerComponent::checkHealth()
 {
+	
 	if (_health == 10)
 	{
 		return sf::IntRect(0, 0, 400, 50);
@@ -95,13 +110,18 @@ void PlayerControlerComponent::render()
 {
 
 }
-void PlayerControlerComponent::takeDamage(double d)
-{
-	_health = _health - d;
+void PlayerControlerComponent::takeDamage(double d , double dt)
+{	
+	if (immortal == false)
+	{
+		immortal = true;
+		_health = _health - d;
+	}
+		
 }
 
 
-void PlayerControlerComponent::collisionCheck()
+void PlayerControlerComponent::collisionCheck(double dt)
 {
 	auto g = _parent->scene->ents.find("gavin")[0];
 	auto gavin = g->get_components<StateMachineComponent>()[0];
@@ -111,19 +131,15 @@ void PlayerControlerComponent::collisionCheck()
 
 	for (auto c : cs)
 	{
-		if (c->GetFixtureB() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
+		if (c->GetFixtureA() == g->get_components<GavinPhysicsComponent>()[0]->getFixture() || c->GetFixtureB() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
 		{
-			if (gavin->currentState() == "Attack")
-			{
 
-				takeDamage(0.01);
-			}
-
+				takeDamage(1, dt);
+			
 		}
-
 		for (auto b : coins)
 		{
-			if (c->GetFixtureA() == b->get_components<PhysicsComponent>()[0]->getFixture())
+			if (c->GetFixtureB() == b->get_components<PhysicsComponent>()[0]->getFixture())
 			{
 				collectCoin();
 				b->setForDelete();

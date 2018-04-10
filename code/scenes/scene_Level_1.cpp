@@ -14,6 +14,7 @@ static shared_ptr<Entity> player;
 static shared_ptr<Entity> Save;
 static shared_ptr<Entity> Quit;
 static shared_ptr<Entity> Resume;
+static shared_ptr<Entity> CoinText;
 Vector2f view_center;
 
 
@@ -21,7 +22,7 @@ void Level1Scene::Load() {
 
 	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
-
+	CoinText = makeUIText();
 
 	int loadPosX;
 	int loadPosY;
@@ -57,9 +58,11 @@ void Level1Scene::Load() {
 
 	makeChests();
 
-	makeEnemies();
+//	makeEnemies();
 
 	addUI();
+
+	makeUIText();
 
 	setLoaded(true);
 }
@@ -76,6 +79,7 @@ void Level1Scene::Update(const double& dt) {
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
+
 	View view(FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
 	float view_player_distance = sqrt(((player->getPosition().x - view_center.x) * (player->getPosition().x - view_center.x)) + ((player->getPosition().y - view_center.y) * (player->getPosition().y - view_center.y)));
 	if (view_player_distance > 40.f)
@@ -89,7 +93,7 @@ void Level1Scene::Update(const double& dt) {
 	{
 
 		//Started Save Game/Load Game
-		
+
 		Vector2f currentPos = player->getPosition();
 
 		int posX = currentPos.x;
@@ -104,9 +108,19 @@ void Level1Scene::Update(const double& dt) {
 		outFile << saveCoords.y << endl;
 		outFile.close();
 		//Position Saved
-		
+
 		Engine::ChangeScene(&menu);
-		
+
+	}
+	if (player->get_components<StateMachineComponent>()[0]->currentState() == "dead")
+	{
+		totalTime += dt;
+
+		if (totalTime >= holdTime)
+		{
+			Engine::ChangeScene(&menu);
+		}
+
 	}
 	Scene::Update(dt);
 

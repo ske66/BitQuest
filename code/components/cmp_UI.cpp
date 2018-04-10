@@ -54,6 +54,7 @@ void UIComponent::render()
 	Renderer::queue(&topBar);
 	Renderer::queue(&heartUI);
 	Renderer::queue(&coinUI);
+
 }
 
 void UIComponent::setHealthDisplay(sf::IntRect s)

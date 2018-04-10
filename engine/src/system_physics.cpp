@@ -1,6 +1,7 @@
 #include "system_physics.h"
 #include "Box2D/Box2D.h"
 
+
 using namespace std;
 using namespace sf;
 
@@ -10,8 +11,6 @@ namespace Physics
 	const int32 velocityIterations = 6;
 	const int32 positionIterations = 2;
 	
-
-		
 	void initialise()
 	{
 		b2Vec2 gravity(0.0f, -40.0f);
