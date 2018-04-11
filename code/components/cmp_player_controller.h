@@ -20,9 +20,9 @@ protected:
 	sf::Sound _soundDeath;
 
 public:
-
+	
 	explicit PlayerControlerComponent(Entity* p);
-	double playerDamage();
+	double playerDamage;
 	sf::IntRect checkHealth();
 	PlayerControlerComponent() = delete;
 	double getHealth();

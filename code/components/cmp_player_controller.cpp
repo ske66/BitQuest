@@ -8,6 +8,7 @@ using namespace sf;
 PlayerControlerComponent::PlayerControlerComponent(Entity* p)
 	: Component(p)
 {
+	playerDamage = 1;
 
 }
 
@@ -53,8 +54,6 @@ void PlayerControlerComponent::update(double dt)
 
 sf::IntRect PlayerControlerComponent::checkHealth()
 {
-	bool isPlaying;
-
 	
 	if (_health == 10)
 	{
@@ -133,6 +132,7 @@ void PlayerControlerComponent::collisionCheck(double dt)
 {
 	auto g = _parent->scene->ents.find("gavin")[0];
 	auto gavin = g->get_components<StateMachineComponent>()[0];
+
 	auto coins = _parent->scene->ents.find("coin");
 	auto cs = _parent->get_components<PlayerPhysicsComponent>()[0]->getTouching();
 
@@ -141,9 +141,7 @@ void PlayerControlerComponent::collisionCheck(double dt)
 	{
 		if (c->GetFixtureA() == g->get_components<GavinPhysicsComponent>()[0]->getFixture() || c->GetFixtureB() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
 		{
-
-				takeDamage(1, dt);
-			
+				takeDamage(1, dt);			
 		}
 		for (auto b : coins)
 		{

@@ -3,6 +3,7 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
+#include "components\cmp_gavin_properties.h"
 #include "components\cmp_bullet.h"
 #include "components\cmp_hurt.h"
 #include "goblin_states.h"
@@ -63,13 +64,14 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 	sm->addState("dead", make_shared<Player_DeadState>());
 	sm->changeState("idle");
 
+	
+
 	player->addComponent<PlayerControlerComponent>();
+
 	player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 160));
 	auto a = player->addComponent<AnimationComponent>();
 	a->Animation("spritesheets/Bob_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
-
-//	auto h = player->addComponent<HurtComponent>("player");
 
 	return player;
 }
@@ -86,10 +88,16 @@ shared_ptr<Entity> makeGavin()
 
 	Engine::GetActiveScene()->ents.find("player")[0];
 
+	sm->addState("dead", make_shared<Gavin_DeadState>());
 	sm->addState("idle", make_shared<Gavin_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
 	sm->addState("chase", make_shared<Gavin_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
-	sm->addState("Attack", make_shared<Gavin_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
+	sm->addState("cast", make_shared<Gavin_CastState>(Engine::GetActiveScene()->ents.find("player")[0]));
 
+	auto bar = gavin->addComponent<SpriteComponent>();
+	bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
+	bar->getSprite().setOrigin({ 50,100 });
+
+	gavin->addComponent<GavinPropertiesComponent>();
 	gavin->addComponent<GavinPhysicsComponent>(Vector2f(120, 160));
 	auto a = gavin->addComponent<AnimationComponent>();
 	a->Animation("spritesheets/Gavin_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
@@ -373,22 +381,23 @@ shared_ptr<Entity>GavinBlast()
 {
 	auto gb = Engine::GetActiveScene()->makeEntity();
 	auto a = gb->addComponent<SpriteComponent>();
-	//a->Sprite("magic.png", IntRect(0, 0, 500, 500));
 
 	if (gb->scene->ents.find("player")[0]->getPosition().x < gb->scene->ents.find("gavin")[0]->getPosition().x)
 	{
 		a->Sprite("magic.png", IntRect(40, 0, -40, 40));
-		gb->setPosition(Vector2f(gb->scene->ents.find("gavin")[0]->getPosition().x - 200 , gb->scene->ents.find("gavin")[0]->getPosition().y));
+		gb->setPosition(Vector2f(gb->scene->ents.find("gavin")[0]->getPosition().x - 50 , gb->scene->ents.find("gavin")[0]->getPosition().y - 20));
 		gb->setRotation(180.f);
 	}
 	else
 	{
-		gb->setPosition(Vector2f(gb->scene->ents.find("gavin")[0]->getPosition().x + 200, gb->scene->ents.find("gavin")[0]->getPosition().y));
+		gb->setPosition(Vector2f(gb->scene->ents.find("gavin")[0]->getPosition().x + 10, gb->scene->ents.find("gavin")[0]->getPosition().y - 20));
 		a->Sprite("magic.png", IntRect(0, 0, 40, 40));
 	}
 	
-	//gb->addComponent<PhysicsComponent>(false, Vector2f(40, 40));
+	gb->addComponent<PhysicsComponent>(true, Vector2f(10, 40));
 	gb->addComponent<BulletComponent>();
+	
+	gb->addTag("gavBlast");
 
 	return gb;
 }

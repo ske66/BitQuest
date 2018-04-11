@@ -11,6 +11,7 @@ using namespace std;
 using namespace sf;
 
 static shared_ptr<Entity> player;
+static shared_ptr<Entity> gavin;
 static shared_ptr<Entity> Save;
 static shared_ptr<Entity> Quit;
 static shared_ptr<Entity> Resume;
@@ -36,6 +37,7 @@ void Level1Scene::Load() {
 	ifstream InFile("res/SaveStates/TestLevelSave.txt");
 	(InFile >> loadPosX >> loadPosY);
 
+
 	if (loadGame == true)
 	{
 		player = makePlayer(Vector2f(loadPosX,loadPosY-240));
@@ -45,17 +47,24 @@ void Level1Scene::Load() {
 		player = makePlayer(Vector2f(1200, 15360));
 	}
 
+
 	view_center = player->getPosition();
+
 
 	TilePhysics();
 
+
 	makeTorches();
+
 
 	makeShops();
 
-	makeGavin();
+
+	gavin = makeGavin();
+
 
 	makeCoins();
+
 
 	makeChests();
 
@@ -122,6 +131,16 @@ void Level1Scene::Update(const double& dt) {
 		if (totalTime >= holdTime)
 		{
 			Engine::ChangeScene(&gameOver);
+		}
+
+	}
+	if (gavin->get_components<StateMachineComponent>()[0]->currentState() == "dead")
+	{
+		totalTime += dt;
+
+		if (totalTime >= holdTime)
+		{
+			Engine::ChangeScene(&menu);
 		}
 
 	}

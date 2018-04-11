@@ -15,10 +15,8 @@ using namespace std;
 
 void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 {
-	//auto me_dmg = owner->get_components<HurtComponent>()[0];
 	auto me = owner->get_components<StateMachineComponent>()[0]; 
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
-
 
 	//dampen if not jumping
 	if (p->isGrounded() == true)
@@ -61,6 +59,7 @@ void  Player_MoveLeftState::execute(Entity *owner, double dt) noexcept
 
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 	
+
 	if (!Keyboard::isKeyPressed(Keyboard::A))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("idle");
@@ -107,14 +106,15 @@ void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 
+	
 	//p->setVelocity({ 0.f , 0.f });
 	
 
 	//reset attack animation when done
 	if (me_anim->attackImgNo >= 6)
 	{
+		
 		me_anim->attackImgNo = 0;
-
 		//keep moving if you where moving before attacking
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{

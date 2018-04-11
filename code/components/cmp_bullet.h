@@ -9,9 +9,13 @@ protected:
 
 public:
 
+	std::shared_ptr<Entity> _player;
+	std::shared_ptr<Entity> _gavin;
 	explicit BulletComponent(Entity* p);
 	
+	bool facingRight = true; //
 	void moveBullet(double dt);
+	void checkContact(double dt);
 	void update(double dt);
 	void render();
 
