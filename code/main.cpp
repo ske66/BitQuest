@@ -6,6 +6,7 @@
 #include "scenes\scene_Settings_Audio.h"
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
+#include "scenes\Scene_Game_Over.h"
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML\Graphics.hpp>
 #include <fstream>
@@ -20,6 +21,7 @@ SettingsAudioScene settingsAudio;
 SettingsGraphicsScene settingsGraphics;
 SettingsGameplayScene settingsGameplay;
 Level1Scene level1;
+GameOverScene gameOver;
 bool loadGame;
 
 int ResolutionX;

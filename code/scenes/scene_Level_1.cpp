@@ -121,7 +121,7 @@ void Level1Scene::Update(const double& dt) {
 
 		if (totalTime >= holdTime)
 		{
-			Engine::ChangeScene(&menu);
+			Engine::ChangeScene(&gameOver);
 		}
 
 	}
