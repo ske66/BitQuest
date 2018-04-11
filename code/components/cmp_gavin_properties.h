@@ -6,17 +6,19 @@ class GavinPropertiesComponent : public Component
 {
 protected:
 	float _health = 10;
-	float damageDelay = 10;
-	float totalTime;
+	float damageDelay = 0.5;
+	float totalTime = 0;
 
 public:
 
+	bool immortal = true;
+	std::shared_ptr<Entity> _player;
 	explicit GavinPropertiesComponent(Entity* p);
-	sf::IntRect checkHealth();
+	void checkHealth();
 	GavinPropertiesComponent() = delete;
 	double getHealth();
 	void takeDamage(double);
 	void update(double dt);
 	void render() override;
-
+	void checkContact();
 };

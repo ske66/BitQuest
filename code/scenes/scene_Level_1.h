@@ -5,7 +5,7 @@
 
 class Level1Scene : public Scene {
 public:
-	double holdTime = 2;
+	double holdTime = 4;
 	double totalTime = 0;
 
 	void Load() override;

@@ -1,5 +1,6 @@
 #include "gavin_states.h"
 #include "prefabs.h"
+#include "components\cmp_gavin_properties.h"
 #include "components/cmp_sprite.h"
 #include "components/cmp_gavin_physics.h"
 #include "components/cmp_animation.h"
@@ -9,28 +10,52 @@
 using namespace sf;
 using namespace std;
 
-float _timer = 1.0f;
+double attackDelay= 2;
+double totalTime = 2;
+double deathDelay = 5;
+double chaseRange = 1000;
+double attackRange = 700;
+
 // Gavin ----------------------------------------------------------------------
 
 void  Gavin_IdleState::execute(Entity *owner, double dt) noexcept
 {
+
 	// Don't move
 	owner->get_components<GavinPhysicsComponent>()[0]->setVelocity(Vector2f(0, 0));
-
 	
 	 //Chase player when in range
-	if(length(owner->getPosition() - _player->getPosition()) < 600.0f)
+	if(length(owner->getPosition() - _player->getPosition()) < chaseRange)
 	{
 		auto sm = owner->get_components<StateMachineComponent>()[0];
-		sm->changeState("chase");
+
+		if (length(owner->getPosition() - _player->getPosition()) < attackRange)
+		{
+			totalTime += dt;
+
+				if(totalTime >= attackDelay)
+				{
+					totalTime -= attackDelay;
+					sm->changeState("cast");
+				}
+			
+		}
+		else
+		{
+			sm->changeState("chase");
+		}
+		
+	}
+	if (owner->get_components<GavinPropertiesComponent>()[0]->getHealth() == 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 }
-
 
 void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 {
 	//out of range
-	if (!(length(owner->getPosition() - _player->getPosition()) < 600.0f))
+	if (!(length(owner->getPosition() - _player->getPosition()) < chaseRange))
 	{
 		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("idle");
@@ -57,39 +82,62 @@ void  Gavin_ChaseState::execute(Entity *owner, double dt) noexcept
 	}
 
 	//in attack range
-	if (length(owner->getPosition() - _player->getPosition()) < 400.0f)
+	if (length(owner->getPosition() - _player->getPosition()) < attackRange)
 	{
+		
 		auto sm = owner->get_components<StateMachineComponent>()[0];
-		sm->changeState("Attack");
+		sm->changeState("cast");
+
 	}
+	if (owner->get_components<GavinPropertiesComponent>()[0]->getHealth() == 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
+}
+
+void  Gavin_CastState::execute(Entity *owner, double dt) noexcept
+{
+	auto me_anim = owner->get_components<AnimationComponent>()[0];
+	
+	if (_player->getPosition().x > owner->getPosition().x)
+	{
+		me_anim->faceRight = true;
+	}
+	if (_player->getPosition().x < owner->getPosition().x)
+	{
+		me_anim->faceRight = false;
+	}
+	
+
+		if (me_anim->attackImgNo == 7 )
+		{
+			GavinBlast();
+			me_anim->attackImgNo = 0;
+			owner->get_components<StateMachineComponent>()[0]->changeState("idle");
+		}
+
+		if (me_anim->attackImgNo == 0)
+		{
+			//out of attack range
+			if (length(owner->getPosition() - _player->getPosition()) > 700)
+			{
+				auto sm = owner->get_components<StateMachineComponent>()[0];
+				sm->changeState("idle");
+
+			}
+		}
+		if (owner->get_components<GavinPropertiesComponent>()[0]->getHealth() == 0)
+		{
+			owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+		}
 	
 }
 
-void  Gavin_AttackState::execute(Entity *owner, double dt) noexcept
+void  Gavin_DeadState::execute(Entity *owner, double dt) noexcept
 {
-
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
-	
-	if (shot == false)
+	if(me_anim->currentimage.x == 6)
 	{
-		GavinBlast();
-		shot = true;
-	}
-	
-
-	if (me_anim->attackImgNo >= 6)
-	{
-		me_anim->attackImgNo = 0;
-	}
-
-
-	if (me_anim->attackImgNo == 0)
-	{
-		//out of attack range
-		if (!(length(owner->getPosition() - _player->getPosition()) < 400.0f))
-		{
-			auto sm = owner->get_components<StateMachineComponent>()[0];
-			sm->changeState("idle");
-		}
+		me_anim->pause = true;
 	}
 }

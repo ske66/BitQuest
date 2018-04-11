@@ -77,6 +77,11 @@ void AnimationComponent::update(double dt) {
 			currentimage.y = 4;
 			Anim(dt);
 		}
+		else if (c->currentState() == "cast")
+		{
+			currentimage.y = 6;
+			attackAnim(dt);
+		}
 		else
 		{
 			Anim(dt);
