@@ -25,6 +25,11 @@ void MainMenuScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
+	//Music
+	_musicMenu = Resources::get<Music>("Menu_Music.wav");
+	_musicMenu->play();
+	_musicMenu->setLoop(true);
+
 
 	{
 		//Position the game's Logo
@@ -95,6 +100,9 @@ void MainMenuScene::Load()
 
 
 void MainMenuScene::UnLoad() {
+	_musicMenu->stop();
+	_musicMenu.reset();
+	
 	ls::unload();
 	Scene::UnLoad();
 }
@@ -124,6 +132,12 @@ void MainMenuScene::Update(const double& dt)
 		if (btnExit->get_components<BtnComponent>()[0]->isSelected())
 		{
 			Engine::GetWindow().close();
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::A))
+		{
+
+
 		}
 
 	Scene::Update(dt);

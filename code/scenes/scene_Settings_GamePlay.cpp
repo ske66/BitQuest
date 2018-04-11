@@ -43,10 +43,7 @@ void SettingsGameplayScene::Load()
 	ifstream file("res/savestates/PlayerControls.txt");
 	while (file >> txtwalkLeft >> txtwalkRight >> txtjump >> txtattack >> txtswitch)
 	{
-		cout << txtwalkLeft << endl;
-		cout << txtwalkRight << endl;
-		cout << txtjump << endl;
-		cout << txtattack << endl;
+
 	}
 
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);

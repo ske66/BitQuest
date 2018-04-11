@@ -4,6 +4,7 @@
 #include "cmp_player_physics.h"
 #include "cmp_gavin_physics.h"
 #include "cmp_animation.h"
+#include <SFML\Audio.hpp>
 
 class PlayerControlerComponent : public Component
 {
@@ -13,6 +14,10 @@ protected:
 	double damageDelay = 2;
 	double totalTime = 0 ;
 	bool immortal = true;
+	sf::SoundBuffer _bufferHit;
+	sf::SoundBuffer _bufferDeath;
+	sf::Sound _soundHit;
+	sf::Sound _soundDeath;
 
 public:
 

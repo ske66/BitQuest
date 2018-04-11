@@ -17,10 +17,14 @@ void BtnComponent::update(double dt)
 	if (_shapeCmp->getShape().getGlobalBounds().contains(mousePos))
 	{
 		setHighlighted(true);
+
+		_isTouching = true;
 	}
 	else
 	{
 		setHighlighted(false);
+
+		_isTouching = false;
 	}
 }
 
@@ -33,6 +37,11 @@ void BtnComponent::setHighlighted(bool h, bool isClicked)
 		{
 			_textCmp->getText().setFillColor(Color(240, 178, 0));
 			_underLine->getShape().setFillColor(Color(240, 178, 0));
+
+			_bufferClick = *(Resources::get<SoundBuffer>("Game_Sounds/Click.wav"));
+			_soundClick.setBuffer(_bufferClick);
+
+			_soundClick.play();
 		}
 		else
 		{

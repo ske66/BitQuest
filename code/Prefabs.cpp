@@ -387,7 +387,6 @@ shared_ptr<Entity>GavinBlast()
 		a->Sprite("magic.png", IntRect(0, 0, 40, 40));
 	}
 	
-	std::cout << "gavin shooty shoot" << std::endl;
 	//gb->addComponent<PhysicsComponent>(false, Vector2f(40, 40));
 	gb->addComponent<BulletComponent>();
 

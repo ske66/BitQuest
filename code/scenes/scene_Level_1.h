@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine.h"
+#include <SFML\Audio.hpp>
 
 class Level1Scene : public Scene {
 public:
@@ -14,4 +15,7 @@ public:
 	void Update(const double& dt) override;
 
 	void Render() override;
+
+	std::shared_ptr<sf::Music>_musicLevel1;
+
 };

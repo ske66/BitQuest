@@ -22,6 +22,12 @@ void Level1Scene::Load() {
 
 	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
+																   //Music
+	_musicLevel1 = Resources::get<Music>("Level_Music.wav");
+	_musicLevel1->play();
+	_musicLevel1->setLoop(true);
+	_musicLevel1->setVolume(50);
+
 	CoinText = makeUIText();
 
 	int loadPosX;
@@ -29,11 +35,6 @@ void Level1Scene::Load() {
 
 	ifstream InFile("res/SaveStates/TestLevelSave.txt");
 	(InFile >> loadPosX >> loadPosY);
-
-	cout << loadPosX << endl;
-
-	cout << loadPosY << endl;
-
 
 	if (loadGame == true)
 	{
@@ -69,6 +70,9 @@ void Level1Scene::Load() {
 
 void Level1Scene::UnLoad() {
 	player.reset();
+	_musicLevel1->stop();
+	_musicLevel1.reset();
+
 	ls::unload();
 	Scene::UnLoad();
 }
@@ -101,7 +105,6 @@ void Level1Scene::Update(const double& dt) {
 
 		Vector2u saveCoords = Vector2u(((posX + 240 / 2) / 240) * 240, ((posY + 240) / 240) * 240);
 
-		cout << saveCoords << endl;
 
 		std::ofstream outFile("res/SaveStates/TestLevelSave.txt");
 		outFile << saveCoords.x << endl;

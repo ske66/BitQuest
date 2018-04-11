@@ -1,5 +1,6 @@
 #pragma once
 #include "components/cmp_state_machine.h"
+#include <SFML\Audio.hpp>
 
 //Player -----------------------------------------------------------------
 
@@ -57,6 +58,7 @@ public:
 
 	double totalTime = 0;
 	double deathHold = 1;
+
 
 	void enterState(Entity*) noexcept override {};
 	void execute(Entity*, double) noexcept override;

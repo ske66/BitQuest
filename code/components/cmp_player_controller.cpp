@@ -2,6 +2,9 @@
 #include "cmp_state_Machine.h"
 #include "cmp_UI.h"
 
+using namespace std;
+using namespace sf;
+
 PlayerControlerComponent::PlayerControlerComponent(Entity* p)
 	: Component(p)
 {
@@ -39,7 +42,6 @@ void PlayerControlerComponent::update(double dt)
 		if (immortal == true)
 		{
 			totalTime += dt;
-			std::cout << totalTime << std::endl;
 			
 			if (totalTime >= damageDelay)
 			{
@@ -51,6 +53,8 @@ void PlayerControlerComponent::update(double dt)
 
 sf::IntRect PlayerControlerComponent::checkHealth()
 {
+	bool isPlaying;
+
 	
 	if (_health == 10)
 	{
@@ -99,7 +103,6 @@ sf::IntRect PlayerControlerComponent::checkHealth()
 	}
 	if (_health == 0)
 	{
-		std::cout << "dead" << std::endl;
 		return sf::IntRect(0, 0, 0, 50);
 	}
 
@@ -116,6 +119,11 @@ void PlayerControlerComponent::takeDamage(double d , double dt)
 	{
 		immortal = true;
 		_health = _health - d;
+
+		_bufferHit = *(Resources::get<SoundBuffer>("Bob_Sounds/Bob_Hit.wav"));
+		_soundHit.setBuffer(_bufferHit);
+
+		_soundHit.play();
 	}
 		
 }

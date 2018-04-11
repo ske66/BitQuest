@@ -155,7 +155,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	{
 		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Fullscreen);
 
-		//window.setFramerateLimit(FrameSpeed);
+		window.setFramerateLimit(FrameSpeed);
 
 		window.setVerticalSyncEnabled(true);
 
@@ -199,7 +199,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	{
 		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Resize);
 
-	//	window.setFramerateLimit(FrameSpeed);
+	window.setFramerateLimit(FrameSpeed);
 
 		window.setVerticalSyncEnabled(true);
 
@@ -250,7 +250,6 @@ std::shared_ptr<Entity> Scene::makeEntity() {
 void Engine::setVsync(bool b) { _window->setVerticalSyncEnabled(b); }
 
 void Engine::ChangeScene(Scene* s) {
-	cout << "Eng: changing scene: " << s << endl;
 	auto old = _activeScene;
 	_activeScene = s;
 
@@ -259,7 +258,6 @@ void Engine::ChangeScene(Scene* s) {
 	}
 
 	if (!s->isLoaded()) {
-		cout << "Eng: Entering Loading Screen\n";
 		loadingTime = 0;
 		_activeScene->Load();
 		loading = true;

@@ -3,14 +3,19 @@
 #include <ecm.h>
 #include "cmp_text.h"
 #include "cmp_animation.h"
+#include <SFML\Audio.hpp>
 
 class BtnComponent : public Component
 {
 private:
 	bool _isHighlighted = false;
+	bool _isTouching = false;
 	std::shared_ptr<ShapeComponent> _shapeCmp;
 	std::shared_ptr<TextComponent> _textCmp;
 	std::shared_ptr<ShapeComponent> _underLine;
+	sf::SoundBuffer _bufferClick;
+	sf::Sound _soundClick;
+
 
 public:
 	BtnComponent() = delete;
