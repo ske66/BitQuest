@@ -1,14 +1,15 @@
 #pragma once
+#pragma once
 #include "components\cmp_state_Machine.h"
 
-class Goblin_IdleState : public State
+class Troll_IdleState : public State
 {
 private:
 	std::shared_ptr<Entity> _player;
 
 public:
 
-	Goblin_IdleState(std::shared_ptr<Entity> player)
+	Troll_IdleState(std::shared_ptr<Entity> player)
 		: _player(player) {}
 
 	void enterState(Entity*) noexcept override {};
@@ -16,14 +17,14 @@ public:
 };
 
 
-class Goblin_AttackState : public State
+class Troll_AttackState : public State
 {
 private:
 	std::shared_ptr<Entity> _player;
 
 public:
 
-	Goblin_AttackState(std::shared_ptr<Entity> player)
+	Troll_AttackState(std::shared_ptr<Entity> player)
 		: _player(player) {}
 
 	void enterState(Entity*) noexcept override {};
@@ -31,28 +32,28 @@ public:
 };
 
 
-class Goblin_ChaseState : public State
+class Troll_ChaseState : public State
 {
 private:
 	std::shared_ptr<Entity> _player;
 
 public:
 
-	Goblin_ChaseState(std::shared_ptr<Entity> player)
+	Troll_ChaseState(std::shared_ptr<Entity> player)
 		: _player(player) {}
 
 	void enterState(Entity*) noexcept override {};
 	void execute(Entity*, double) noexcept override;
 };
 
-class Goblin_DeadState : public State
+class Troll_DeadState : public State
 {
 private:
 
 public:
 
 	double attackRange;
-	Goblin_DeadState() {}
+	Troll_DeadState() {}
 
 	void enterState(Entity*) noexcept override {};
 	void execute(Entity*, double) noexcept override;

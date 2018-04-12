@@ -2,23 +2,23 @@
 #include <ecm.h>
 #include "engine.h"
 
-class GavinPropertiesComponent : public Component
+class GoblinPropertiesComponent : public Component
 {
 protected:
-	float _health = 20;
-	float damageDelay = 0.5;
+	float _health = 2;
+	float damageDelay = 0.2;
 	float totalTime = 0;
-
 public:
 
+	float goblinDamage = 1;
 	bool immortal = true;
 	std::shared_ptr<Entity> _player;
-	explicit GavinPropertiesComponent(Entity* p);
+	explicit GoblinPropertiesComponent(Entity* p);
 	void checkHealth();
-	GavinPropertiesComponent() = delete;
+	GoblinPropertiesComponent() = delete;
 	double getHealth();
 	void takeDamage(double);
 	void update(double dt);
 	void render() override;
-	void checkContact();
+	void checkContact(double dt);
 };

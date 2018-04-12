@@ -68,7 +68,7 @@ void Level1Scene::Load() {
 
 	makeChests();
 
-//	makeEnemies();
+	makeEnemies();
 
 	addUI();
 
