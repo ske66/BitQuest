@@ -3,22 +3,30 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
-
+#include "Player_states.h"
+#include "goblin_states.h"
+#include "orc_states.h"
 #include "troll_states.h"
-#include "components\cmp_troll_properties.h"
+#include "skeleton_states.h"
+#include "gavin_states.h"
+
+
 #include "components\cmp_goblin_properties.h"
+#include "components\cmp_orc_properties.h"
+#include "components\cmp_troll_properties.h"
+#include "components\cmp_skeleton_properties.h"
+
 #include "components\cmp_gavin_properties.h"
 #include "components\cmp_bullet.h"
 #include "components\cmp_hurt.h"
-#include "goblin_states.h"
+
 #include"components\cmp_object_anim.h"
 #include "components\cmp_state_Machine.h"
 #include "components\cmp_btn.h"
 #include "components\cmp_animation.h"
 #include "components\cmp_player_controller.h"
 #include "components\cmp_UI.h"
-#include "gavin_states.h"
-#include "Player_states.h"
+
 
 using namespace std;
 using namespace sf;
@@ -152,15 +160,28 @@ vector<shared_ptr<Entity>> makeEnemies()
 	for (auto or : orcs)
 	{
 		auto orc = Engine::GetActiveScene()->makeEntity();
-		orc->setPosition(ls::getTilePosition(or ));
+		orc->setPosition(ls::getTilePosition(or));
 		orc->addTag("orc");
 
+		auto p = orc->addComponent<PhysicsComponent>(true, Vector2f(100, 160));
+		auto sm = orc->addComponent<StateMachineComponent>();
+		p->getFixture()->GetBody()->SetBullet(true);
 
+		auto os = orc->addComponent<OrcPropertiesComponent>();
 
-		orc->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
+		sm->addState("dead", make_shared<Orc_DeadState>());
+		sm->addState("chase", make_shared<Orc_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("idle", make_shared<Orc_IdleState>(Engine::GetActiveScene() ->ents.find("player")[0]));
+		sm->addState("attack", make_shared<Orc_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->changeState("idle");
+
 		auto a = orc->addComponent<AnimationComponent>();
-		a->Animation("Spritesheets/Orc_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
-		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		a->Animation("Spritesheets/Orc_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getLocalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		auto bar = orc->addComponent<SpriteComponent>();
+		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
+		bar->getSprite().setOrigin({ 50,100 });
 
 		enemies.push_back(orc);
 	}
@@ -200,12 +221,26 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto skeleton = Engine::GetActiveScene()->makeEntity();
 		skeleton->setPosition(ls::getTilePosition(sk));
 		skeleton->addTag("skeleton");
+		auto prop = skeleton->addComponent<SkeletonPropertiesComponent>();
 
 
-		skeleton->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
-		//auto a = skeleton->addComponent<AnimationComponent>();
-		//a->Animation("Spritesheets/Skeleton_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
-		//a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		auto sm = skeleton->addComponent<StateMachineComponent>();
+
+		sm->addState("dead", make_shared<Skeleton_DeadState>());
+		sm->addState("chase", make_shared<Skeleton_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("idle", make_shared<Skeleton_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("Attack", make_shared<Skeleton_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->changeState("idle");
+
+
+		skeleton->addComponent<PhysicsComponent>(true, Vector2f(100, 160));
+		auto a = skeleton->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/skeleton_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		auto bar = skeleton->addComponent<SpriteComponent>();
+		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
+		bar->getSprite().setOrigin({ 50,100 });
 
 		enemies.push_back(skeleton);
 	}

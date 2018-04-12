@@ -124,6 +124,7 @@ void TrollPropertiesComponent::checkHealth()
 	{
 		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 30, 5));
 	}
+
 	if (_health == 2)
 	{
 		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 20, 5));

@@ -23,7 +23,7 @@ void Level1Scene::Load() {
 
 	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
-																   //Music
+	//Music
 	_musicLevel1 = Resources::get<Music>("Level_Music.wav");
 	_musicLevel1->play();
 	_musicLevel1->setLoop(true);

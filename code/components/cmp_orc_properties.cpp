@@ -1,15 +1,15 @@
-#include "cmp_goblin_properties.h"
+#include "cmp_orc_properties.h"
 #include "cmp_physics.h"
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
 
-GoblinPropertiesComponent::GoblinPropertiesComponent(Entity* p)
+OrcPropertiesComponent::OrcPropertiesComponent(Entity* p)
 	: Component(p)
 {
 	_player = _parent->scene->ents.find("player")[0];
 };
 
-void GoblinPropertiesComponent::takeDamage(double h)
+void OrcPropertiesComponent::takeDamage(double h)
 {
 	if (immortal == false)
 	{
@@ -19,20 +19,17 @@ void GoblinPropertiesComponent::takeDamage(double h)
 	}
 }
 
-double GoblinPropertiesComponent::getHealth()
+double OrcPropertiesComponent::getHealth()
 {
 	return _health;
 }
 
-
-void GoblinPropertiesComponent::update(double dt)
+void OrcPropertiesComponent::update(double dt)
 {
 	if (length(_parent->getPosition() - _player->getPosition()) < 100)
 	{
 		this->checkContact(dt);
 	}
-
-	
 
 	if (immortal == true)
 	{
@@ -45,11 +42,13 @@ void GoblinPropertiesComponent::update(double dt)
 		}
 	}
 }
-void GoblinPropertiesComponent::render()
+
+void OrcPropertiesComponent::render()
 {
 
 }
-void GoblinPropertiesComponent::checkContact(double dt)
+
+void OrcPropertiesComponent::checkContact(double dt)
 {
 
 	auto cs = _parent->get_components<PhysicsComponent>()[0]->getTouching();
@@ -68,14 +67,14 @@ void GoblinPropertiesComponent::checkContact(double dt)
 			}
 			else
 			{
-				ap->takeDamage(goblinDamage, dt);
+				ap->takeDamage(orcDamage, dt);
 			}
 		}
 	}
 
 }
 
-void GoblinPropertiesComponent::checkHealth()
+void OrcPropertiesComponent::checkHealth()
 {
 	auto bar = _parent->get_components<SpriteComponent>()[0];
 
@@ -122,7 +121,6 @@ void GoblinPropertiesComponent::checkHealth()
 
 	if (_health == 1)
 	{
-
 		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 10, 5));
 	}
 	if (_health == 0)

@@ -1,39 +1,44 @@
-#include "cmp_goblin_properties.h"
-#include "cmp_physics.h"
+#include "cmp_skeleton_properties.h"
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
+#include <iostream>
 
-GoblinPropertiesComponent::GoblinPropertiesComponent(Entity* p)
+
+SkeletonPropertiesComponent::SkeletonPropertiesComponent(Entity* p)
 	: Component(p)
 {
 	_player = _parent->scene->ents.find("player")[0];
-};
 
-void GoblinPropertiesComponent::takeDamage(double h)
+}
+
+
+void SkeletonPropertiesComponent::takeDamage(double h)
 {
+
 	if (immortal == false)
 	{
 		immortal = true;
 		_health = _health - h;
-		this->checkHealth();
+
 	}
+
 }
 
-double GoblinPropertiesComponent::getHealth()
+double SkeletonPropertiesComponent::getHealth()
 {
 	return _health;
 }
 
-
-void GoblinPropertiesComponent::update(double dt)
+void SkeletonPropertiesComponent::update(double dt)
 {
-	if (length(_parent->getPosition() - _player->getPosition()) < 100)
+
+	//only check when near player (saves performance evaluation of position Runs in Constant time loop runs in liniar time avoid where possible)
+	if (length(_parent->getPosition() - _player->getPosition()) > 50)
 	{
-		this->checkContact(dt);
+		checkContact(dt);
 	}
 
-	
-
+	checkHealth();
 	if (immortal == true)
 	{
 		totalTime += dt;
@@ -45,11 +50,13 @@ void GoblinPropertiesComponent::update(double dt)
 		}
 	}
 }
-void GoblinPropertiesComponent::render()
+
+void SkeletonPropertiesComponent::render()
 {
 
 }
-void GoblinPropertiesComponent::checkContact(double dt)
+
+void SkeletonPropertiesComponent::checkContact(double dt)
 {
 
 	auto cs = _parent->get_components<PhysicsComponent>()[0]->getTouching();
@@ -63,19 +70,21 @@ void GoblinPropertiesComponent::checkContact(double dt)
 		{
 			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
-				std::cout << _health << std::endl;
-				this->takeDamage(ap->playerDamage);
-			}
-			else
+				takeDamage(ap->playerDamage);
+			}	
+			if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
 			{
-				ap->takeDamage(goblinDamage, dt);
+				ap->takeDamage(skeletonDamage, dt);
 			}
+				
+			
+
 		}
 	}
 
 }
 
-void GoblinPropertiesComponent::checkHealth()
+void SkeletonPropertiesComponent::checkHealth()
 {
 	auto bar = _parent->get_components<SpriteComponent>()[0];
 
@@ -115,6 +124,7 @@ void GoblinPropertiesComponent::checkHealth()
 	{
 		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 30, 5));
 	}
+
 	if (_health == 2)
 	{
 		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 20, 5));
@@ -122,7 +132,6 @@ void GoblinPropertiesComponent::checkHealth()
 
 	if (_health == 1)
 	{
-
 		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 10, 5));
 	}
 	if (_health == 0)
