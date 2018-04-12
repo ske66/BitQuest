@@ -7,6 +7,7 @@
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
 #include "scenes\Scene_Game_Over.h"
+#include "scenes\scene_Shop.h"
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML\Graphics.hpp>
 #include <fstream>
@@ -22,6 +23,7 @@ SettingsGraphicsScene settingsGraphics;
 SettingsGameplayScene settingsGameplay;
 Level1Scene level1;
 GameOverScene gameOver;
+ShopScene shop;
 bool loadGame;
 
 int ResolutionX;
