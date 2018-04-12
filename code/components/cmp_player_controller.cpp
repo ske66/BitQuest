@@ -10,6 +10,7 @@ PlayerControlerComponent::PlayerControlerComponent(Entity* p)
 	: Component(p)
 {
 	playerDamage = 1;
+	
 
 }
 
@@ -39,8 +40,6 @@ void PlayerControlerComponent::update(double dt)
 
 		UI->setHealthDisplay(checkHealth());
 		collisionCheck(dt);
-
-
 
 		if (immortal == true)
 		{
@@ -132,19 +131,13 @@ void PlayerControlerComponent::takeDamage(double d , double dt)
 
 void PlayerControlerComponent::collisionCheck(double dt)
 {
-	auto g = _parent->scene->ents.find("gavin")[0];
-	auto gavin = g->get_components<StateMachineComponent>()[0];
-
 	auto coins = _parent->scene->ents.find("coin");
 	auto cs = _parent->get_components<PlayerPhysicsComponent>()[0]->getTouching();
 
-
 	for (auto c : cs)
 	{
-		if (c->GetFixtureA() == g->get_components<GavinPhysicsComponent>()[0]->getFixture() || c->GetFixtureB() == g->get_components<GavinPhysicsComponent>()[0]->getFixture())
-		{
-				takeDamage(1, dt);			
-		}
+		std::cout << "questions" << std::endl;
+
 		for (auto b : coins)
 		{
 			if (c->GetFixtureB() == b->get_components<PhysicsComponent>()[0]->getFixture())
@@ -154,8 +147,7 @@ void PlayerControlerComponent::collisionCheck(double dt)
 			}
 
 		}
-
-
+		
 	}
 
 }

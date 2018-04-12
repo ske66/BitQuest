@@ -1,45 +1,39 @@
-#include "cmp_gavin_properties.h"
+#include "cmp_goblin_properties.h"
+#include "cmp_physics.h"
 #include "cmp_player_physics.h"
-#include "cmp_gavin_physics.h"
 #include "cmp_player_controller.h"
-#include <iostream>
 
-
-GavinPropertiesComponent::GavinPropertiesComponent(Entity* p)
+GoblinPropertiesComponent::GoblinPropertiesComponent(Entity* p)
 	: Component(p)
 {
 	_player = _parent->scene->ents.find("player")[0];
+};
 
-}
-
-
-void GavinPropertiesComponent::takeDamage(double h)
+void GoblinPropertiesComponent::takeDamage(double h)
 {
-
 	if (immortal == false)
 	{
 		immortal = true;
 		_health = _health - h;
-		
+		this->checkHealth();
 	}
-	
 }
 
-double GavinPropertiesComponent::getHealth()
+double GoblinPropertiesComponent::getHealth()
 {
 	return _health;
 }
 
-void GavinPropertiesComponent::update(double dt)
+
+void GoblinPropertiesComponent::update(double dt)
 {
-	
-	//only check when near player (saves performance evaluation of position Runs in Constant time loop runs in liniar time avoid where possible)
-	if (length(_parent->getPosition() - _player->getPosition()) > 50)
+	if (length(_parent->getPosition() - _player->getPosition()) < 100)
 	{
-		checkContact();
+		this->checkContact(dt);
 	}
 
-	checkHealth();
+	
+
 	if (immortal == true)
 	{
 		totalTime += dt;
@@ -51,35 +45,37 @@ void GavinPropertiesComponent::update(double dt)
 		}
 	}
 }
-
-void GavinPropertiesComponent::render()
+void GoblinPropertiesComponent::render()
 {
 
 }
-
-void GavinPropertiesComponent::checkContact()
+void GoblinPropertiesComponent::checkContact(double dt)
 {
-	
-		auto cs = _parent->get_components<GavinPhysicsComponent>()[0]->getTouching();
 
-		auto ap = _player->get_components<PlayerControlerComponent>()[0];
-		auto playerPhys = _player->get_components<PlayerPhysicsComponent>()[0];
+	auto cs = _parent->get_components<PhysicsComponent>()[0]->getTouching();
 
-		for (auto c : cs)
+	auto ap = _player->get_components<PlayerControlerComponent>()[0];
+	auto playerPhys = _player->get_components<PlayerPhysicsComponent>()[0];
+
+	for (auto c : cs)
+	{
+		if (c->GetFixtureA() == playerPhys->getFixture() || c->GetFixtureB() == playerPhys->getFixture())
 		{
-			if (c->GetFixtureA() == playerPhys->getFixture() || c->GetFixtureB() == playerPhys->getFixture())
+			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
-				if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
-				{
-					takeDamage(ap->playerDamage);
-				}
-				
+				std::cout << _health << std::endl;
+				this->takeDamage(ap->playerDamage);
+			}
+			else
+			{
+				ap->takeDamage(goblinDamage, dt);
 			}
 		}
+	}
 
 }
 
-void GavinPropertiesComponent::checkHealth()
+void GoblinPropertiesComponent::checkHealth()
 {
 	auto bar = _parent->get_components<SpriteComponent>()[0];
 

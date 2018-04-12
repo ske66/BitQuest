@@ -81,7 +81,7 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 	: PhysicsComponent(p, true, size) {
 	_size = sv2_to_bv2(size, true);
 	_maxVelocity = Vector2f(400.f, 800.f);
-	//	_fixture->SetDensity(0.2);
+	//_fixture->SetDensity(0.2);
 	_groundspeed = 200.f;
 	_grounded = false;
 	_body->SetSleepingAllowed(false);

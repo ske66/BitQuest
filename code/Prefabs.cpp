@@ -3,6 +3,10 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
+
+#include "troll_states.h"
+#include "components\cmp_troll_properties.h"
+#include "components\cmp_goblin_properties.h"
 #include "components\cmp_gavin_properties.h"
 #include "components\cmp_bullet.h"
 #include "components\cmp_hurt.h"
@@ -124,8 +128,10 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto p = goblin->addComponent<PhysicsComponent>(true, Vector2f(20, 80));
 		auto sm = goblin->addComponent<StateMachineComponent>();
 		p->getFixture()->GetBody()->SetBullet(true);
-	
+		
+		auto gs = goblin->addComponent<GoblinPropertiesComponent>();
 
+		sm->addState("dead", make_shared<Goblin_DeadState>());
 		sm->addState("chase", make_shared<Goblin_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
 		sm->addState("idle", make_shared<Goblin_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
 		sm->addState("Attack", make_shared<Goblin_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
@@ -134,6 +140,10 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto a = goblin->addComponent<AnimationComponent>();
 		a->Animation("Spritesheets/Goblin_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		auto bar = goblin->addComponent<SpriteComponent>();
+		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
+		bar->getSprite().setOrigin({ 50,100 });
 
 		enemies.push_back(goblin);
 	}
@@ -148,9 +158,9 @@ vector<shared_ptr<Entity>> makeEnemies()
 
 
 		orc->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
-		//auto a = orc->addComponent<AnimationComponent>();
-		//a->Animation("Spritesheets/Orc_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
-		//a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		auto a = orc->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Orc_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 		enemies.push_back(orc);
 	}
@@ -161,13 +171,25 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto troll = Engine::GetActiveScene()->makeEntity();
 		troll->setPosition(ls::getTilePosition(tr));
 		troll->addTag("troll");
+		auto prop = troll->addComponent<TrollPropertiesComponent>();
 
+		auto sm = troll->addComponent<StateMachineComponent>();
+
+		sm->addState("dead", make_shared<Troll_DeadState>());
+		sm->addState("chase", make_shared<Troll_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("idle", make_shared<Troll_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("Attack", make_shared<Troll_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->changeState("idle");
 
 
 		troll->addComponent<PhysicsComponent>(true, Vector2f(100, 360));
-		//auto a = troll->addComponent<AnimationComponent>();
-		//a->Animation("Spritesheets/Troll_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 360, 360), Vector2u(8, 8));
-		//a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		auto a = troll->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Troll_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 360, 360), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		auto bar = troll->addComponent<SpriteComponent>();
+		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
+		bar->getSprite().setOrigin({ 50,100 });
 
 		enemies.push_back(troll);
 	}
