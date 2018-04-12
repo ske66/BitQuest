@@ -71,15 +71,13 @@ void TrollPropertiesComponent::checkContact(double dt)
 			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
 				takeDamage(ap->playerDamage);
+			}	
+			if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
+			{
+				ap->takeDamage(trollDamage, dt);
 			}
-			else
-			{	
-				if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
-				{
-					ap->takeDamage(trollDamage, dt);
-				}
 				
-			}
+			
 
 		}
 	}
