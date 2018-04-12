@@ -29,7 +29,6 @@ void TutorialScene::Load()
 
 	addUI();
 
-
 	setLoaded(true);
 }
 

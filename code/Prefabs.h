@@ -7,8 +7,9 @@ std::shared_ptr<Entity> makeButton(std::string, sf::Vector2f bounds);
 std::shared_ptr<Entity> makePlayer(sf::Vector2f _pos);
 std::shared_ptr<Entity> makeGavin();
 std::shared_ptr<Entity> addUI();
-std::shared_ptr<Entity> makeUIText();
 std::shared_ptr<Entity> GavinBlast();
+std::shared_ptr<Entity> coinAmount();
+std::shared_ptr<Entity> arrowAmount();
 
 std::vector<std::shared_ptr<Entity>> makeEnemies();
 std::vector<std::shared_ptr<Entity>> makeShops();

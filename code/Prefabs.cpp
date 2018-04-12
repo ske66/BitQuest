@@ -360,22 +360,34 @@ void TilePhysics()
 
 shared_ptr<Entity>addUI()
 {
-
 	auto e = Engine::GetActiveScene()->makeEntity();
 	e->addComponent<UIComponent>();
+
 	e->addTag("UI");
-	
+
 	return e;
 }
 
-shared_ptr<Entity>makeUIText()
+shared_ptr<Entity>coinAmount()
 {
-	auto t = Engine::GetActiveScene()->makeEntity();
-	auto tt = t->addComponent<TextComponent>("x 0");
-	tt->getText().setColor(Color::White);
+	auto e = Engine::GetActiveScene()->makeEntity();
+	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
+	t->getText().setOrigin(t->getText().getLocalBounds().width, 0);
+	e->addTag("coinCount");
 
-	return t;
+	return e;
 }
+
+shared_ptr<Entity>arrowAmount()
+{
+	auto e = Engine::GetActiveScene()->makeEntity();
+	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
+	t->getText().setOrigin(t->getText().getLocalBounds().width, 0);
+	e->addTag("arrowCount");
+
+	return e;
+}
+
 
 shared_ptr<Entity>GavinBlast()
 {

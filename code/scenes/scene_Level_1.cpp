@@ -29,8 +29,6 @@ void Level1Scene::Load() {
 	_musicLevel1->setLoop(true);
 	_musicLevel1->setVolume(50);
 
-	CoinText = makeUIText();
-
 	int loadPosX;
 	int loadPosY;
 
@@ -70,9 +68,11 @@ void Level1Scene::Load() {
 
 //	makeEnemies();
 
-	addUI();
+	coinAmount();
 
-	makeUIText();
+	arrowAmount();
+
+	addUI();
 
 	setLoaded(true);
 }
@@ -96,7 +96,7 @@ void Level1Scene::Update(const double& dt) {
 	View view(FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
 	float view_player_distance = sqrt(((player->getPosition().x - view_center.x) * (player->getPosition().x - view_center.x)) + ((player->getPosition().y - view_center.y) * (player->getPosition().y - view_center.y)));
 	if (view_player_distance > 40.f)
-		view_center += (player->getPosition() - view_center) *(float)dt * 3.5f;
+		view_center += (player->getPosition() - view_center) *(float)dt * 4.f;
 	view.setCenter(view_center);
 
 	Engine::GetWindow().setView(view);

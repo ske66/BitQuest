@@ -8,17 +8,25 @@ class UIComponent : public Component
 {
 private:
 
+	sf::RectangleShape weaponSelection;
+
 	std::shared_ptr<sf::Texture> _texHeartUI;
 	std::shared_ptr<sf::Texture> _texCoinUI;
+	std::shared_ptr<sf::Texture> _texArrowUI;
+	std::shared_ptr<sf::Texture> _texSwordUI;
+	std::shared_ptr<sf::Texture> _texBowUI;
 
 	sf::Sprite heartUI;
 	sf::Sprite coinUI;
+	sf::Sprite arrowUI;
+	sf::Sprite swordUI;
+	sf::Sprite bowUI;
 
-	sf::RectangleShape topBar;
+	std::shared_ptr<Entity> _coinCount;
+	std::shared_ptr<Entity> _arrowCount;
 
 public:
 	UIComponent() = delete;
-
 	void setHealthDisplay(sf::IntRect s);
 	explicit UIComponent(Entity* p);
 	void update(double dt) override;
