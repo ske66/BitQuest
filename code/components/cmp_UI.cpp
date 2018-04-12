@@ -1,5 +1,6 @@
 #include "cmp_UI.h"
 #include "engine.h"
+#include "cmp_state_machine.h"
 #include "System_Renderer.h"
 #include "system_resources.h"
 #include "../code/Prefabs.h"
@@ -14,7 +15,7 @@ UIComponent::UIComponent(Entity* p)
 	:Component(p)
 {
 
-
+	_player = _parent->scene->ents.find("player")[0];
 
 	_coinCount = _parent->scene->ents.find("coinCount")[0];
 	_arrowCount = _parent->scene->ents.find("arrowCount")[0];
@@ -24,6 +25,9 @@ UIComponent::UIComponent(Entity* p)
 	_texArrowUI = Resources::load<Texture>("arrowUI.png");
 	_texSwordUI = Resources::load<Texture>("SwordUI.png");
 	_texBowUI = Resources::load<Texture>("BowUI.png");
+
+	//_texBow = Resources::load<Texture>("spritesheets / Bob_archer_spritesheet.png");
+	//_texSword = Resources::load<Texture>("spritesheets / Bob_spritesheet.png");
 
 	weaponSelection = RectangleShape(Vector2f(65, 65));
 	weaponSelection.setFillColor(Color(255, 255, 255, 20));
@@ -53,13 +57,21 @@ void UIComponent::update(double dt)
 		Engine::GetWindow().getView().getCenter().y });
 
 
-	if (Keyboard::isKeyPressed(Keyboard::Num2))
-	{
-		weaponUI = Sprite(*_texBowUI);
-
-	}
 	if (Keyboard::isKeyPressed(Keyboard::Num1))
 	{
+		auto p = _player->get_components<AnimationComponent>()[0];
+		p->Animation("spritesheets/Bob_archer_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		p->getSprite().setOrigin(p->getSprite().getGlobalBounds().width / 2, p->getSprite().getGlobalBounds().height / 2);;
+		weaponUI = Sprite(*_texBowUI);
+		sword = false;
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Num2))
+	{
+		auto p = _player->get_components<AnimationComponent>()[0];
+		_player->get_components<AnimationComponent>()[0]->Animation("spritesheets/Bob_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		p->getSprite().setOrigin(p->getSprite().getGlobalBounds().width / 2, p->getSprite().getGlobalBounds().height / 2);
+		sword = true;
 		weaponUI = Sprite(*_texSwordUI);
 	}
 	

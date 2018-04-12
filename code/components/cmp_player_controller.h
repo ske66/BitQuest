@@ -19,9 +19,9 @@ protected:
 	sf::Sound _soundDeath;
 	std::shared_ptr<Entity> _gavin;
 	
-
 public:
 	
+	bool sword = false;
 	explicit PlayerControlerComponent(Entity* p);
 	double playerDamage;
 	bool immortal = true;

@@ -10,8 +10,6 @@ PlayerControlerComponent::PlayerControlerComponent(Entity* p)
 	: Component(p)
 {
 	playerDamage = 1;
-	
-
 }
 
 double PlayerControlerComponent::getHealth()
@@ -34,10 +32,23 @@ void PlayerControlerComponent::collectCoin()
 	_parent->scene->ents.find("coinCount")[0]->get_components<TextComponent>()[0]->SetText("x" + to_string(coins));
 }
 
+
+
+
 void PlayerControlerComponent::update(double dt)
 {
 	auto UI = _parent->scene->ents.find("UI")[0]->get_components<UIComponent>()[0];
 
+	if (UI->sword == true)
+	{
+		sword = true;
+	}
+	else
+	{
+		sword = false;
+	}
+
+	
 		UI->setHealthDisplay(checkHealth());
 		collisionCheck(dt);
 
@@ -136,8 +147,6 @@ void PlayerControlerComponent::collisionCheck(double dt)
 
 	for (auto c : cs)
 	{
-		std::cout << "questions" << std::endl;
-
 		for (auto b : coins)
 		{
 			if (c->GetFixtureB() == b->get_components<PhysicsComponent>()[0]->getFixture())

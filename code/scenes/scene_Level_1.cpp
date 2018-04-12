@@ -72,6 +72,8 @@ void Level1Scene::Load() {
 
 	arrowAmount();
 
+
+
 	addUI();
 
 	setLoaded(true);

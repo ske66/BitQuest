@@ -3,7 +3,7 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
-
+#include "components\cmp_player_bullet.h"
 #include "troll_states.h"
 #include "components\cmp_troll_properties.h"
 #include "components\cmp_goblin_properties.h"
@@ -58,7 +58,7 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 	auto player = Engine::GetActiveScene()->makeEntity();
 	player->setPosition(_pos);
 	player->addTag("player");
-
+	
 	auto sm = player->addComponent<StateMachineComponent>();
 
 	sm->addState("idle", make_shared<Player_IdleState>());
@@ -109,6 +109,7 @@ shared_ptr<Entity> makeGavin()
 
 	sm->changeState("idle");
 
+	
 	return gavin;
 }
 // ---------------------------------------------------------------------------------------------------------
@@ -124,7 +125,8 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto goblin = Engine::GetActiveScene()->makeEntity();
 		goblin->setPosition(ls::getTilePosition(go));
 		goblin->addTag("goblin");
-		
+		goblin->addTag("troll");
+
 		auto p = goblin->addComponent<PhysicsComponent>(true, Vector2f(20, 80));
 		auto sm = goblin->addComponent<StateMachineComponent>();
 		p->getFixture()->GetBody()->SetBullet(true);
@@ -433,4 +435,30 @@ shared_ptr<Entity>GavinBlast()
 	gb->addTag("gavBlast");
 
 	return gb;
+}
+
+shared_ptr<Entity>playerArrow()
+{
+	auto pa = Engine::GetActiveScene()->makeEntity();
+	auto a = pa->addComponent<SpriteComponent>();
+
+	a->Sprite("Arrow.png", IntRect(40, 0, -40, 40));
+	if (pa->scene->ents.find("player")[0]->get_components<AnimationComponent>()[0]->faceRight == true)
+	{
+		pa->setPosition(Vector2f(pa->scene->ents.find("player")[0]->getPosition().x + 50, pa->scene->ents.find("player")[0]->getPosition().y - 20));
+		
+	}
+	else
+	{
+		pa->setPosition(Vector2f(pa->scene->ents.find("player")[0]->getPosition().x - 10, pa->scene->ents.find("player")[0]->getPosition().y - 20));
+		a->Sprite("Arrow.png", IntRect(0, 0, 40, 40));
+		pa->setRotation(180.f);
+	}
+
+	pa->addComponent<PhysicsComponent>(true, Vector2f(10, 40));
+	pa->addComponent<PlayerBulletComponent>();
+
+	pa->addTag("playerArrow");
+
+	return pa;
 }

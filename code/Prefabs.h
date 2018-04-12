@@ -10,6 +10,7 @@ std::shared_ptr<Entity> addUI();
 std::shared_ptr<Entity> GavinBlast();
 std::shared_ptr<Entity> coinAmount();
 std::shared_ptr<Entity> arrowAmount();
+std::shared_ptr<Entity> playerArrow();
 
 std::vector<std::shared_ptr<Entity>> makeEnemies();
 std::vector<std::shared_ptr<Entity>> makeShops();
