@@ -25,6 +25,10 @@ void  Troll_IdleState::execute(Entity *owner, double dt) noexcept
 		
 	}
 
+	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
 }
 
 void  Troll_ChaseState::execute(Entity *owner, double dt) noexcept
@@ -54,9 +58,10 @@ void  Troll_ChaseState::execute(Entity *owner, double dt) noexcept
 		
 	}
 
-
-
-
+	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
 
 	if (_player->getPosition().x > owner->getPosition().x)
 	{
@@ -95,6 +100,10 @@ void  Troll_AttackState::execute(Entity *owner, double dt) noexcept
 		sm->changeState("chase");
 	}
 
+	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
 	
 }
 

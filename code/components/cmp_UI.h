@@ -15,6 +15,8 @@ private:
 	std::shared_ptr<sf::Texture> _texArrowUI;
 	std::shared_ptr<sf::Texture> _texSwordUI;
 	std::shared_ptr<sf::Texture> _texBowUI;
+	std::shared_ptr<sf::Texture> _texSword;
+	std::shared_ptr<sf::Texture> _texBow;
 
 	sf::Sprite heartUI;
 	sf::Sprite coinUI;
@@ -23,9 +25,10 @@ private:
 
 	std::shared_ptr<Entity> _coinCount;
 	std::shared_ptr<Entity> _arrowCount;
-
+	std::shared_ptr<Entity> _player;
 
 public:
+	bool sword = true;
 	UIComponent() = delete;
 	void setHealthDisplay(sf::IntRect s);
 	explicit UIComponent(Entity* p);

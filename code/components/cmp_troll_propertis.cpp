@@ -17,8 +17,9 @@ void TrollPropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
+		std::cout << _health << std::endl;
 		immortal = true;
-		_health = _health - h;
+		this->_health = _health - h;
 
 	}
 
@@ -70,7 +71,7 @@ void TrollPropertiesComponent::checkContact(double dt)
 		{
 			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
-				takeDamage(ap->playerDamage);
+				this->takeDamage(ap->playerDamage);
 			}	
 			if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
 			{

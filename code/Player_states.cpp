@@ -116,40 +116,54 @@ void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 
-	//reset attack animation when done
-	if (me_anim->attackImgNo >= 6)
+	if (owner->get_components<PlayerControlerComponent>()[0]->sword == false)
 	{
-		me_anim->attackImgNo = 0;
-		me->changeState("idle");
-	}
 
-	//lock movement when attacking
-	if (me_anim->attackImgNo == 0)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+		if (me_anim->attackImgNo >= 6)
 		{
-			owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
+			cout << "fuck" << endl;
+			playerArrow();
+			me_anim->attackImgNo = 0;
+			me->changeState("idle");
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			me->changeState("walk_left");
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			me->changeState("walk_right");
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		{
-			me->changeState("jump");
-		}
 	}
-	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() < 0)
+	else
 	{
-		me->changeState("dead");
+		//reset attack animation when done
+		if (me_anim->attackImgNo >= 6)
+		{
+			me_anim->attackImgNo = 0;
+			me->changeState("idle");
+		}
+
+		//lock movement when attacking
+		if (me_anim->attackImgNo == 0)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+			{
+				owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				me->changeState("walk_left");
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			{
+				me->changeState("walk_right");
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			{
+				me->changeState("jump");
+			}
+		}
+		if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() < 0)
+		{
+			me->changeState("dead");
+		}
 	}
 }
-
 void  Player_DeadState::execute(Entity *owner, double dt) noexcept
 {
 
@@ -158,8 +172,7 @@ void  Player_DeadState::execute(Entity *owner, double dt) noexcept
 	if (me_anim->currentimage.x >= 5)
 	{
 		me_anim->pause = true;
-		
 	}
-	
+
 
 }
