@@ -13,14 +13,17 @@ RectangleShape topBar;
 UIComponent::UIComponent(Entity* p)
 	:Component(p)
 {
+
+
+
 	_coinCount = _parent->scene->ents.find("coinCount")[0];
 	_arrowCount = _parent->scene->ents.find("arrowCount")[0];
 
 	_texHeartUI = Resources::load<Texture>("heart.png");
 	_texCoinUI = Resources::load<Texture>("spritesheets/Coin_spritesheet.png");
 	_texArrowUI = Resources::load<Texture>("arrowUI.png");
-	_texSwordUI = Resources::load<Texture>("Sword.png");
-	_texBowUI = Resources::load<Texture>("bow.png");
+	_texSwordUI = Resources::load<Texture>("SwordUI.png");
+	_texBowUI = Resources::load<Texture>("BowUI.png");
 
 	weaponSelection = RectangleShape(Vector2f(65, 65));
 	weaponSelection.setFillColor(Color(255, 255, 255, 20));
@@ -36,13 +39,8 @@ UIComponent::UIComponent(Entity* p)
 	arrowUI = Sprite(*_texArrowUI);
 	arrowUI.setTextureRect(IntRect(0, 0, 100, 100));
 
-	bowUI = Sprite(*_texBowUI);
-	bowUI.setTextureRect(IntRect(0, 0, 60, 60));
-
-	swordUI = Sprite(*_texSwordUI);
-	swordUI.setTextureRect(IntRect(0, 0, 60, 60));
-
-
+	weaponUI = Sprite(*_texSwordUI);
+	weaponUI.setTextureRect(IntRect(0, 0, 100, 100));
 	
 	_coinCount->get_components<TextComponent>()[0]->SetText("x0");
 	_arrowCount->get_components<TextComponent>()[0]->SetText("x0");
@@ -55,10 +53,16 @@ void UIComponent::update(double dt)
 		Engine::GetWindow().getView().getCenter().y });
 
 
-	weaponSelection.setPosition(
-		_parent->getPosition().x + Engine::GetWindow().getSize().x * (-0.35),
-		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * (-0.8));
+	if (Keyboard::isKeyPressed(Keyboard::Num2))
+	{
+		weaponUI = Sprite(*_texBowUI);
 
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Num1))
+	{
+		weaponUI = Sprite(*_texSwordUI);
+	}
+	
 
 	heartUI.setPosition(
 		_parent->getPosition().x - Engine::GetWindow().getSize().x / 2 + 30.f,
@@ -79,13 +83,10 @@ void UIComponent::update(double dt)
 		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * (-0.86)));
 
 
-	swordUI.setPosition(
+	weaponUI.setPosition(
 		_parent->getPosition().x + Engine::GetWindow().getSize().x * (-0.4),
 		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * (-0.8));
 
-	bowUI.setPosition(
-		_parent->getPosition().x + Engine::GetWindow().getSize().x * (-0.35),
-		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * (-0.8));
 	
 }
 
@@ -95,8 +96,7 @@ void UIComponent::render()
 	Renderer::queue(&heartUI);
 	Renderer::queue(&coinUI);
 	Renderer::queue(&arrowUI);
-	Renderer::queue(&swordUI);
-	Renderer::queue(&bowUI);
+	Renderer::queue(&weaponUI);
 }
 
 void UIComponent::setHealthDisplay(sf::IntRect s)

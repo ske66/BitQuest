@@ -362,7 +362,6 @@ shared_ptr<Entity>addUI()
 {
 	auto e = Engine::GetActiveScene()->makeEntity();
 	e->addComponent<UIComponent>();
-
 	e->addTag("UI");
 
 	return e;

@@ -1,6 +1,7 @@
 #include "cmp_player_controller.h"
 #include "cmp_state_Machine.h"
 #include "cmp_UI.h"
+#include "cmp_text.h"
 
 using namespace std;
 using namespace sf;
@@ -27,9 +28,10 @@ int PlayerControlerComponent::getCoins()
 }
 void PlayerControlerComponent::collectCoin()
 {
-	coins += 1;
-}
+	coins++;
 
+	_parent->scene->ents.find("coinCount")[0]->get_components<TextComponent>()[0]->SetText("x" + to_string(coins));
+}
 
 void PlayerControlerComponent::update(double dt)
 {

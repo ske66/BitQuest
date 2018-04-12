@@ -19,11 +19,11 @@ private:
 	sf::Sprite heartUI;
 	sf::Sprite coinUI;
 	sf::Sprite arrowUI;
-	sf::Sprite swordUI;
-	sf::Sprite bowUI;
+	sf::Sprite weaponUI;
 
 	std::shared_ptr<Entity> _coinCount;
 	std::shared_ptr<Entity> _arrowCount;
+
 
 public:
 	UIComponent() = delete;
