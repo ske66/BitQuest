@@ -8,7 +8,7 @@ TrollPropertiesComponent::TrollPropertiesComponent(Entity* p)
 	: Component(p)
 {
 	_player = _parent->scene->ents.find("player")[0];
-
+	_trolls = _parent->scene->ents.find("troll");
 }
 
 
@@ -39,7 +39,11 @@ void TrollPropertiesComponent::update(double dt)
 		checkContact(dt);
 	}
 
-	checkHealth();
+	
+	_parent->get_components<SpriteComponent>()[0]->Sprite("EnemyHealth.png", rect);
+
+
+	this->checkHealth();
 	if (immortal == true)
 	{
 		totalTime += dt;
@@ -71,7 +75,11 @@ void TrollPropertiesComponent::checkContact(double dt)
 		{
 			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
-				this->takeDamage(ap->playerDamage);
+				if (_player->get_components<AnimationComponent>()[0]->attackImgNo >= 6)
+				{
+					this->takeDamage(ap->playerDamage);
+				}
+				
 			}	
 			if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
 			{
@@ -85,59 +93,62 @@ void TrollPropertiesComponent::checkContact(double dt)
 
 }
 
-void TrollPropertiesComponent::checkHealth()
+sf::IntRect TrollPropertiesComponent::checkHealth()
 {
-	auto bar = _parent->get_components<SpriteComponent>()[0];
 
-	if (_health == 10)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 100, 5));
-	}
+		if (_health == 10)
+		{
+			rect = sf::IntRect(0, 0, 100, 5);
+		}
 
-	if (_health == 9)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 90, 5));
-	}
-	if (_health == 8)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 80, 5));
-	}
+		if (_health == 9)
+		{
+			sf::IntRect(0, 0, 90, 5);
+		
+		}
+		if (_health == 8)
+		{
+			rect = sf::IntRect(0, 0, 80, 5);
+			
+		}
 
-	if (_health == 7)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 70, 5));
-	}
-	if (_health == 6)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 60, 5));
-	}
+		if (_health == 7)
+		{
+			rect = sf::IntRect(0, 0, 70, 5);
+		}
+		if (_health == 6)
+		{
+			rect = sf::IntRect(0, 0, 60, 5);
+		}
 
-	if (_health == 5)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 50, 5));
-	}
-	if (_health == 4)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 40, 5));
-	}
+		if (_health == 5)
+		{
+			rect = sf::IntRect(0, 0, 50, 5);
+		}
+		if (_health == 4)
+		{
+			rect = sf::IntRect(0, 0, 40, 5);
+		}
 
-	if (_health == 3)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 30, 5));
-	}
+		if (_health == 3)
+		{
+			rect = sf::IntRect(0, 0, 30, 5);
+		}
 
-	if (_health == 2)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 20, 5));
-	}
+		if (_health == 2)
+		{
+			rect = sf::IntRect(0, 0, 20, 5);
+		}
 
-	if (_health == 1)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 10, 5));
-	}
-	if (_health == 0)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 0, 5));
-	}
+		if (_health == 1)
+		{
+			rect = sf::IntRect(0, 0, 10, 5);
+		}
+		if (_health == 0)
+		{
+			rect = sf::IntRect(0, 0, 0, 5);
+		}
+	
+		return rect;
 
 }

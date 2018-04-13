@@ -5,11 +5,16 @@
 class PlayerBulletComponent : public Component
 {
 protected:
-	double _bulletSpeed;
-	double _bulletDamage;
+	float _bulletSpeed;
+	float _bulletDamage;
 
+	float _bulletDip;
+	float _bulletArc;
 public:
 
+	std::vector<std::shared_ptr<Entity>> _slimes;
+	std::vector<std::shared_ptr<Entity>> _trolls;
+	std::vector<std::shared_ptr<Entity>> _orcs;
 	std::shared_ptr<Entity> _player;
 	explicit PlayerBulletComponent(Entity* p);
 

@@ -82,6 +82,11 @@ void AnimationComponent::update(double dt) {
 			currentimage.y = 6;
 			attackAnim(dt);
 		}
+		else if(c->currentState() == "block")
+		{
+			currentimage.y = 3;
+			Anim(dt);
+		}
 		else
 		{
 			Anim(dt);

@@ -10,12 +10,13 @@ protected:
 	float totalTime = 0;
 
 public:
-
+	sf::IntRect rect;
 	bool immortal = true;
 	float trollDamage = 3;
+	std::vector<std::shared_ptr<Entity>> _trolls;
 	std::shared_ptr<Entity> _player;
 	explicit TrollPropertiesComponent(Entity* p);
-	void checkHealth();
+	sf::IntRect checkHealth();
 	TrollPropertiesComponent() = delete;
 	double getHealth();
 	void takeDamage(double);

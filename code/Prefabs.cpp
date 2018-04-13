@@ -72,6 +72,7 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 	auto sm = player->addComponent<StateMachineComponent>();
 
 	sm->addState("idle", make_shared<Player_IdleState>());
+	sm->addState("block", make_shared<Player_BlockState>());
 	sm->addState("walk_left", make_shared<Player_MoveLeftState>());
 	sm->addState("walk_right", make_shared<Player_MoveRightState>());
 	sm->addState("Attack", make_shared<Player_AttackState>());
@@ -82,7 +83,7 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 
 	player->addComponent<PlayerControlerComponent>();
 
-	player->addComponent<PlayerPhysicsComponent>(Vector2f(120, 160));
+	player->addComponent<PlayerPhysicsComponent>(Vector2f(140, 160));
 	auto a = player->addComponent<AnimationComponent>();
 	a->Animation("spritesheets/Bob_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
@@ -135,8 +136,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto goblin = Engine::GetActiveScene()->makeEntity();
 		goblin->setPosition(ls::getTilePosition(go));
 		goblin->addTag("goblin");
-		goblin->addTag("troll");
-
+		
 		auto p = goblin->addComponent<PhysicsComponent>(true, Vector2f(20, 80));
 		auto sm = goblin->addComponent<StateMachineComponent>();
 		p->getFixture()->GetBody()->SetBullet(true);
@@ -167,7 +167,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		orc->setPosition(ls::getTilePosition(or));
 		orc->addTag("orc");
 
-		auto p = orc->addComponent<PhysicsComponent>(true, Vector2f(100, 160));
+		auto p = orc->addComponent<PhysicsComponent>(true, Vector2f(80, 160));
 		auto sm = orc->addComponent<StateMachineComponent>();
 		p->getFixture()->GetBody()->SetBullet(true);
 
@@ -176,7 +176,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		sm->addState("dead", make_shared<Orc_DeadState>());
 		sm->addState("chase", make_shared<Orc_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
 		sm->addState("idle", make_shared<Orc_IdleState>(Engine::GetActiveScene() ->ents.find("player")[0]));
-		sm->addState("attack", make_shared<Orc_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("Attack", make_shared<Orc_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
 		sm->changeState("idle");
 
 		auto a = orc->addComponent<AnimationComponent>();
@@ -350,27 +350,23 @@ vector<shared_ptr<Entity>> makeChests()
 
 }
 
-vector<shared_ptr<Entity>> makeCoins()
-{
-	vector<shared_ptr<Entity>> Mcoins;
 
-	auto coins = ls::findTiles(ls::COIN);
-	for (auto c : coins)
-	{
+shared_ptr<Entity> makeCoin()
+{
 		auto coin = Engine::GetActiveScene()->makeEntity();
-		coin->setPosition(ls::getTilePosition(c));
 		coin->addTag("coin");
 
+		coin->setPosition(coin->scene->ents.find("troll")[0]->getPosition());
 
 		coin->addComponent<PhysicsComponent>(false, Vector2f(30, 15));
 		auto a = coin->addComponent<ObjectAnimComponent>();
 		a->Animation("spritesheets/Coin_spritesheet.png", Vector2f(0, -60), IntRect(0, 0, 60, 60), Vector2u(6, 1));
 		a->getSprite().setOrigin(0, 0);
 
-		Mcoins.push_back(coin);
-	}
-	return Mcoins;
+		return coin;
 }
+	
+
 
 
 
@@ -474,21 +470,22 @@ shared_ptr<Entity>GavinBlast()
 	return gb;
 }
 
-shared_ptr<Entity>playerArrow()
+shared_ptr<Entity>makeArrow()
 {
 	auto pa = Engine::GetActiveScene()->makeEntity();
 	auto a = pa->addComponent<SpriteComponent>();
 
-	a->Sprite("Arrow.png", IntRect(40, 0, -40, 40));
+	a->Sprite("Arrow.png", IntRect(80, 0, -80, 40));
 	if (pa->scene->ents.find("player")[0]->get_components<AnimationComponent>()[0]->faceRight == true)
 	{
 		pa->setPosition(Vector2f(pa->scene->ents.find("player")[0]->getPosition().x + 50, pa->scene->ents.find("player")[0]->getPosition().y - 20));
-		
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 	}
 	else
 	{
 		pa->setPosition(Vector2f(pa->scene->ents.find("player")[0]->getPosition().x - 10, pa->scene->ents.find("player")[0]->getPosition().y - 20));
-		a->Sprite("Arrow.png", IntRect(0, 0, 40, 40));
+		a->Sprite("Arrow.png", IntRect(0, 0, 80, 40));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 		pa->setRotation(180.f);
 	}
 

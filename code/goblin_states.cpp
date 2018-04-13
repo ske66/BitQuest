@@ -12,6 +12,8 @@ void  Goblin_IdleState::execute(Entity *owner, double dt) noexcept
 
 	if (owner->get_components<GoblinPropertiesComponent>()[0]->getHealth() <= 0)
 	{
+		owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
+		owner->get_components<AnimationComponent>()[0]->currentimage.x = 0;
 		sm->changeState("dead");
 	}
 
@@ -52,6 +54,8 @@ void  Goblin_ChaseState::execute(Entity *owner, double dt) noexcept
 
 	if (owner->get_components<GoblinPropertiesComponent>()[0]->getHealth() <= 0)
 	{
+		owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
+		owner->get_components<AnimationComponent>()[0]->currentimage.x = 0;
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 
@@ -84,38 +88,35 @@ void  Goblin_AttackState::execute(Entity *owner, double dt) noexcept
 {
 	auto p = owner->get_components<PhysicsComponent>()[0];
 
-
 	if (_player->getPosition().x > owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = true;
-		p->impulse({ 2.0f , 0.0f });
-		p->dampen({ 0.7f , 0.0f });
+		p->impulse({ 3.0f , 0.0f });
+		p->dampen({ 0.7f , 1.0f });
 	}
 
 	//follow left
 	if (_player->getPosition().x < owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = false;
-		p->impulse({ -2.0f , 0.0f });
-		p->dampen({ 0.7f , 0.0f });
+		p->impulse({ -3.0f , 0.0f });
+		p->dampen({ 0.7f , 1.0f });
 
 	}
 
-
-	if (owner->get_components<GoblinPropertiesComponent>()[0]->getHealth() <= 0)
-	{
-		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
-	}
 
 	if (length(owner->getPosition() - _player->getPosition()) > 200.0f)
 	{
 		auto sm = owner->get_components<StateMachineComponent>()[0];
-		sm->changeState("chase");
+		sm->changeState("idle");
 	}
 
 	if (owner->get_components<GoblinPropertiesComponent>()[0]->getHealth() <= 0)
 	{
+		owner->get_components<AnimationComponent>()[0]->currentimage.x = 0;
+		owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+		
 	}
 }
 
@@ -125,6 +126,7 @@ void  Goblin_DeadState::execute(Entity *owner, double dt) noexcept
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	if (me_anim->currentimage.x == 7)
 	{
+		
 		me_anim->currentimage.x = 0;
 		me_anim->pause = true;
 		owner->setForDelete();

@@ -19,6 +19,14 @@ void GavinPropertiesComponent::takeDamage(double h)
 	if (immortal == false)
 	{
 		immortal = true;
+		if (_player->getPosition().x < _parent->getPosition().x)
+		{
+			_parent->get_components<GavinPhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(20.f, 0.f), true);
+		}
+		else
+		{
+			_parent->get_components<GavinPhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-20.f, 0.f), true);
+		}
 		_health = _health - h;
 		
 	}

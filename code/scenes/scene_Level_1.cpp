@@ -45,24 +45,15 @@ void Level1Scene::Load() {
 		player = makePlayer(Vector2f(1200, 15360));
 	}
 
-
 	view_center = player->getPosition();
-
 
 	TilePhysics();
 
-
 	makeTorches();
-
 
 	makeShops();
 
-
 	gavin = makeGavin();
-
-
-	makeCoins();
-
 
 	makeChests();
 
@@ -71,7 +62,6 @@ void Level1Scene::Load() {
 	coinAmount();
 
 	arrowAmount();
-
 
 
 	addUI();

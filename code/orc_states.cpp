@@ -4,75 +4,93 @@
 #include "components\cmp_animation.h"
 #include "components\cmp_hurt.h"
 
+double totalTimeO = 2;
+double attackDelayO = 3;
+
+
 void  Orc_IdleState::execute(Entity *owner, double dt) noexcept
 {
 
+	auto p = owner->get_components<PhysicsComponent>()[0];
 	auto sm = owner->get_components<StateMachineComponent>()[0];
 
-
-	if (owner->get_components<OrcPropertiesComponent>()[0]->getHealth() <= 0)
-	{
-		sm->changeState("dead");
-	}
-
-	// Don't move
-	owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
-
-
-	if (_player->getPosition().x > owner->getPosition().x)
-	{
-		owner->get_components<AnimationComponent>()[0]->faceRight = true;
-	}
 	if (_player->getPosition().x < owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = false;
 	}
 
-	//Chase player when in range
-	if (length(owner->getPosition() - _player->getPosition()) < 800.0f)
+	if (_player->getPosition().x > owner->getPosition().x)
 	{
-		if (length(owner->getPosition() - _player->getPosition()) < 200.0f)
+		owner->get_components<AnimationComponent>()[0]->faceRight = true;
+	}
+
+
+	if (length(owner->getPosition() - _player->getPosition()) < 500.f)
+	{
+		if (length(owner->getPosition() - _player->getPosition()) < 200.f)
 		{
-			sm->changeState("Attack");
+			totalTimeO += dt;
+			if (totalTimeO >= attackDelayO)
+			{
+				totalTimeO -= attackDelayO;
+				sm->changeState("Attack");
+			}
+
 		}
-		else if (length(owner->getPosition() - _player->getPosition()) < 800.0f)
+		else if(length(owner->getPosition() - _player->getPosition()) > 400.f)
 		{
 			sm->changeState("chase");
 		}
+
 	}
-
-}
-
-void  Orc_ChaseState::execute(Entity *owner, double dt) noexcept
-{
-	auto p = owner->get_components<PhysicsComponent>()[0];
-	auto g = owner->get_components<PhysicsComponent>()[0];
-	auto sm = owner->get_components<StateMachineComponent>()[0];
 
 	if (owner->get_components<OrcPropertiesComponent>()[0]->getHealth() <= 0)
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 
+}
 
-	if (length(owner->getPosition() - _player->getPosition()) < 200.0f)
+void  Orc_ChaseState::execute(Entity *owner, double dt) noexcept
+{
+	auto sm = owner->get_components<StateMachineComponent>()[0];
+	auto p = owner->get_components<PhysicsComponent>()[0];
+
+	if (length(owner->getPosition() - _player->getPosition()) > 500.f)
 	{
-		sm->changeState("Attack");
+		sm->changeState("idle");
+	}
+
+
+	if (length(owner->getPosition() - _player->getPosition()) < 200.f)
+	{
+		totalTimeO += dt;
+		if (totalTimeO >= attackDelayO)
+		{
+			totalTimeO -= attackDelayO;
+			sm->changeState("Attack");
+		}
+
+	}
+
+	if (owner->get_components<OrcPropertiesComponent>()[0]->getHealth() <= 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 
 	if (_player->getPosition().x > owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = true;
-		g->impulse({ 5.0f , 0.0f });
-		g->dampen({ 0.7f , 1.0f });
+		p->impulse({ 3.0f , 0.0f });
+		p->dampen({ 0.7f , 1.0f });
 	}
 
 	//follow left
 	if (_player->getPosition().x < owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = false;
-		g->impulse({ -5.0f , 0.0f });
-		g->dampen({ 0.7f , 1.0f });
+		p->impulse({ -3.0f , 0.0f });
+		p->dampen({ 0.7f , 1.0f });
 
 	}
 
@@ -82,33 +100,30 @@ void  Orc_ChaseState::execute(Entity *owner, double dt) noexcept
 void Orc_AttackState::execute(Entity *owner, double dt) noexcept
 {
 	auto p = owner->get_components<PhysicsComponent>()[0];
+	auto a = owner->get_components<AnimationComponent>()[0];
+	auto sm = owner->get_components<StateMachineComponent>()[0];
 
+	
+	if (_player->getPosition().x < owner->getPosition().x)
+	{
+		owner->get_components<AnimationComponent>()[0]->faceRight = false;
+	}
 
 	if (_player->getPosition().x > owner->getPosition().x)
 	{
 		owner->get_components<AnimationComponent>()[0]->faceRight = true;
-		p->impulse({ 2.0f , 0.0f });
-		p->dampen({ 0.7f , 0.0f });
-	}
-
-	//follow left
-	if (_player->getPosition().x < owner->getPosition().x)
-	{
-		owner->get_components<AnimationComponent>()[0]->faceRight = false;
-		p->impulse({ -2.0f , 0.0f });
-		p->dampen({ 0.7f , 0.0f });
-
 	}
 
 
-	if (owner->get_components<OrcPropertiesComponent>()[0]->getHealth() <= 0)
+	if (a->attackImgNo >= 6)
 	{
-		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+		a->attackImgNo = 0;
+		sm->changeState("idle");
 	}
 
-	if (length(owner->getPosition() - _player->getPosition()) > 200.0f)
+
+	if (length(owner->getPosition() - _player->getPosition()) > 400.f)
 	{
-		auto sm = owner->get_components<StateMachineComponent>()[0];
 		sm->changeState("chase");
 	}
 
@@ -116,6 +131,7 @@ void Orc_AttackState::execute(Entity *owner, double dt) noexcept
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
+
 }
 
 
