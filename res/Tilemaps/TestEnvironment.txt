@@ -62,6 +62,6 @@ wwww                                                            wwww
 wwww                      TTTTTTTT                              wwww
 wwww                      TTTTTTTTTTTTTTTTTTT                   wwww
 wwww                                                            wwww
-wwwwsT $ R W{}AB[]C    4                                     G  wwww
+wwwwsT $ R W{}AB[]C    4  c                                  G  wwww
 wwwwffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffwwww
 wwwgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggwwww

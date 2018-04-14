@@ -5,6 +5,7 @@
 #include "../components/cmp_btn.h"
 #include "../GameState.h"
 #include "../code/Prefabs.h"
+#include "../code/SaveLoad.h"
 #include "engine.h"
 #include "levelsystem.h"
 #include <SFML\Graphics.hpp>
@@ -113,15 +114,16 @@ void MainMenuScene::Update(const double& dt)
 
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
-
+			SaveLoad::ResetGame();
 			Engine::ChangeScene((Scene*)&level1);
-			loadGame = false;
+
 		}
 
 		if (btnLoadGame->get_components<BtnComponent>()[0]->isSelected())
 		{
+			SaveLoad::LoadGame();
 			Engine::ChangeScene((Scene*)&level1);
-			loadGame = true;
+
 		}
 
 		if (btnSettings->get_components<BtnComponent>()[0]->isSelected())
@@ -131,6 +133,7 @@ void MainMenuScene::Update(const double& dt)
 
 		if (btnExit->get_components<BtnComponent>()[0]->isSelected())
 		{
+			SaveLoad::ResetGame();
 			Engine::GetWindow().close();
 		}
 

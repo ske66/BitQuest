@@ -4,6 +4,7 @@
 #include "../components/cmp_btn.h"
 #include "../code/components/cmp_text.h"
 #include "engine.h"
+#include "../code/SaveLoad.h"
 #include "levelsystem.h"
 #include <SFML\Graphics.hpp>
 #include <iostream>
@@ -53,8 +54,7 @@ void GameOverScene::Update(const double& dt)
 
 	if (btnRetry->get_components<BtnComponent>()[0]->isSelected())
 	{
-		loadGame = true;
-
+		SaveLoad::LoadGame();
 		Engine::ChangeScene((Scene*)&level1);
 	}
 

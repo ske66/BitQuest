@@ -319,8 +319,9 @@ vector<shared_ptr<Entity>> makeTorches()
 		torch->setPosition(ls::getTilePosition(t));
 		torch->addTag("torch");
 
-		//auto a = torch->addComponent<AnimationComponent>();
-		//a->Animation("spritesheets/Torch.png", Vector2f(0, 0), IntRect(0, 0, 120, 120), Vector2u(8, 1));
+		auto a = torch->addComponent<ObjectAnimComponent>();
+		a->Animation("spritesheets/Torch.png", Vector2f(0, 0), IntRect(0, 0, 120, 120), Vector2u(8, 1));
+		a->getSprite().setOrigin(0, 0);
 
 		Mtorches.push_back(torch);
 	}

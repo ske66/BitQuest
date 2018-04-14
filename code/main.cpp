@@ -24,7 +24,6 @@ SettingsGameplayScene settingsGameplay;
 Level1Scene level1;
 GameOverScene gameOver;
 ShopScene shop;
-bool loadGame;
 
 int ResolutionX;
 int ResolutionY;

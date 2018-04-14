@@ -2,6 +2,7 @@
 #include "../GameState.h"
 #include "../code/Prefabs.h"
 #include "../code/components/cmp_btn.h"
+#include "../code/SaveLoad.h"
 #include <levelsystem.h>
 #include <iostream>
 #include <string>
@@ -29,50 +30,28 @@ void Level1Scene::Load() {
 	_musicLevel1->setLoop(true);
 	_musicLevel1->setVolume(50);
 
-	int loadPosX;
-	int loadPosY;
-
-	ifstream InFile("res/SaveStates/TestLevelSave.txt");
-	(InFile >> loadPosX >> loadPosY);
-
-
-	if (loadGame == true)
-	{
-		player = makePlayer(Vector2f(loadPosX,loadPosY-240));
-	}
-	else
-	{
-		player = makePlayer(Vector2f(1200, 15360));
-	}
-
-
-	view_center = player->getPosition();
-
 
 	TilePhysics();
 
+	makeChests();
 
 	makeTorches();
 
-
 	makeShops();
-
-
-	gavin = makeGavin();
-
 
 	makeCoins();
 
+	player = makePlayer(Vector2f(SaveLoad::positionX, SaveLoad::positionY));
 
-	makeChests();
+	view_center = player->getPosition();
+	
+	gavin = makeGavin();
 
 	makeEnemies();
 
 	coinAmount();
 
 	arrowAmount();
-
-
 
 	addUI();
 
@@ -103,12 +82,10 @@ void Level1Scene::Update(const double& dt) {
 
 	Engine::GetWindow().setView(view);
 
-
-	if (Keyboard::isKeyPressed(Keyboard::H))
+		
+	
+	if (player->get_components<StateMachineComponent>()[0]->currentState() == "dead")
 	{
-
-		//Started Save Game/Load Game
-
 		Vector2f currentPos = player->getPosition();
 
 		int posX = currentPos.x;
@@ -116,22 +93,15 @@ void Level1Scene::Update(const double& dt) {
 
 		Vector2u saveCoords = Vector2u(((posX + 240 / 2) / 240) * 240, ((posY + 240) / 240) * 240);
 
-
-		std::ofstream outFile("res/SaveStates/TestLevelSave.txt");
-		outFile << saveCoords.x << endl;
-		outFile << saveCoords.y << endl;
-		outFile.close();
-		//Position Saved
-
-		Engine::ChangeScene(&menu);
-
-	}
-	if (player->get_components<StateMachineComponent>()[0]->currentState() == "dead")
-	{
 		totalTime += dt;
 
 		if (totalTime >= holdTime)
-		{
+		{			
+			SaveLoad::positionX = saveCoords.x;
+			SaveLoad::positionY = saveCoords.y - 240;
+
+			SaveLoad::SaveGame();
+
 			Engine::ChangeScene(&gameOver);
 		}
 
@@ -144,10 +114,9 @@ void Level1Scene::Update(const double& dt) {
 		{
 			Engine::ChangeScene(&menu);
 		}
-
 	}
-	Scene::Update(dt);
 
+	Scene::Update(dt);
 }
 
 void Level1Scene::Render() {
