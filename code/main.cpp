@@ -34,5 +34,5 @@ int main() {
 	ifstream Graphics("res/savestates/Graphics.txt");
 	(Graphics >> ResolutionX >> ResolutionY >> FPS);
 
-	Engine::Start(ResolutionX,ResolutionY, "Bitquest!", &menu);
+	Engine::Start(game_width, game_heigth, "Bitquest!", &menu, frameRate);
 }

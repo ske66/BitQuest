@@ -30,6 +30,7 @@ void MainMenuScene::Load()
 	_musicMenu = Resources::get<Music>("Menu_Music.wav");
 	_musicMenu->play();
 	_musicMenu->setLoop(true);
+	_musicMenu->setVolume(musicVolume);
 
 
 	{

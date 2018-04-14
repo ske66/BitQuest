@@ -35,5 +35,4 @@ public:
 	void collisionCheck(double dt);
 	void update(double dt);
 	void render() override;
-
 };

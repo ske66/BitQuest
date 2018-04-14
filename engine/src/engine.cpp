@@ -4,6 +4,7 @@
 #include "system_physics.h"
 #include "system_Renderer.h"
 #include "system_resources.h"
+#include "../code/SaveLoad.h"
 #include <SFML\Graphics.hpp>
 #include <future>
 #include <vector>
@@ -16,15 +17,17 @@ using namespace std;
 Scene* Engine::_activeScene = nullptr;
 std::string Engine::_gameName;
 
-
-
 static bool loading = false;
 static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
 
+bool Engine::_fullscreen = false;
+
 Texture spritesheet;
 Sprite goblin;
+
+
 
 
 float switchtime;
@@ -33,16 +36,13 @@ sf::Vector2u currentimage;
 float totalTime;
 sf::Vector2u imagecount(8, 8);
 
-//Loading screen animation
-
-//Loading screen animation
-
 void Loading_Load()
 {
 	spritesheet.loadFromFile("res/textures/Spritesheets/Goblin_spritesheet.png");
 	goblin.setTexture(spritesheet);
 	goblin.setTextureRect(uvRect);
 	goblin.setOrigin(0, 120);
+	goblin.setPosition(Engine::getWindowSize().x / 2, Engine::getWindowSize().y / 4);
 
 	switchtime = 0.045f;
 
@@ -90,7 +90,7 @@ void Loading_render() {
 
 	static Text t("Loading...", *Resources::get<sf::Font>("Wonder.ttf"));
 	t.setOrigin(Engine::GetWindow().getSize().x / 2, Engine::GetWindow().getSize().y / 2);
-	t.setPosition(Engine::GetWindow().getSize().x - 125, 900.f);
+	t.setPosition(Engine::GetWindow().getSize().x / 2, Engine::GetWindow().getSize().y / 2);
 
 	Renderer::queue(&t);
 	Renderer::queue(&goblin);
@@ -137,108 +137,60 @@ void Engine::Render(RenderWindow& window) {
 }
 
 
-
 void Engine::Start(unsigned int width, unsigned int height,
-	const std::string& gameName, Scene* scn) {
-
-	int ResX;
-	int ResY;
-	int FrameSpeed;
-	string ScreenType;
-
-	ifstream Graphics("res/savestates/Graphics.txt");
-	(Graphics >> ResX >> ResY >> FrameSpeed >> ScreenType);
-	
+	const std::string& gameName, Scene* scn, unsigned int frameRate) {
 	RenderWindow window;
+	window.create(VideoMode(width, height, 2), gameName);
+	window.setFramerateLimit(frameRate);
+	//window.create(VideoMode(width, height), gameName, Style::Titlebar | Style::Close);
+	_gameName = gameName;
+	_window = &window;
+	Renderer::initialise(window);
+	Physics::initialise();
 
-	if (ScreenType == "Fullscreen")
-	{
-		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Fullscreen);
+	//FOR WHEN I HAVE CONTROLS WORKING
 
-		window.setFramerateLimit(FrameSpeed);
+	//Controls::initialise();
 
-		window.setVerticalSyncEnabled(true);
-
-
-		_gameName = gameName;
-		_window = &window;
-		Renderer::initialise(window);
-		Physics::initialise();
-		ChangeScene(scn);
-
-		while (window.isOpen()) {
-			Event event;
-
-			while (window.pollEvent(event)) {
-				if (event.type == Event::Closed) {
-					window.close();
-				}
-
-				if (event.type == sf::Event::Resized)
+	SaveLoad::ResetGame();
+	ChangeScene(scn);
+	while (window.isOpen()) {
+		Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == Event::Closed) {
+				window.close();
+			}
+			//Resize Window Mode
+			if (event.type == sf::Event::Resized)
+			{
+				sf::FloatRect visableArea(0, 0, event.size.width, event.size.height);
+				window.setView(sf::View(visableArea));
+			}
+			//Fullscreen Mode
+			if (event.type == sf::Event::KeyReleased)
+			{
+				if (event.key.code == sf::Keyboard::F11)
 				{
-					sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-					window.setView(sf::View(visibleArea));
+					_fullscreen = !_fullscreen;
+					window.create(VideoMode(width, height), gameName, (_fullscreen ? Style::Fullscreen : Style::Resize | Style::Close));
+					window.setFramerateLimit(frameRate);
+				    _window = &window;
 				}
 			}
-			window.clear();
-			Update();
-			Render(window);
-			window.display();
-
 		}
-		if (_activeScene != nullptr) {
-			_activeScene->UnLoad();
-			_activeScene = nullptr;
-		}
-		window.close();
-		Physics::shutdown();
-		Renderer::shutdown();
 
+		window.clear(Color(90, 73, 67));
+		Update();
+		Render(window);
+		window.display();
 	}
-	else if (ScreenType == "Windowed")
-	{
-		RenderWindow window(VideoMode(ResX, ResY), gameName, sf::Style::Resize);
-
-	window.setFramerateLimit(FrameSpeed);
-
-		window.setVerticalSyncEnabled(true);
-
-		_gameName = gameName;
-		_window = &window;
-		Renderer::initialise(window);
-		Physics::initialise();
-		ChangeScene(scn);
-
-		while (window.isOpen()) {
-			Event event;
-
-			while (window.pollEvent(event)) {
-				if (event.type == Event::Closed) {
-					window.close();
-				}
-
-				if (event.type == sf::Event::Resized)
-				{
-					sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-					window.setView(sf::View(visibleArea));
-				}
-			}
-
-			window.clear();
-			Update();
-			Render(window);
-			window.display();
-
-		}
-		if (_activeScene != nullptr) {
-			_activeScene->UnLoad();
-			_activeScene = nullptr;
-		}
-		window.close();
-		Physics::shutdown();
-		Renderer::shutdown();
-
+	if (_activeScene != nullptr) {
+		_activeScene->UnLoad();
+		_activeScene = nullptr;
 	}
+
+	window.close();
+	Physics::shutdown();
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {
@@ -246,6 +198,7 @@ std::shared_ptr<Entity> Scene::makeEntity() {
 	ents.list.push_back(e);
 	return std::move(e);
 }
+
 
 void Engine::setVsync(bool b) { _window->setVerticalSyncEnabled(b); }
 

@@ -24,11 +24,6 @@ static shared_ptr<Entity> btnOff;
 static shared_ptr<Entity> btn30;
 static shared_ptr<Entity> btn60;
 
-int FrameRate;
-string VMode;
-Vector2u Resolution;
-
-
 
 void SettingsGraphicsScene::Load()
 {
@@ -113,58 +108,47 @@ void SettingsGraphicsScene::Update(const double& dt)
 
 	if (ResLow->get_components<BtnComponent>()[0]->isSelected())
 	{
-		Resolution.x = 1280;
-		Resolution.y = 720;
+		game_width = 1280;
+		game_heigth = 720;
 	}
 
 	if (ResMed->get_components<BtnComponent>()[0]->isSelected())
 	{
-		Resolution.x = 1600;
-		Resolution.y = 900;
+		game_width = 1600;
+		game_heigth = 900;
 	}
 
 	if (ResHigh->get_components<BtnComponent>()[0]->isSelected())
 	{
-		Resolution.x = 1920;
-		Resolution.y = 1080;
+		game_width = 1920;
+		game_heigth = 1080;
 	}
 
 	if (btn60->get_components<BtnComponent>()[0]->isSelected())
 	{
-		FrameRate = 60;
+		frameRate = 60;
 	}
 
 	if (btn30->get_components<BtnComponent>()[0]->isSelected())
 	{
-		FrameRate = 30;
+		frameRate = 30;
 	}
 
 	if (btnOn->get_components<BtnComponent>()[0]->isSelected())
 	{
-		VMode = "Fullscreen";
+		//windowMode = "Fullscreen";
 	}
 
 	if (btnOff->get_components<BtnComponent>()[0]->isSelected())
 	{
-		VMode = "Windowed";
+		//windowMode = "Windowed";
 	}
-
 
 	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
 	{
-		//write to file
-
-		ofstream output;
-		output.open("res/savestates/Graphics.txt");
-		output << Resolution.x << endl;
-		output << Resolution.y << endl;
-		output << FrameRate << endl;
-		output << VMode << endl;
-		output.close();
-
 		Engine::GetWindow().close();
 
-		Engine::Start(Resolution.x, Resolution.y, "Bitquest!", &menu);
+		Engine::Start(game_width, game_heigth, "Bitquest!", &menu, frameRate);
 	}
 }
 

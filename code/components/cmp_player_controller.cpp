@@ -2,6 +2,7 @@
 #include "cmp_state_Machine.h"
 #include "cmp_UI.h"
 #include "cmp_text.h"
+#include "../code/GameState.h"
 
 using namespace std;
 using namespace sf;
@@ -135,6 +136,7 @@ void PlayerControlerComponent::takeDamage(double d , double dt)
 		_soundHit.setBuffer(_bufferHit);
 
 		_soundHit.play();
+		_soundHit.setVolume(sfxVolume);
 	}
 		
 }

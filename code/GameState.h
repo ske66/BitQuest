@@ -17,3 +17,10 @@ extern SettingsGameplayScene settingsGameplay;
 extern Level1Scene level1;
 extern GameOverScene gameOver;
 extern ShopScene shop;
+
+static uint16_t game_width = 1600;
+static uint16_t game_heigth = 900;
+static uint16_t frameRate = 60;
+
+static uint16_t musicVolume = 80;
+static uint16_t sfxVolume = 100;

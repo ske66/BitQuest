@@ -12,15 +12,25 @@ using namespace std;
 using namespace sf;
 
 static shared_ptr<Entity> btnBack;
-static shared_ptr<Entity> studMaster;
-static shared_ptr<Entity> studMusic;
-static shared_ptr<Entity> studSFX;
 static shared_ptr<Entity> btnDone;
+static shared_ptr<Entity> btnMusicLow;
+static shared_ptr<Entity> btnMusicMed;
+static shared_ptr<Entity> btnMusicHigh;
+static shared_ptr<Entity> btnSFXLow;
+static shared_ptr<Entity> btnSFXMed;
+static shared_ptr<Entity> btnSFXHigh;
 
 void SettingsAudioScene::Load()
 {
 
 	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
+
+	//Music
+	_musicMenu = Resources::get<Music>("Menu_Music.wav");
+	_musicMenu->play();
+	_musicMenu->setLoop(true);
+	_musicMenu->setVolume(musicVolume);
+
 
 	{
 		//Back button
@@ -34,44 +44,23 @@ void SettingsAudioScene::Load()
 	}
 
 	{
-		//Master audio slider
-		auto txtMaster = makeEntity();
-		auto t = txtMaster->addComponent<TextComponent>("Master Volume");
-		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
-		txtMaster->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 200.f));
-
-		auto slider = makeEntity();
-		auto s = slider->addComponent<SpriteComponent>();
-		s->Sprite("Slider.png", IntRect(0, 0, 500, 32));
-		s->getSprite().setOrigin(s->getSprite().getGlobalBounds().width / 2, s->getSprite().getGlobalBounds().height / 2);
-		slider->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
-
-		 studMaster = makeEntity();
-		auto st = studMaster->addComponent<SpriteComponent>();
-		st->Sprite("stud.png", IntRect(0, 0, 32, 24));
-		st->getSprite().setOrigin(st->getSprite().getGlobalBounds().width / 2, st->getSprite().getGlobalBounds().height / 2);
-		studMaster->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
-	}
-
-	{
 		//Music audio slider
 
 		auto txtMusic = makeEntity();
 		auto t = txtMusic->addComponent<TextComponent>("Music Volume");
-		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
-		txtMusic->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 350.f));
+		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
+		txtMusic->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 250.f));
 
-		auto slider = makeEntity();
-		auto s = slider->addComponent<SpriteComponent>();
-		s->Sprite("Slider.png", IntRect(0, 0, 500, 32));
-		s->getSprite().setOrigin(s->getSprite().getGlobalBounds().width / 2, s->getSprite().getGlobalBounds().height / 2);
-		slider->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 400.f));
+		btnMusicLow = makeButton("Low", Vector2f(150, 60));
+		btnMusicLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
 
-		 studMusic = makeEntity();
-		auto st = studMusic->addComponent<SpriteComponent>();
-		st->Sprite("stud.png", IntRect(0, 0, 32, 24));
-		st->getSprite().setOrigin(st->getSprite().getGlobalBounds().width / 2, st->getSprite().getGlobalBounds().height / 2);
-		studMusic->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 400.f));
+		btnMusicMed = makeButton("Medium", Vector2f(150, 60));
+		btnMusicMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 250.f));
+
+		btnMusicHigh = makeButton("High", Vector2f(150, 60));
+		btnMusicHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 460, 250.f));
+
+		
 	}
 
 	{
@@ -79,20 +68,17 @@ void SettingsAudioScene::Load()
 
 		auto txtSFX = makeEntity();
 		auto t = txtSFX->addComponent<TextComponent>("SFX Audio");
-		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
-		txtSFX->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 500.f));
+		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
+		txtSFX->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 450.f));
 
-		auto slider = makeEntity();
-		auto s = slider->addComponent<SpriteComponent>();
-		s->Sprite("Slider.png", IntRect(0, 0, 500, 32));
-		s->getSprite().setOrigin(s->getSprite().getGlobalBounds().width / 2, s->getSprite().getGlobalBounds().height / 2);
-		slider->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 550.f));
+		btnSFXLow = makeButton("Low", Vector2f(150, 60));
+		btnSFXLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
 
-		 studSFX = makeEntity();
-		auto st = studSFX->addComponent<SpriteComponent>();
-		st->Sprite("stud.png", IntRect(0, 0, 32, 24));
-		st->getSprite().setOrigin(st->getSprite().getGlobalBounds().width / 2, st->getSprite().getGlobalBounds().height / 2);
-		studSFX->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 550.f));
+		btnSFXMed = makeButton("Medium", Vector2f(150, 60));
+		btnSFXMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 450.f));
+
+		btnSFXHigh = makeButton("High", Vector2f(150, 60));
+		btnSFXHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 460, 450.f));
 	}
 
 	{
@@ -107,84 +93,55 @@ void SettingsAudioScene::Load()
 }
 
 void SettingsAudioScene::UnLoad() {
+	_musicMenu->stop();
+	_musicMenu.reset();
+
 	ls::unload();
 	Scene::UnLoad();
 }
 
 void SettingsAudioScene::Update(const double& dt)
 {
-		sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
-		sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
+		
+	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
+	{
+		Engine::ChangeScene((Scene*)&settings);
+	}
 
-		if (btnBack->get_components<BtnComponent>()[0]->isSelected())
-		{
-			Engine::ChangeScene((Scene*)&settings);
-		}
+	if (btnMusicLow->get_components<BtnComponent>()[0]->isSelected())
+	{
+		musicVolume = 33;
+	}
 
+	if (btnMusicMed->get_components<BtnComponent>()[0]->isSelected())
+	{
+		musicVolume = 66;
+	}
 
-		if (btnDone->get_components<BtnComponent>()[0]->isSelected())
-		{
-			Engine::ChangeScene((Scene*)&settings);
-		}
+	if (btnMusicHigh->get_components<BtnComponent>()[0]->isSelected())
+	{
+		musicVolume = 100;
+	}
 
+	if (btnSFXLow->get_components<BtnComponent>()[0]->isSelected())
+	{
+		sfxVolume = 33;
+	}
 
-		//Slider lock, gets positon of mouse and only lets the slider move alone the x-axis, stops when it hits a certain Position Left & Right
-			if (studMaster->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().getGlobalBounds().contains(worldPos))
-			{
+	if (btnSFXMed->get_components<BtnComponent>()[0]->isSelected())
+	{
+		sfxVolume = 66;
+	}
 
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					studMaster->setPosition(Vector2f(worldPos.x, 250));
+	if (btnSFXHigh->get_components<BtnComponent>()[0]->isSelected())
+	{
+		sfxVolume = 100;
+	}
 
-					if (studMaster->getPosition().x > 860.f)
-					{
-						studMaster->setPosition(Vector2f(860, 250));
-					}
-
-					if (studMaster->getPosition().x < 430.f)
-					{
-						studMaster->setPosition(Vector2f(430, 250));
-					}
-				}
-			}
-
-			if (studMusic->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().getGlobalBounds().contains(worldPos))
-			{
-
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					studMusic->setPosition(Vector2f(worldPos.x, 400));
-
-					if (studMusic->getPosition().x > 860.f)
-					{
-						studMusic->setPosition(Vector2f(860, 400));
-					}
-
-					if (studMusic->getPosition().x < 430.f)
-					{
-						studMusic->setPosition(Vector2f(430, 400));
-					}
-				}
-			}
-
-			if (studSFX->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().getGlobalBounds().contains(worldPos))
-			{
-
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				{
-					studSFX->setPosition(Vector2f(worldPos.x, 550));
-
-					if (studSFX->getPosition().x > 860.f)
-					{
-						studSFX->setPosition(Vector2f(860, 550));
-					}
-
-					if (studSFX->getPosition().x < 430.f)
-					{
-						studSFX->setPosition(Vector2f(430, 550));
-					}
-				}
-			}
+	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
+	{
+		Engine::ChangeScene(&settings);
+	}
 
 	Scene::Update(dt);
 }
