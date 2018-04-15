@@ -17,6 +17,8 @@ protected:
 	sf::SoundBuffer _bufferDeath;
 	sf::Sound _soundHit;
 	sf::Sound _soundDeath;
+	sf::SoundBuffer _bufferSheild;
+	sf::Sound _soundSheild;
 	std::shared_ptr<Entity> _gavin;
 	
 public:

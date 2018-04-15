@@ -15,6 +15,15 @@ void GoblinPropertiesComponent::takeDamage(double h)
 	{
 		immortal = true;
 		_health = _health - h;
+
+		if (_player->getPosition().x < _parent->getPosition().x)
+		{
+			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(50.f , 0.f),true);
+		}
+		else
+		{
+			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-50.f, 0.f), true);
+		}
 		this->checkHealth();
 	}
 }
@@ -32,7 +41,8 @@ void GoblinPropertiesComponent::update(double dt)
 		this->checkContact(dt);
 	}
 
-	
+	_parent->get_components<SpriteComponent>()[0]->Sprite("EnemyHealth.png", rect);
+
 
 	if (immortal == true)
 	{
@@ -63,8 +73,10 @@ void GoblinPropertiesComponent::checkContact(double dt)
 		{
 			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
-				std::cout << _health << std::endl;
-				this->takeDamage(ap->playerDamage);
+				if (_player->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
+				{
+					this->takeDamage(ap->playerDamage);
+				}
 			}
 			else
 			{
@@ -75,59 +87,27 @@ void GoblinPropertiesComponent::checkContact(double dt)
 
 }
 
-void GoblinPropertiesComponent::checkHealth()
+sf::IntRect GoblinPropertiesComponent::checkHealth()
 {
-	auto bar = _parent->get_components<SpriteComponent>()[0];
-
-	if (_health == 10)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 100, 5));
-	}
-
-	if (_health == 9)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 90, 5));
-	}
-	if (_health == 8)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 80, 5));
-	}
-
-	if (_health == 7)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 70, 5));
-	}
-	if (_health == 6)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 60, 5));
-	}
-
-	if (_health == 5)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 50, 5));
-	}
-	if (_health == 4)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 40, 5));
-	}
-
 	if (_health == 3)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 30, 5));
+		rect = sf::IntRect(0, 0, 100, 5);
 	}
+
 	if (_health == 2)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 20, 5));
+		rect = sf::IntRect(0, 0, 66, 5);
 	}
 
 	if (_health == 1)
 	{
-
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 10, 5));
+		rect = sf::IntRect(0, 0, 33, 5);
 	}
 	if (_health == 0)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 0, 5));
+		rect = sf::IntRect(0, 0, 0, 5);
 	}
+
+	return rect; 
 
 }

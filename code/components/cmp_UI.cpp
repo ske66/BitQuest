@@ -61,7 +61,7 @@ void UIComponent::update(double dt)
 	if (Keyboard::isKeyPressed(Keyboard::Num1))
 	{
 		auto p = _player->get_components<AnimationComponent>()[0];
-		p->Animation("spritesheets/Bob_archer_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		p->Animation("spritesheets/Bob_archer_spritesheetV2.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 		p->getSprite().setOrigin(p->getSprite().getGlobalBounds().width / 2, p->getSprite().getGlobalBounds().height / 2);;
 		weaponUI = Sprite(*_texBowUI);
 		sword = false;

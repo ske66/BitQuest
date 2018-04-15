@@ -28,24 +28,28 @@ void Level1Scene::Load() {
 	_musicLevel1 = Resources::get<Music>("Level_Music.wav");
 	_musicLevel1->play();
 	_musicLevel1->setLoop(true);
-	_musicLevel1->setVolume(musicVolume);
 
+	_musicLevel1->setVolume(musicVolume);
 
 	TilePhysics();
 
+
 	makeChests();
+
 
 	makeTorches();
 
 	makeShops();
 
-	makeCoins();
+
+	makeCoin();
 
 	player = makePlayer(Vector2f(SaveLoad::positionX, SaveLoad::positionY));
 
 	view_center = player->getPosition();
 	
 	gavin = makeGavin();
+
 
 	makeEnemies();
 

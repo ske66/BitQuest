@@ -1,7 +1,9 @@
-#include "cmp_orc_properties.h"
+
 #include "cmp_physics.h"
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
+#include "cmp_orc_properties.h"
+
 
 OrcPropertiesComponent::OrcPropertiesComponent(Entity* p)
 	: Component(p)
@@ -13,6 +15,14 @@ void OrcPropertiesComponent::takeDamage(double h)
 {
 	if (immortal == false)
 	{
+		if (_player->getPosition().x < _parent->getPosition().x)
+		{
+			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(40.f, 0.f), true);
+		}
+		else
+		{
+			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-40.f, 0.f), true);
+		}
 		immortal = true;
 		_health = _health - h;
 		this->checkHealth();
@@ -26,10 +36,12 @@ double OrcPropertiesComponent::getHealth()
 
 void OrcPropertiesComponent::update(double dt)
 {
-	if (length(_parent->getPosition() - _player->getPosition()) < 100)
+	if (length(_parent->getPosition() - _player->getPosition()) < 300)
 	{
 		this->checkContact(dt);
 	}
+
+	_parent->get_components<SpriteComponent>()[0]->Sprite("EnemyHealth.png", rect);
 
 	if (immortal == true)
 	{
@@ -62,10 +74,13 @@ void OrcPropertiesComponent::checkContact(double dt)
 		{
 			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
-				std::cout << _health << std::endl;
-				this->takeDamage(ap->playerDamage);
+				if (_player->get_components<AnimationComponent>()[0]->attackImgNo >= 6)
+				{
+					this->takeDamage(ap->playerDamage);
+				}
+				
 			}
-			else
+			if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
 			{
 				ap->takeDamage(orcDamage, dt);
 			}
@@ -73,59 +88,61 @@ void OrcPropertiesComponent::checkContact(double dt)
 	}
 
 }
-
-void OrcPropertiesComponent::checkHealth()
+sf::IntRect OrcPropertiesComponent::checkHealth()
 {
-	auto bar = _parent->get_components<SpriteComponent>()[0];
-
 	if (_health == 10)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 100, 5));
+		rect = sf::IntRect(0, 0, 100, 5);
 	}
 
 	if (_health == 9)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 90, 5));
+		sf::IntRect(0, 0, 90, 5);
+
 	}
 	if (_health == 8)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 80, 5));
+		rect = sf::IntRect(0, 0, 80, 5);
+
 	}
 
 	if (_health == 7)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 70, 5));
+		rect = sf::IntRect(0, 0, 70, 5);
 	}
 	if (_health == 6)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 60, 5));
+		rect = sf::IntRect(0, 0, 60, 5);
 	}
 
 	if (_health == 5)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 50, 5));
+		rect = sf::IntRect(0, 0, 50, 5);
 	}
 	if (_health == 4)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 40, 5));
+		rect = sf::IntRect(0, 0, 40, 5);
 	}
 
 	if (_health == 3)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 30, 5));
+		rect = sf::IntRect(0, 0, 30, 5);
 	}
+
 	if (_health == 2)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 20, 5));
+		rect = sf::IntRect(0, 0, 20, 5);
 	}
 
 	if (_health == 1)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 10, 5));
+		rect = sf::IntRect(0, 0, 10, 5);
 	}
 	if (_health == 0)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 0, 5));
+		rect = sf::IntRect(0, 0, 0, 5);
 	}
+
+	return rect;
 
 }

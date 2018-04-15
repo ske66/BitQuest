@@ -17,6 +17,14 @@ void SkeletonPropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
+		if (_player->getPosition().x < _parent->getPosition().x)
+		{
+			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(40.f, 0.f), true);
+		}
+		else
+		{
+			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(-40.f, 0.f), true);
+		}
 		immortal = true;
 		_health = _health - h;
 
@@ -70,7 +78,10 @@ void SkeletonPropertiesComponent::checkContact(double dt)
 		{
 			if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 			{
-				takeDamage(ap->playerDamage);
+				if (_player->get_components<AnimationComponent>()[0]->attackImgNo >= 6)
+				{
+					takeDamage(ap->playerDamage);
+				}
 			}	
 			if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
 			{

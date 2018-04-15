@@ -3,6 +3,7 @@
 #include "components\cmp_physics.h"
 #include "components\cmp_animation.h"
 #include "components\cmp_hurt.h"
+#include "Prefabs.h"
 
 double totalTimeT = 2;
 double attackDelayT = 3;
@@ -14,9 +15,9 @@ void  Troll_IdleState::execute(Entity *owner, double dt) noexcept
 
 	if (length(owner->getPosition() - _player->getPosition()) < 500.f)
 	{
-		if (length(owner->getPosition() - _player->getPosition()) < 100.f)
+		if (length(owner->getPosition() - _player->getPosition()) < 200.f)
 		{
-			sm->changeState("idle");
+			sm->changeState("Attack");
 		}
 		else
 		{
@@ -25,8 +26,12 @@ void  Troll_IdleState::execute(Entity *owner, double dt) noexcept
 		
 	}
 
+	p->setFriction(1);
+
 	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
 	{
+		owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
+		owner->get_components<AnimationComponent>()[0]->currentimage.x = 0;
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 }
@@ -41,12 +46,6 @@ void  Troll_ChaseState::execute(Entity *owner, double dt) noexcept
 		sm->changeState("idle");
 	}
 	
-	if(length(owner->getPosition() - _player->getPosition()) < 100.f)
-	{
-		sm->changeState("idle");
-	}
-
-
 	if (length(owner->getPosition() - _player->getPosition()) < 200.f)
 	{
 		totalTimeT += dt;
@@ -60,6 +59,8 @@ void  Troll_ChaseState::execute(Entity *owner, double dt) noexcept
 
 	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
 	{
+		owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
+		owner->get_components<AnimationComponent>()[0]->currentimage.x = 0;
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 
@@ -102,6 +103,8 @@ void  Troll_AttackState::execute(Entity *owner, double dt) noexcept
 
 	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
 	{
+		owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
+		owner->get_components<AnimationComponent>()[0]->currentimage.x = 0;
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 	
@@ -115,6 +118,8 @@ void  Troll_DeadState::execute(Entity *owner, double dt) noexcept
 	{
 		me_anim->currentimage.x = 0;
 		me_anim->pause = true;
+		makeCoin();
+		owner->scene->ents.find("coin")[0]->setPosition(owner->getPosition());
 		owner->setForDelete();
 	}
 }
