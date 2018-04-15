@@ -3,7 +3,6 @@
 #include <levelsystem.h>
 #include <system_resources.h>
 
-
 #include "Player_states.h"
 #include "goblin_states.h"
 #include "orc_states.h"
@@ -11,7 +10,6 @@
 #include "troll_states.h"
 #include "skeleton_states.h"
 #include "gavin_states.h"
-
 
 #include "components\cmp_goblin_properties.h"
 #include "components\cmp_orc_properties.h"
@@ -29,10 +27,8 @@
 #include "components\cmp_player_controller.h"
 #include "components\cmp_UI.h"
 
-
 using namespace std;
 using namespace sf;
-
 
 //**// Prefab Model \\**\\
 
@@ -433,7 +429,7 @@ shared_ptr<Entity>coinAmount()
 {
 	auto e = Engine::GetActiveScene()->makeEntity();
 	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
-	t->getText().setOrigin(t->getText().getLocalBounds().width, 0);
+	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
 	e->addTag("coinCount");
 
 	return e;
@@ -443,7 +439,7 @@ shared_ptr<Entity>arrowAmount()
 {
 	auto e = Engine::GetActiveScene()->makeEntity();
 	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
-	t->getText().setOrigin(t->getText().getLocalBounds().width, 0);
+	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
 	e->addTag("arrowCount");
 
 	return e;

@@ -5,6 +5,7 @@
 #include "system_resources.h"
 #include "../code/Prefabs.h"
 #include "cmp_text.h"
+#include "../code/GameState.h"
 
 using namespace std;
 using namespace sf;
@@ -45,7 +46,7 @@ UIComponent::UIComponent(Entity* p)
 
 	weaponUI = Sprite(*_texSwordUI);
 	weaponUI.setTextureRect(IntRect(0, 0, 100, 100));
-	
+
 	_coinCount->get_components<TextComponent>()[0]->SetText("x0");
 	_arrowCount->get_components<TextComponent>()[0]->SetText("x0");
 }
@@ -86,20 +87,16 @@ void UIComponent::update(double dt)
 
 	arrowUI.setPosition(
 		_parent->getPosition().x + Engine::GetWindow().getSize().x / 3,
-		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * (-0.8));
-
-	_coinCount->setPosition(Vector2f(_parent->getPosition().x + Engine::GetWindow().getSize().x / 3 * 1.65,
-		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * 0.95 ));
-
-	_arrowCount->setPosition(Vector2f(_parent->getPosition().x + Engine::GetWindow().getSize().x / 3 * 1.65,
-		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * (-0.86)));
-
+		_parent->getPosition().y + Engine::GetWindow().getSize().y / 2.7);
 
 	weaponUI.setPosition(
-		_parent->getPosition().x + Engine::GetWindow().getSize().x * (-0.4),
-		_parent->getPosition().y - Engine::GetWindow().getSize().y / 2 * (-0.8));
+		_parent->getPosition().x - Engine::GetWindow().getSize().x /2 + 100.f,
+		_parent->getPosition().y + Engine::GetWindow().getSize().y / 2.7);
 
-	
+	_coinCount->setPosition(Vector2f(coinUI.getPosition().x + 250, coinUI.getPosition().y + 30));
+
+	_arrowCount->setPosition(Vector2f(arrowUI.getPosition().x + 250, arrowUI.getPosition().y + 30));
+
 }
 
 void UIComponent::render()
