@@ -424,7 +424,7 @@ shared_ptr<Entity>addUI()
 shared_ptr<Entity>coinAmount()
 {
 	auto e = Engine::GetActiveScene()->makeEntity();
-	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
+	auto t = e->addComponent<TextComponent>("x0");
 	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
 	e->addTag("coinCount");
 
@@ -434,9 +434,19 @@ shared_ptr<Entity>coinAmount()
 shared_ptr<Entity>arrowAmount()
 {
 	auto e = Engine::GetActiveScene()->makeEntity();
-	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
+	auto t = e->addComponent<TextComponent>("x0");
 	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
 	e->addTag("arrowCount");
+
+	return e;
+}
+
+shared_ptr<Entity>hamAmount()
+{
+	auto e = Engine::GetActiveScene()->makeEntity();
+	auto t = e->addComponent<TextComponent>("x0");
+	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
+	e->addTag("hamCount");
 
 	return e;
 }

@@ -10,8 +10,6 @@
 using namespace std;
 using namespace sf;
 
-RectangleShape topBar;
-
 UIComponent::UIComponent(Entity* p)
 	:Component(p)
 {
@@ -20,20 +18,14 @@ UIComponent::UIComponent(Entity* p)
 
 	_coinCount = _parent->scene->ents.find("coinCount")[0];
 	_arrowCount = _parent->scene->ents.find("arrowCount")[0];
+	_hamCount = _parent->scene->ents.find("hamCount")[0];
 
 	_texHeartUI = Resources::load<Texture>("heart.png");
 	_texCoinUI = Resources::load<Texture>("spritesheets/Coin_spritesheet.png");
 	_texArrowUI = Resources::load<Texture>("arrowUI.png");
 	_texSwordUI = Resources::load<Texture>("SwordUI.png");
 	_texBowUI = Resources::load<Texture>("BowUI.png");
-
-	//_texBow = Resources::load<Texture>("spritesheets / Bob_archer_spritesheet.png");
-	//_texSword = Resources::load<Texture>("spritesheets / Bob_spritesheet.png");
-
-	weaponSelection = RectangleShape(Vector2f(65, 65));
-	weaponSelection.setFillColor(Color(255, 255, 255, 20));
-	weaponSelection.setOutlineColor(Color(240, 178, 0));
-	weaponSelection.setOutlineThickness(3.f);
+	_texHamUI = Resources::load<Texture>("HamUI.png");
 
 	heartUI = Sprite(*_texHeartUI);
 	heartUI.setTextureRect(IntRect(0, 0, 240, 60));
@@ -47,8 +39,13 @@ UIComponent::UIComponent(Entity* p)
 	weaponUI = Sprite(*_texSwordUI);
 	weaponUI.setTextureRect(IntRect(0, 0, 100, 100));
 
+	hamUI = Sprite(*_texHamUI);
+	hamUI.setTextureRect(IntRect(0,0,100, 100));
+
 	_coinCount->get_components<TextComponent>()[0]->SetText("x0");
 	_arrowCount->get_components<TextComponent>()[0]->SetText("x0");
+	_hamCount->get_components<TextComponent>()[0]->SetText("X0");
+
 }
 
 void UIComponent::update(double dt)
@@ -75,7 +72,6 @@ void UIComponent::update(double dt)
 		sword = true;
 		weaponUI = Sprite(*_texSwordUI);
 	}
-	
 
 	heartUI.setPosition(
 		_parent->getPosition().x - Engine::GetWindow().getSize().x / 2 + 30.f,
@@ -90,12 +86,18 @@ void UIComponent::update(double dt)
 		_parent->getPosition().y + Engine::GetWindow().getSize().y / 2.7);
 
 	weaponUI.setPosition(
-		_parent->getPosition().x - Engine::GetWindow().getSize().x /2 + 100.f,
+		_parent->getPosition().x - Engine::GetWindow().getSize().x / 50,
 		_parent->getPosition().y + Engine::GetWindow().getSize().y / 2.7);
 
-	_coinCount->setPosition(Vector2f(coinUI.getPosition().x + 250, coinUI.getPosition().y + 30));
+	hamUI.setPosition(
+		_parent->getPosition().x - Engine::GetWindow().getSize().x / 2.3,
+		_parent->getPosition().y + Engine::GetWindow().getSize().y / 2.7);
 
-	_arrowCount->setPosition(Vector2f(arrowUI.getPosition().x + 250, arrowUI.getPosition().y + 30));
+	_coinCount->setPosition(Vector2f(coinUI.getPosition().x + 150, coinUI.getPosition().y + 30));
+
+	_arrowCount->setPosition(Vector2f(arrowUI.getPosition().x + 150, arrowUI.getPosition().y + 50));
+
+	_hamCount->setPosition(Vector2f(hamUI.getPosition().x + 150, hamUI.getPosition().y + 50));
 
 }
 
@@ -106,6 +108,7 @@ void UIComponent::render()
 	Renderer::queue(&coinUI);
 	Renderer::queue(&arrowUI);
 	Renderer::queue(&weaponUI);
+	Renderer::queue(&hamUI);
 }
 
 void UIComponent::setHealthDisplay(sf::IntRect s)

@@ -17,14 +17,17 @@ private:
 	std::shared_ptr<sf::Texture> _texBowUI;
 	std::shared_ptr<sf::Texture> _texSword;
 	std::shared_ptr<sf::Texture> _texBow;
+	std::shared_ptr<sf::Texture> _texHamUI;
 
 	sf::Sprite heartUI;
 	sf::Sprite coinUI;
 	sf::Sprite arrowUI;
 	sf::Sprite weaponUI;
+	sf::Sprite hamUI;
 
 	std::shared_ptr<Entity> _coinCount;
 	std::shared_ptr<Entity> _arrowCount;
+	std::shared_ptr<Entity> _hamCount;
 	std::shared_ptr<Entity> _player;
 
 public:

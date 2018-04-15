@@ -42,7 +42,7 @@ void Level1Scene::Load() {
 	makeShops();
 
 
-	makeCoin();
+	//makeCoin();
 
 	player = makePlayer(Vector2f(SaveLoad::positionX, SaveLoad::positionY));
 
@@ -56,6 +56,8 @@ void Level1Scene::Load() {
 	coinAmount();
 
 	arrowAmount();
+
+	hamAmount();
 
 	addUI();
 
