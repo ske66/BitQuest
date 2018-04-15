@@ -34,13 +34,13 @@ UIComponent::UIComponent(Entity* p)
 	coinUI.setTextureRect(IntRect(0, 0, 60, 60));
 
 	arrowUI = Sprite(*_texArrowUI);
-	arrowUI.setTextureRect(IntRect(0, 0, 100, 100));
+	arrowUI.setTextureRect(IntRect(0, 0, 60, 60));
 
 	weaponUI = Sprite(*_texSwordUI);
-	weaponUI.setTextureRect(IntRect(0, 0, 100, 100));
+	weaponUI.setTextureRect(IntRect(0, 0, 60, 60));
 
 	hamUI = Sprite(*_texHamUI);
-	hamUI.setTextureRect(IntRect(0,0,100, 100));
+	hamUI.setTextureRect(IntRect(0, 0, 60, 60));
 
 	_coinCount->get_components<TextComponent>()[0]->SetText("x0");
 	_arrowCount->get_components<TextComponent>()[0]->SetText("x0");
@@ -95,9 +95,9 @@ void UIComponent::update(double dt)
 
 	_coinCount->setPosition(Vector2f(coinUI.getPosition().x + 150, coinUI.getPosition().y + 30));
 
-	_arrowCount->setPosition(Vector2f(arrowUI.getPosition().x + 150, arrowUI.getPosition().y + 50));
+	_arrowCount->setPosition(Vector2f(arrowUI.getPosition().x + 150, arrowUI.getPosition().y + 30));
 
-	_hamCount->setPosition(Vector2f(hamUI.getPosition().x + 150, hamUI.getPosition().y + 50));
+	_hamCount->setPosition(Vector2f(hamUI.getPosition().x + 150, hamUI.getPosition().y + 30));
 
 }
 
