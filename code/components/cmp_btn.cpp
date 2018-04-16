@@ -8,7 +8,7 @@ using namespace sf;
 BtnComponent::BtnComponent(Entity* p, shared_ptr<ShapeComponent> s, shared_ptr<TextComponent> t, shared_ptr<ShapeComponent> u)
 	: _shapeCmp(s), _textCmp(t), _underLine(u), Component(p)
 {
-	setHighlighted(false, true);
+		setHighlighted(false, true);
 }
 
 void BtnComponent::update(double dt)
@@ -45,8 +45,8 @@ void BtnComponent::setHighlighted(bool h, bool isClicked)
 		}
 		else
 		{
-			_textCmp->getText().setFillColor(Color(255,255,255));
-			_underLine->getShape().setFillColor(Color(128,128,128));
+			_textCmp->getText().setFillColor(Color(255, 255, 255));
+			_underLine->getShape().setFillColor(Color(128, 128, 128));
 		}
 	}
 }

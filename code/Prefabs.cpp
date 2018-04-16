@@ -453,8 +453,6 @@ shared_ptr<Entity> makeCoin()
 	
 
 
-
-
 shared_ptr<Entity> makeButton(string text, Vector2f bounds)
 {
 

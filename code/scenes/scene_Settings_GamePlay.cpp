@@ -1,12 +1,11 @@
 #include "scene_Settings_Gameplay.h"
 #include "../components/cmp_text.h"
-#include "../components/cmp_animation.h"
 #include "../components/cmp_sprite.h"
 #include "SFML\Graphics.hpp"
-#include "SFML\Window\Event.hpp"
 #include "../GameState.h"
 #include "../code/Prefabs.h"
-#include"../components/cmp_btn.h"
+#include "../components/cmp_btn.h"
+#include "../code/Controls.h"
 #include "levelsystem.h"
 
 #include <iostream>
@@ -16,158 +15,83 @@
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> btnBack;
-static shared_ptr<Entity> btnDone;
-static shared_ptr<Entity> walkLeftBox;
-static shared_ptr<Entity> walkRightBox;
-static shared_ptr<Entity> jumpBox;
-static shared_ptr<Entity> attackBox;
-static shared_ptr<Entity> switchBox;
-
-static shared_ptr<Entity> LeftChar;
-static shared_ptr<Entity> RightChar;
-static shared_ptr<Entity> JumpChar;
-static shared_ptr<Entity> AttackChar;
-static shared_ptr<Entity> SwitchChar;
-
-//READ IN FROM FILE
-
-string txtwalkLeft = "A";
-string txtwalkRight = "D";
-string txtjump = "W";
-string txtattack = "_";
-string txtswitch = "Q";
 
 void SettingsGameplayScene::Load()
 {
-	ifstream file("res/savestates/PlayerControls.txt");
-	while (file >> txtwalkLeft >> txtwalkRight >> txtjump >> txtattack >> txtswitch)
-	{
-
-	}
 
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
-	{
-		btnBack = makeButton("Back", Vector2f(150, 60));
-		btnBack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
-	}
+	_btns.clear();
+	_changingControl.reset();
+
+	_btn_Back = makeButton("Back", Vector2f(150, 60));
+	_btn_Back->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
+
+	_btn_ControlsAction.reset();
+	_btn_ControlsAction = makeButton("Action", Vector2f(40, 40));
+	_btn_ControlsAction->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8, 300.f));
+	_btns.push_back(_btn_ControlsAction);
+	_controlsBtns[_btn_ControlsAction] = "Action";
 
 
-	{
-		auto Gameplay = makeEntity();
-		auto t = Gameplay->addComponent<TextComponent>("Gameplay");
-		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
-		Gameplay->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 100.f));
-	}
-
-	{
-		//Set walk left
-
-		auto WalkLeft = makeEntity();
-		auto wl = WalkLeft->addComponent<TextComponent>("Left");
-		wl->getText().setOrigin(wl->getText().getGlobalBounds().width / 2, wl->getText().getGlobalBounds().height / 2);
-		WalkLeft->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 400, 300.f));
-
-		walkLeftBox = makeEntity();
-		auto wlb = walkLeftBox->addComponent<ShapeComponent>();
-		wlb->setShape<sf::RectangleShape>(Vector2f(40.f, 50.f));
-		wlb->getShape().setOrigin(wlb->getShape().getGlobalBounds().width / 2, wlb->getShape().getGlobalBounds().height / 2);
-		walkLeftBox->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 400, 380.f));
-
-		LeftChar = makeEntity();
-		auto lc = LeftChar->addComponent<TextComponent>(txtwalkLeft);
-		lc->getText().setOrigin(lc->getText().getGlobalBounds().width / 2, lc->getText().getGlobalBounds().height / 2);
-		LeftChar->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 400, 380.f));
-
-	}
+	_btn_ControlsLeft.reset();
+	_btn_ControlsLeft = makeButton("Left", Vector2f(40, 40));
+	_btn_ControlsLeft->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8 + 150 , 300.f));
+	_btns.push_back(_btn_ControlsLeft);
+	_controlsBtns[_btn_ControlsLeft] = "Left";
 
 
-	{
-		//Set walk right
+	_btn_ControlsRight.reset();
+	_btn_ControlsRight = makeButton("Right", Vector2f(40, 40));
+	_btn_ControlsRight->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8 + 300, 300.f));
+	_btns.push_back(_btn_ControlsRight);
+	_controlsBtns[_btn_ControlsRight] = "Right";
 
-		auto WalkRight = makeEntity();
-		auto wr = WalkRight->addComponent<TextComponent>("Right");
-		wr->getText().setOrigin(wr->getText().getGlobalBounds().width / 2, wr->getText().getGlobalBounds().height / 2);
-		WalkRight->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 200, 300.f));
 
-		walkRightBox = makeEntity();
-		auto wrb = walkRightBox->addComponent<ShapeComponent>();
-		wrb->setShape<sf::RectangleShape>(Vector2f(40.f, 50.f));
-		wrb->getShape().setOrigin(wrb->getShape().getGlobalBounds().width / 2, wrb->getShape().getGlobalBounds().height / 2);
-		walkRightBox->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 200, 380.f));
+	_btn_ControlsJump.reset();
+	_btn_ControlsJump = makeButton("Jump", Vector2f(40, 40));
+	_btn_ControlsJump->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8 + 450, 300.f));
+	_btns.push_back(_btn_ControlsJump);
+	_controlsBtns[_btn_ControlsJump] = "Jump";
 
-		RightChar = makeEntity();
-		auto rc = RightChar->addComponent<TextComponent>(txtwalkRight);
-		rc->getText().setOrigin(rc->getText().getGlobalBounds().width / 2, rc->getText().getGlobalBounds().height / 2);
-		RightChar->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 - 200, 380.f));
-	}
 
-	{
-		//Set jump
+	_btn_ControlsAttack.reset();
+	_btn_ControlsAttack = makeButton("Attack", Vector2f(40, 40));
+	_btn_ControlsAttack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8 + 600, 300.f));
+	_btns.push_back(_btn_ControlsAttack);
+	_controlsBtns[_btn_ControlsAttack] = "Attack";
 
-		auto Jump = makeEntity();
-		auto j = Jump->addComponent<TextComponent>("Jump");
-		j->getText().setOrigin(j->getText().getGlobalBounds().width / 2, j->getText().getGlobalBounds().height / 2);
-		Jump->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 300.f));
 
-		jumpBox = makeEntity();
-		auto jb = jumpBox->addComponent<ShapeComponent>();
-		jb->setShape<sf::RectangleShape>(Vector2f(40.f, 50.f));
-		jb->getShape().setOrigin(jb->getShape().getGlobalBounds().width / 2, jb->getShape().getGlobalBounds().height / 2);
-		jumpBox->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 380.f));
+	_btn_ControlsBlock.reset();
+	_btn_ControlsBlock = makeButton("Block", Vector2f(40, 40));
+	_btn_ControlsBlock->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8 + 750, 300.f));
+	_btns.push_back(_btn_ControlsBlock);
+	_controlsBtns[_btn_ControlsBlock] = "Block";
 
-		JumpChar = makeEntity();
-		auto jc = JumpChar->addComponent<TextComponent>(txtjump);
-		jc->getText().setOrigin(jc->getText().getGlobalBounds().width / 2, jc->getText().getGlobalBounds().height / 2);
-		JumpChar->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 380.f));
-	}
 
-	{
-		//Set attack
+	_btn_ControlsSword.reset();
+	_btn_ControlsSword = makeButton("Sword", Vector2f(40, 40));
+	_btn_ControlsSword->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8 + 900, 300.f));
+	_btns.push_back(_btn_ControlsSword);
+	_controlsBtns[_btn_ControlsSword] = "Sword";
 
-		auto Attack = makeEntity();
-		auto a = Attack->addComponent<TextComponent>("Attack");
-		a->getText().setOrigin(a->getText().getGlobalBounds().width / 2, a->getText().getGlobalBounds().height / 2);
-		Attack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 300.f));
 
-		attackBox = makeEntity();
-		auto ab = attackBox->addComponent<ShapeComponent>();
-		ab->setShape<sf::RectangleShape>(Vector2f(40.f, 50.f));
-		ab->getShape().setOrigin(ab->getShape().getGlobalBounds().width / 2, ab->getShape().getGlobalBounds().height / 2);
-		attackBox->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 380.f));
+	_btn_ControlsBow.reset();
+	_btn_ControlsBow = makeButton("Bow", Vector2f(40, 40));
+	_btn_ControlsBow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 8 + 1050, 300.f));
+	_btns.push_back(_btn_ControlsBow);
+	_controlsBtns[_btn_ControlsBow] = "Bow";
 
-		AttackChar = makeEntity();
-		auto ac = AttackChar->addComponent<TextComponent>(txtattack);
-		ac->getText().setOrigin(ac->getText().getGlobalBounds().width / 2, ac->getText().getGlobalBounds().height / 2);
-		AttackChar->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 200, 380.f));
-	}
 
-	{
-		//Set switch
+	_btn_Done = makeButton("Done", Vector2f(150, 60));
+	_btn_Done->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
 
-		auto Switch = makeEntity();
-		auto s = Switch->addComponent<TextComponent>("Switch");
-		s->getText().setOrigin(s->getText().getGlobalBounds().width / 2, s->getText().getGlobalBounds().height / 2);
-		Switch->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 400, 300.f));
 
-		switchBox = makeEntity();
-		auto sb = switchBox->addComponent<ShapeComponent>();
-		sb->setShape<sf::RectangleShape>(Vector2f(40.f, 50.f));
-		sb->getShape().setOrigin(sb->getShape().getGlobalBounds().width / 2, sb->getShape().getGlobalBounds().height / 2);
-		switchBox->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 400, 380.f));
+	_clickCooldown = 0.2f;
 
-		SwitchChar = makeEntity();
-		auto sc = SwitchChar->addComponent<TextComponent>(txtswitch);
-		sc->getText().setOrigin(sc->getText().getGlobalBounds().width / 2, sc->getText().getGlobalBounds().height / 2);
-		SwitchChar->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 400, 380.f));
 
-	}
+	Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
 
-	{
-		btnDone = makeButton("Done", Vector2f(150, 60));
-		btnDone->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
-	}
 	setLoaded(true);
 }
 
@@ -179,86 +103,49 @@ void SettingsGameplayScene::UnLoad() {
 void SettingsGameplayScene::Update(const double& dt)
 {
 
+	if (_clickCooldown >= 0.0f) _clickCooldown -= dt;
 
-	sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::GetWindow());
-	sf::Vector2f worldPos = Engine::GetWindow().mapPixelToCoords(pixelPos);
+	if (_clickCooldown < 0.0f)
+	{
 
+		if (_changingControl == nullptr)
+		{
+			for (auto b : _controlsBtns)
+			{
+				if (b.first->GetCompatibleComponent<BtnComponent>()[0]->isSelected())
+				{
+					_changingControl = b.first;
+					b.first->get_components<TextComponent>()[0]->getText().setColor(Color(254, 203, 82));
+				}
+			}
+		}
+	}
 
-	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
+	if (_changingControl != nullptr)
+	{
+		for (auto k = Keyboard::Unknown; k != Keyboard::Pause; k = static_cast<Keyboard::Key>(k + 1))
+		{
+			Controls::SetKeyboardButton(_controlsBtns[_changingControl], k);
+			_changingControl->get_components<TextComponent>()[0]->getText().setColor(Color(198, 152, 127));
+			_changingControl = nullptr;
+		}
+	}
+
+	if (_btn_Back->get_components<BtnComponent>()[0]->isSelected())
 	{
 		Engine::ChangeScene((Scene*)&settings);
 	}
 
 
-	if (walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
+	if (_btn_Done->get_components<BtnComponent>()[0]->isSelected())
 	{
-		walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-	}
-	else
-	{
-		walkLeftBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
-
-
-
-	if (walkRightBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-	{
-		walkRightBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-	}
-	else
-	{
-		walkRightBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
-
-
-
-	if (jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-	{
-		jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-	}
-	else
-	{
-		jumpBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
-
-
-
-	if (attackBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-	{
-		attackBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-	}
-	else
-	{
-		attackBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
-
-
-
-	if (switchBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(worldPos))
-	{
-		switchBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(240, 178, 0));
-	}
-	else
-	{
-		switchBox->GetCompatibleComponent<ShapeComponent>()[0]->getShape().setFillColor(Color(128, 128, 128));
-	}
-
-
-	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
-	{
-		ofstream output;
-		output.open("res/savestates/PlayerControls.txt");
-		output << txtwalkLeft << endl;
-		output << txtwalkRight << endl;
-		output << txtjump << endl;
-		output << txtattack << endl;
-		output << txtswitch << endl;
-		output.close();
-
 		Engine::ChangeScene((Scene*)&settings);
 	}
-	Scene::Update(dt);
+
+
+Scene::Update(dt);
 }
+
 
 void SettingsGameplayScene::Render()
 {

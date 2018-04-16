@@ -17,6 +17,7 @@ extern SettingsGameplayScene settingsGameplay;
 extern Level1Scene level1;
 extern GameOverScene gameOver;
 extern ShopScene shop;
+static bool usingKeyboard = true;
 
 static uint16_t game_width = 1600;
 static uint16_t game_heigth = 900;

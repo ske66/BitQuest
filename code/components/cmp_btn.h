@@ -10,6 +10,7 @@ class BtnComponent : public Component
 private:
 	bool _isHighlighted = false;
 	bool _isTouching = false;
+	bool selected = false;
 	std::shared_ptr<ShapeComponent> _shapeCmp;
 	std::shared_ptr<TextComponent> _textCmp;
 	std::shared_ptr<ShapeComponent> _underLine;
