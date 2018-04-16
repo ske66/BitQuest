@@ -33,23 +33,17 @@ void Level1Scene::Load() {
 
 	TilePhysics();
 
-
 	makeChests();
-
 
 	makeTorches();
 
 	makeShops();
-
-
-	makeCoin();
 
 	player = makePlayer(Vector2f(SaveLoad::positionX, SaveLoad::positionY));
 
 	view_center = player->getPosition();
 	
 	gavin = makeGavin();
-
 
 	makeEnemies();
 

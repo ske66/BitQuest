@@ -12,12 +12,11 @@ BulletComponent::BulletComponent(Entity* p)
 	
 	_player = _parent->scene->ents.find("player")[0];
 	_gavin = _parent->scene->ents.find("gavin")[0];
-	auto d = _gavin->get_components<AnimationComponent>()[0];
 
 	_bulletDamage = 1;
 	_bulletSpeed = 10;
 
-	if (d->faceRight == true)
+	if (_parent->getPosition().x > _player->getPosition().x)
 	{
 		facingRight = true;
 	}
@@ -42,7 +41,7 @@ void BulletComponent::moveBullet(double dt)
 	auto d = _gavin->get_components<AnimationComponent>()[0];
 
 
-	if (facingRight == false)
+	if (facingRight == true)
 	{
 		b->impulse(sf::Vector2f(-_bulletSpeed, 3));
 		b->dampen({ 0.7f , 0.f });	
@@ -53,7 +52,7 @@ void BulletComponent::moveBullet(double dt)
 		b->dampen({ 0.7f , 0.f });
 	}
 
-	if(length(_parent->getPosition() - _gavin->getPosition()) > 700)
+	if(length(_parent->getPosition() - _player->getPosition()) > 800)
 	{
 		_parent->setForDelete();
 	}

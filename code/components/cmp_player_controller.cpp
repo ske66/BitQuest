@@ -127,13 +127,6 @@ void PlayerControlerComponent::render()
 }
 void PlayerControlerComponent::takeDamage(double d , double dt)
 {	
-	if (immortal == true)
-	{
-		_bufferSheild = *(Resources::get<SoundBuffer>("Bob_Sounds/Bob_Hit.wav"));
-		_soundSheild.setBuffer(_bufferHit);
-
-		_soundSheild.play();
-	}
 	if (immortal == false)
 	{
 		immortal = true;

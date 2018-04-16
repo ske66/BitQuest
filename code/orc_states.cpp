@@ -5,14 +5,16 @@
 #include "components\cmp_hurt.h"
 
 double totalTimeO = 2;
-double attackDelayO = 3;
+double attackDelayO = 1;
 
 
 void  Orc_IdleState::execute(Entity *owner, double dt) noexcept
 {
-
+	
 	auto p = owner->get_components<PhysicsComponent>()[0];
 	auto sm = owner->get_components<StateMachineComponent>()[0];
+
+	p->dampen({ 0.7f , 1.0f });
 
 	if (_player->getPosition().x < owner->getPosition().x)
 	{

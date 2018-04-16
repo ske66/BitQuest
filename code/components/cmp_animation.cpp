@@ -49,7 +49,8 @@ void AnimationComponent::update(double dt) {
 				attackImgNo = 0;
 			}
 		}
-		else if (c->currentState() == "chase" || c->currentState() == "walk_right" || c->currentState() == "walk_left")
+		else if (c->currentState() == "chase" || c->currentState() == "walk_right" || c->currentState() == "walk_left" 
+			|| c->currentState() == "flee")
 		{
 
 			currentimage.y = 0;

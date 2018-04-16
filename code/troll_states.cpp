@@ -13,7 +13,7 @@ void  Troll_IdleState::execute(Entity *owner, double dt) noexcept
 	auto p = owner->get_components<PhysicsComponent>()[0];
 	auto sm = owner->get_components<StateMachineComponent>()[0];
 
-	if (length(owner->getPosition() - _player->getPosition()) < 500.f)
+	if (length(owner->getPosition() - _player->getPosition()) < 800.f)
 	{
 		if (length(owner->getPosition() - _player->getPosition()) < 200.f)
 		{
@@ -26,7 +26,7 @@ void  Troll_IdleState::execute(Entity *owner, double dt) noexcept
 		
 	}
 
-	p->setFriction(1);
+	p->dampen({ 0.7f , 1.0f });
 
 	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
 	{
@@ -41,7 +41,7 @@ void  Troll_ChaseState::execute(Entity *owner, double dt) noexcept
 	auto sm = owner->get_components<StateMachineComponent>()[0];
 	auto p = owner->get_components<PhysicsComponent>()[0];
 
-	if (length(owner->getPosition() - _player->getPosition()) > 500.f)
+	if (length(owner->getPosition() - _player->getPosition()) > 800.f)
 	{
 		sm->changeState("idle");
 	}

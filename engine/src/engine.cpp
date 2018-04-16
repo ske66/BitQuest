@@ -146,6 +146,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	_gameName = gameName;
 	_window = &window;
 	Renderer::initialise(window);
+
 	Physics::initialise();
 
 	//FOR WHEN I HAVE CONTROLS WORKING

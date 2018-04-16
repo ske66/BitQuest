@@ -203,15 +203,15 @@ void  Player_BlockState::execute(Entity *owner, double dt) noexcept
 {
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 
-	if (me_anim->currentimage.x == 4)
-	{
-		me_anim->pause = true;
-		owner->get_components<PlayerControlerComponent>()[0]->immortal = true;
+	me_anim->currentimage.x = 3;
+	
+	me_anim->pause = true;
+	owner->get_components<PlayerControlerComponent>()[0]->immortal = true;
 
-		if(!sf::Mouse::isButtonPressed(sf::Mouse::Right))
-		{
-			me_anim->pause = false;
-			owner->get_components<StateMachineComponent>()[0]->changeState("idle");
-		}
+	if(!sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		me_anim->pause = false;
+		owner->get_components<StateMachineComponent>()[0]->changeState("idle");
 	}
+	
 }

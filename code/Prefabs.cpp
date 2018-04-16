@@ -11,6 +11,11 @@
 #include "skeleton_states.h"
 #include "gavin_states.h"
 
+#include"ghost_states.h"
+#include "components\cmp_ghost_properties.h"
+#include "components\cmp_slime_bullet.h"
+#include "components\cmp_slime_properties.h"
+#include "Slime_states.h"
 #include "components\cmp_goblin_properties.h"
 #include "components\cmp_orc_properties.h"
 #include "components\cmp_troll_properties.h"
@@ -75,14 +80,19 @@ shared_ptr<Entity> makePlayer(Vector2f _pos)
 	sm->addState("dead", make_shared<Player_DeadState>());
 	sm->changeState("idle");
 
-	
-
 	player->addComponent<PlayerControlerComponent>();
 
 	player->addComponent<PlayerPhysicsComponent>(Vector2f(140, 160));
 	auto a = player->addComponent<AnimationComponent>();
 	a->Animation("spritesheets/Bob_spritesheet.png", Vector2f(0, 120), IntRect(0, 0, 240, 240), Vector2u(8, 8));
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+
+	auto c = player->get_components<PlayerPhysicsComponent>()[0];
+
+	b2Filter filter = c->getFixture()->GetFilterData();
+	filter.categoryBits = 2;
+	c->getFixture()->SetFilterData(filter);
 
 	return player;
 }
@@ -115,6 +125,14 @@ shared_ptr<Entity> makeGavin()
 	a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 	sm->changeState("idle");
+
+
+
+	auto c = gavin->get_components<GavinPhysicsComponent>()[0];
+
+	b2Filter filter = c->getFixture()->GetFilterData();
+	filter.categoryBits = 1;
+	c->getFixture()->SetFilterData(filter);
 
 	
 	return gavin;
@@ -153,6 +171,14 @@ vector<shared_ptr<Entity>> makeEnemies()
 		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
 		bar->getSprite().setOrigin({ 50,100 });
 
+		auto count = goblin->get_components<PhysicsComponent>();
+		for (auto c : count)
+		{
+			b2Filter filter = c->getFixture()->GetFilterData();
+			filter.categoryBits = 1;
+			c->getFixture()->SetFilterData(filter);
+		}
+
 		enemies.push_back(goblin);
 	}
 
@@ -183,6 +209,15 @@ vector<shared_ptr<Entity>> makeEnemies()
 		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
 		bar->getSprite().setOrigin({ 50,100 });
 
+
+		auto count = orc->get_components<PhysicsComponent>();
+		for (auto c : count)
+		{
+			b2Filter filter = c->getFixture()->GetFilterData();
+			filter.categoryBits = 1;
+			c->getFixture()->SetFilterData(filter);
+		}
+
 		enemies.push_back(orc);
 	}
 
@@ -211,6 +246,15 @@ vector<shared_ptr<Entity>> makeEnemies()
 		auto bar = troll->addComponent<SpriteComponent>();
 		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
 		bar->getSprite().setOrigin({ 50,100 });
+
+
+		auto count = troll->get_components<PhysicsComponent>();
+		for (auto c : count)
+		{
+			b2Filter filter = c->getFixture()->GetFilterData();
+			filter.categoryBits = 1;
+			c->getFixture()->SetFilterData(filter);
+		}
 
 		enemies.push_back(troll);
 	}
@@ -242,6 +286,15 @@ vector<shared_ptr<Entity>> makeEnemies()
 		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
 		bar->getSprite().setOrigin({ 50,100 });
 
+		auto count = skeleton->get_components<PhysicsComponent>();
+		for (auto c : count)
+		{
+			b2Filter filter = c->getFixture()->GetFilterData();
+			filter.categoryBits = 1;
+			c->getFixture()->SetFilterData(filter);
+		}
+
+
 		enemies.push_back(skeleton);
 	}
 
@@ -253,10 +306,25 @@ vector<shared_ptr<Entity>> makeEnemies()
 		slime->addTag("slime");
 
 
-		slime->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
-		//auto a = slime->addComponent<AnimationComponent>();
-		//a->Animation("Spritesheets/Slime_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
-		//a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		slime->addComponent<SlimePropertiesComponent>();
+
+		auto sm = slime->addComponent<StateMachineComponent>();
+
+		sm->addState("dead", make_shared<Slime_DeadState>());
+		sm->addState("flee", make_shared<Slime_FleeState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("idle", make_shared<Slime_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("Attack", make_shared<Slime_AttackState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->changeState("idle");
+
+
+		slime->addComponent<PhysicsComponent>(true, Vector2f(80, 200));
+		auto a = slime->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Slime_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+
+		auto bar = slime->addComponent<SpriteComponent>();
+		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
+		bar->getSprite().setOrigin({ 50,100 });
 
 		enemies.push_back(slime);
 	}
@@ -268,13 +336,33 @@ vector<shared_ptr<Entity>> makeEnemies()
 		ghost->setPosition(ls::getTilePosition(gh));
 		ghost->addTag("ghost");
 
+		ghost->addComponent<GhostPropertiesComponent>();
 
+		auto sm = ghost->addComponent<StateMachineComponent>();
+
+		sm->addState("dead", make_shared<Ghost_DeadState>());
+		sm->addState("idle", make_shared<Ghost_IdleState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("chase", make_shared<Ghost_ChaseState>(Engine::GetActiveScene()->ents.find("player")[0]));
+		sm->addState("cast", make_shared<Ghost_CastState>(Engine::GetActiveScene()->ents.find("player")[0]));
 
 		ghost->addComponent<PhysicsComponent>(true, Vector2f(100, 200));
-		//auto a = ghost->addComponent<AnimationComponent>();
-		//	a->Animation("Spritesheets/Ghost_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
-		//a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		auto a = ghost->addComponent<AnimationComponent>();
+		a->Animation("Spritesheets/Ghost_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 240, 240), Vector2u(8, 8));
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
+		
+		auto count = ghost->get_components<PhysicsComponent>();
+		for (auto c : count)
+		{
+			b2Filter filter = c->getFixture()->GetFilterData();
+			filter.categoryBits = 1;
+			c->getFixture()->SetFilterData(filter);
+		}
 
+		auto bar = ghost->addComponent<SpriteComponent>();
+		bar->Sprite("EnemyHealth.png", sf::IntRect(0, 0, 100, 5));
+		bar->getSprite().setOrigin({ 50,100 });
+
+		sm->changeState("idle");
 		enemies.push_back(ghost);
 	}
 	return enemies;
@@ -353,7 +441,7 @@ shared_ptr<Entity> makeCoin()
 		auto coin = Engine::GetActiveScene()->makeEntity();
 		coin->addTag("coin");
 
-		coin->setPosition(coin->scene->ents.find("troll")[0]->getPosition());
+	//	coin->setPosition(coin->scene->ents.find("troll")[0]->getPosition());
 
 		coin->addComponent<PhysicsComponent>(false, Vector2f(30, 15));
 		auto a = coin->addComponent<ObjectAnimComponent>();
@@ -400,6 +488,14 @@ void TilePhysics()
 		auto e = Engine::GetActiveScene()->makeEntity();
 		e->setPosition(pos);
 		e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
+		auto count = e->get_components<PhysicsComponent>();
+		for (auto c : count)
+		{
+			b2Filter filter = c->getFixture()->GetFilterData();
+			filter.categoryBits = 2;
+			c->getFixture()->SetFilterData(filter);
+		}
+		e->addTag("wall");
 	}
 
 	auto floor = ls::findTiles(ls::FLOOR);
@@ -409,6 +505,15 @@ void TilePhysics()
 		auto e = Engine::GetActiveScene()->makeEntity();
 		e->setPosition(pos);
 		e->addComponent<PhysicsComponent>(false, Vector2f(ls::getTileSize(), ls::getTileSize()));
+		auto count = e->get_components<PhysicsComponent>();
+		for (auto c : count)
+		{
+			b2Filter filter = c->getFixture()->GetFilterData();
+			filter.categoryBits = 2;
+			c->getFixture()->SetFilterData(filter);
+		}
+		e->addTag("floor");
+		
 	}
 }
 
@@ -462,6 +567,11 @@ shared_ptr<Entity>GavinBlast()
 	gb->addComponent<PhysicsComponent>(true, Vector2f(10, 40));
 	gb->addComponent<BulletComponent>();
 	
+	auto p = gb->get_components<PhysicsComponent>()[0];
+	b2Filter filter = p->getFixture()->GetFilterData();
+	filter.maskBits = 2;
+	p->getFixture()->SetFilterData(filter);
+
 	gb->addTag("gavBlast");
 
 	return gb;
@@ -492,4 +602,64 @@ shared_ptr<Entity>makeArrow()
 	pa->addTag("playerArrow");
 
 	return pa;
+}
+
+shared_ptr<Entity>slimeBlast()
+{
+	auto gb = Engine::GetActiveScene()->makeEntity();
+	auto a = gb->addComponent<SpriteComponent>();
+
+	if (gb->scene->ents.find("player")[0]->getPosition().x < gb->scene->ents.find("slime")[0]->getPosition().x)
+	{
+		a->Sprite("magic.png", IntRect(40, 0, -40, 40));
+		gb->setPosition(Vector2f(gb->scene->ents.find("slime")[0]->getPosition().x - 50, gb->scene->ents.find("slime")[0]->getPosition().y + 40));
+		gb->setRotation(180.f);
+	}
+	else
+	{
+		gb->setPosition(Vector2f(gb->scene->ents.find("slime")[0]->getPosition().x + 50, gb->scene->ents.find("slime")[0]->getPosition().y + 40));
+		a->Sprite("magic.png", IntRect(0, 0, 40, 40));
+	}
+
+	gb->addComponent<PhysicsComponent>(true, Vector2f(10, 40));
+	gb->addComponent<SlimeBulletComponent>();
+	auto p = gb->get_components<PhysicsComponent>()[0];
+
+	b2Filter filter = p->getFixture()->GetFilterData();
+	filter.maskBits = 2;
+	p->getFixture()->SetFilterData(filter);
+
+	gb->addTag("slimeBlast");
+
+	return gb;
+}
+
+shared_ptr<Entity>ghostBlast()
+{
+	auto gb = Engine::GetActiveScene()->makeEntity();
+	auto a = gb->addComponent<SpriteComponent>();
+
+	if (gb->scene->ents.find("player")[0]->getPosition().x < gb->scene->ents.find("ghost")[0]->getPosition().x)
+	{
+		a->Sprite("magic.png", IntRect(40, 0, -40, 40));
+		gb->setPosition(Vector2f(gb->scene->ents.find("ghost")[0]->getPosition().x - 50, gb->scene->ents.find("ghost")[0]->getPosition().y - 40));
+		gb->setRotation(180.f);
+	}
+	else
+	{
+		gb->setPosition(Vector2f(gb->scene->ents.find("ghost")[0]->getPosition().x + 50, gb->scene->ents.find("ghost")[0]->getPosition().y - 40));
+		a->Sprite("magic.png", IntRect(0, 0, 40, 40));
+	}
+
+	gb->addComponent<PhysicsComponent>(true, Vector2f(10, 40));
+	gb->addComponent<BulletComponent>();
+	auto p = gb->get_components<PhysicsComponent>()[0];
+
+	b2Filter filter = p->getFixture()->GetFilterData();
+	filter.maskBits = 2;
+	p->getFixture()->SetFilterData(filter);
+
+	gb->addTag("ghostBlast");
+
+	return gb;
 }

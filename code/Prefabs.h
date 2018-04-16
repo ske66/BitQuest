@@ -11,6 +11,9 @@ std::shared_ptr<Entity> GavinBlast();
 std::shared_ptr<Entity> coinAmount();
 std::shared_ptr<Entity> arrowAmount();
 std::shared_ptr<Entity> makeArrow();
+std::shared_ptr<Entity> slimeBlast();
+std::shared_ptr<Entity> ghostBlast();
+
 
 std::vector<std::shared_ptr<Entity>> makeEnemies();
 std::vector<std::shared_ptr<Entity>> makeShops();

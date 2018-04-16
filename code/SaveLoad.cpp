@@ -53,7 +53,7 @@ void SaveLoad::SaveGame()
 
 void SaveLoad::ResetGame()
 {
-	positionX = 1200;
+	positionX = 7000;
 	positionY = 15360;
 	health = 5;
 	coins = 0;
