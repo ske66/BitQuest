@@ -6,6 +6,7 @@
 #include "scenes\scene_Settings_Audio.h"
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
+#include "scenes\scene_Tutorial.h"
 #include "scenes\Scene_Game_Over.h"
 #include "scenes\scene_Shop.h"
 #include <SFML/Window/VideoMode.hpp>
@@ -21,6 +22,7 @@ SettingsScene settings;
 SettingsAudioScene settingsAudio;
 SettingsGraphicsScene settingsGraphics;
 SettingsGameplayScene settingsGameplay;
+TutorialScene tutorial;
 Level1Scene level1;
 GameOverScene gameOver;
 ShopScene shop;

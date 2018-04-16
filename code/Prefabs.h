@@ -18,6 +18,7 @@ std::vector<std::shared_ptr<Entity>> makeEnemies();
 std::vector<std::shared_ptr<Entity>> makeShops();
 std::vector<std::shared_ptr<Entity>> makeTorches();
 std::vector<std::shared_ptr<Entity>> makeChests();
+std::shared_ptr<Entity> makeEventBox(sf::Vector2f bounds);
 
 
 void TilePhysics();

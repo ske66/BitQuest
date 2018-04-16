@@ -12,8 +12,14 @@ public:
 
 	void Render() override;
 
+	float totalTime;
+	float Delay;
+
+
 private:
-	std::shared_ptr<Entity> _player;
+
 	sf::Vector2f _view_center;
+
+	float _clickCooldown;
 
 };

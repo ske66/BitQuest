@@ -348,6 +348,21 @@ vector<shared_ptr<Entity>> makeChests()
 }
 
 
+shared_ptr<Entity> makeEventBox(Vector2f bounds)
+{
+	auto eventBox = Engine::GetActiveScene()->makeEntity();
+	eventBox->addTag("eventBox");
+
+	auto s = eventBox->addComponent<ShapeComponent>();
+	s->setShape<RectangleShape>(Vector2f(bounds));
+	s->getShape().setFillColor(Color::Red);
+	s->getShape().setOrigin(s->getShape().getGlobalBounds().width / 2, s->getShape().getGlobalBounds().height / 2);
+
+	return eventBox;
+
+}
+
+
 shared_ptr<Entity> makeCoin()
 {
 		auto coin = Engine::GetActiveScene()->makeEntity();
