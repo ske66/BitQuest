@@ -11,6 +11,7 @@
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include <fstream>
+#include <math.h>
 
 using namespace std;
 using namespace sf;
@@ -24,6 +25,10 @@ static shared_ptr<Entity> btnExit;
 
 void MainMenuScene::Load()
 {
+	double mark = sqrt(16);
+
+	cout << mark << endl;
+
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
 	//Music

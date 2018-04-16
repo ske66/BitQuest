@@ -6,17 +6,16 @@ using namespace std;
 using namespace sf;
 
 map<std::string, Keyboard::Key> Controls::_keyboardLookupTable;
-map<std::string, Mouse::Button> Controls::_mouseLookupTable;
 
 void Controls::initialise()
 {
 		//If using keyboard is being used
-		Controls::SetKeyboardButton("Pause", Keyboard::Escape);
-		Controls::SetKeyboardButton("Enter", Keyboard::Return);
+		Controls::SetKeyboardButton("Action", Keyboard::Return);
 		Controls::SetKeyboardButton("MoveLeft", Keyboard::A);
 		Controls::SetKeyboardButton("MoveRight", Keyboard::D);
 		Controls::SetKeyboardButton("Jump", Keyboard::Space);
-		Controls::SetMouseButton("Attack", Mouse::Left);
+		Controls::SetKeyboardButton("Attack",Keyboard::L);
+		Controls::SetKeyboardButton("Block", Keyboard::K);
 		Controls::SetKeyboardButton("Sword", Keyboard::Num1);
 		Controls::SetKeyboardButton("Bow", Keyboard::Num2);
 }
@@ -24,6 +23,19 @@ void Controls::initialise()
 Keyboard::Key Controls::GetKeyboardButton(string action)
 {
 	auto k = _keyboardLookupTable.find(action);
-	if (k != _keyboardLookupTable)
+	if (k != _keyboardLookupTable.end())
+	{
+		return k->second;
+	}
+	else
+	{
+		throw invalid_argument("Action not known");
+	}
 }
+
+void Controls::SetKeyboardButton(string action, Keyboard::Key key)
+{
+	_keyboardLookupTable[action] = key;
+}
+
 
