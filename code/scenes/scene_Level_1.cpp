@@ -41,9 +41,6 @@ void Level1Scene::Load() {
 
 	makeShops();
 
-
-	makeCoin();
-
 	player = makePlayer(Vector2f(SaveLoad::positionX, SaveLoad::positionY));
 
 	view_center = player->getPosition();

@@ -82,7 +82,6 @@ void MainMenuScene::Load()
 		chest->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 3, Engine::GetWindow().getSize().y / 2 * 1.3));
 	
 		
-
 		_btnExit.reset();
 		_btnExit = makeButton("Quit Game", Vector2f(230, 60));
 		_btnExit->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 4, Engine::GetWindow().getSize().y / 2 * 1.5));
