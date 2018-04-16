@@ -16,9 +16,14 @@ static shared_ptr<Entity> gavin;
 
 static shared_ptr<Entity> eventBox1;
 
+String test;
+
 
 void TutorialScene::Load()
 {
+
+	totalTime = 0.0f;
+	Delay = 0.f;
 
 	ls::loadLevelFile("res/Tilemaps/tutorial_level.txt", 240.f);
 
@@ -48,6 +53,8 @@ void TutorialScene::Load()
 	eventBox1->setPosition(Vector2f(1100, 2760));
 
 	setLoaded(true);
+
+	_clickCooldown = 1.2f;
 }
 
 
@@ -59,29 +66,38 @@ void TutorialScene::UnLoad() {
 
 void TutorialScene::Update(const double& dt)
 {
-	//auto mousePos = Engine::GetWindow().mapPixelToCoords(Mouse::getPosition(Engine::GetWindow()));
 	Vector2f playerPos = player->getPosition();
 
 	if (eventBox1->get_components<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(playerPos))
 	{
-		//cout << "Touching yooouuuuuuuooou" << endl;
+// apply text to textcomponent
 
-		yes = true;
 
-		//eventBox1->setForDelete(); 
-		
-		if (yes == true)
+
+		totalTime += dt;
+
+		cout << totalTime << endl;
+
+
+		switch (totalTime >= Delay) {
+		case 1: test = "Hello";
+			{
+			if (totalTime >= Delay + 3)
+			{
+		case 2: test = "hello again";
 		{
-			eventBox1->get_components<TextComponent>()[0]->SetText("hello");
-			cout << "Touching meeeeeeehhhheeeee" << endl;
+			if (totalTime >= Delay + 6)
+			{
+		case 3: test = "Brilliant";
+			}}}}
+			//disable player movement until done
 		}
+	}
+	else
+	{
 
 	}
-
-	
-
-	//_shapeCmp->getShape().getGlobalBounds().contains(mousePos)
-
+			
 
 
 	if (ls::getTileAt(player->getPosition()) == ls::END) {

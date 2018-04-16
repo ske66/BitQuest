@@ -12,10 +12,14 @@ public:
 
 	void Render() override;
 
+	float totalTime;
+	float Delay;
+
+
 private:
 
 	sf::Vector2f _view_center;
 
-	bool yes = false;
+	float _clickCooldown;
 
 };

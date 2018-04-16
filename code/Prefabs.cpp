@@ -358,15 +358,6 @@ shared_ptr<Entity> makeEventBox(Vector2f bounds)
 	s->getShape().setFillColor(Color::Red);
 	s->getShape().setOrigin(s->getShape().getGlobalBounds().width / 2, s->getShape().getGlobalBounds().height / 2);
 
-	//auto u = button->addComponent<ShapeComponent>();
-	//u->setShape<RectangleShape>(Vector2f(bounds.x, 5.f));
-	//u->getShape().setFillColor(Color(128, 128, 128));
-	//u->getShape().setOrigin(u->getShape().getGlobalBounds().width / 2, u->getShape().getGlobalBounds().height / 2 - 30);
-
-	auto t = eventBox->addComponent<TextComponent>("TEST!");
-	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
-	t->getText().setPosition(1100, 2760);
-
 	return eventBox;
 
 }
