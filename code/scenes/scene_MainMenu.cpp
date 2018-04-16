@@ -20,8 +20,6 @@ static shared_ptr<Entity> btnLoadGame;
 static shared_ptr<Entity> btnSettings;
 static shared_ptr<Entity> btnExit;
 
-
-
 void MainMenuScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
@@ -116,7 +114,7 @@ void MainMenuScene::Update(const double& dt)
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
 			SaveLoad::ResetGame();
-			Engine::ChangeScene((Scene*)&level1);
+			Engine::ChangeScene((Scene*)&tutorial);
 
 		}
 

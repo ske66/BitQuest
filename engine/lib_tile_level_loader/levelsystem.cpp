@@ -12,7 +12,7 @@ std::map<LevelSystem::Tile, sf::IntRect> LevelSystem::_rectMap{
 	{ WAYPOINT, IntRect(240,240, _tileSize, _tileSize) },
 	{ EMPTY, IntRect(240,240, _tileSize, _tileSize) },
 	{ START, IntRect(480,0, _tileSize, _tileSize)	},
-	{ END, IntRect(240,240, _tileSize, _tileSize) },
+	{ END, IntRect(480,0, _tileSize, _tileSize) },
 	{ WALL, IntRect(240, 0, _tileSize, _tileSize) },
 	{ FLOOR, IntRect(0,0, _tileSize, _tileSize) },
 	{ GROUND, IntRect(0,240, _tileSize, _tileSize) },

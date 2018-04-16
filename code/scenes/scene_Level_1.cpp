@@ -50,7 +50,6 @@ void Level1Scene::Load() {
 	
 	gavin = makeGavin();
 
-
 	makeEnemies();
 
 	coinAmount();
