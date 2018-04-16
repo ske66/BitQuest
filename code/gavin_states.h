@@ -17,6 +17,7 @@ public:
 
 	void enterState(Entity*) noexcept override {};
 	void execute(Entity*, double) noexcept override;
+	
 };
 
 
@@ -34,29 +35,30 @@ public:
 	void execute(Entity*, double) noexcept override;
 };
 
-class Gavin_PrepAttackState : public State
+
+class Gavin_CastState : public State
 {
 private:
 	std::shared_ptr<Entity> _player;
-
+	bool shot = false;
 public:
 
-	Gavin_PrepAttackState(std::shared_ptr<Entity> player)
+	double attackRange;
+	Gavin_CastState(std::shared_ptr<Entity> player)
 		: _player(player) {}
 
 	void enterState(Entity*) noexcept override {};
 	void execute(Entity*, double) noexcept override;
 };
 
-class Gavin_AttackState : public State
+class Gavin_DeadState : public State
 {
 private:
-	std::shared_ptr<Entity> _player;
 
 public:
 
-	Gavin_AttackState(std::shared_ptr<Entity> player)
-		: _player(player) {}
+	double attackRange;
+	Gavin_DeadState(){}
 
 	void enterState(Entity*) noexcept override {};
 	void execute(Entity*, double) noexcept override;

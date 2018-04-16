@@ -6,6 +6,8 @@
 #include "scenes\scene_Settings_Audio.h"
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
+#include "scenes\Scene_Game_Over.h"
+#include "scenes\scene_Shop.h"
 
 extern MainMenuScene menu;
 extern SettingsScene settings;
@@ -13,4 +15,12 @@ extern SettingsAudioScene settingsAudio;
 extern SettingsGraphicsScene settingsGraphics;
 extern SettingsGameplayScene settingsGameplay;
 extern Level1Scene level1;
-extern bool loadGame;
+extern GameOverScene gameOver;
+extern ShopScene shop;
+
+static uint16_t game_width = 1600;
+static uint16_t game_heigth = 900;
+static uint16_t frameRate = 60;
+
+static uint16_t musicVolume = 80;
+static uint16_t sfxVolume = 100;

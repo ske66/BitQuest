@@ -5,7 +5,9 @@
 #include "components/cmp_animation.h"
 #include <iostream>
 #include "Player_states.h"
-
+#include "components\cmp_player_controller.h"
+#include "components\cmp_hurt.h"
+#include "GameState.h"
 
 using namespace sf;
 using namespace std;
@@ -15,6 +17,16 @@ void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 {
 	auto me = owner->get_components<StateMachineComponent>()[0]; 
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
+	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("block");
+	}
 
 	//dampen if not jumping
 	if (p->isGrounded() == true)
@@ -30,7 +42,7 @@ void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 	{
 		me->changeState("walk_right");
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		me->changeState("Attack");
 	}
@@ -39,31 +51,56 @@ void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 		me->changeState("jump");
 	}
 
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() < 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
 }
 
 void  Player_MoveLeftState::execute(Entity *owner, double dt) noexcept
 {
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+	owner->get_components<AnimationComponent>()[0]->faceRight = false;
+
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("block");
+	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
 	}
 
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 	
+
 	if (!Keyboard::isKeyPressed(Keyboard::A))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("idle");
 	}
 	p->impulse({ -9.0f , 0.0f });
 	p->dampen({ 1.7f , 1.0f });
-	cout << "ml" << endl;
-
+	
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
 }
 
 void  Player_MoveRightState::execute(Entity *owner, double dt) noexcept
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+
+	owner->get_components<AnimationComponent>()[0]->faceRight = true;
+
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("block");
+	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
 	}
@@ -78,57 +115,103 @@ void  Player_MoveRightState::execute(Entity *owner, double dt) noexcept
 	p->impulse({ 9.0f , 0.0f });
 	p->dampen({ 1.7f , 1.0f });
 	
-	cout << "mr" << endl;
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
+	}
+	
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
+	}
+
 }
 
 void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 {
 
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		owner->get_components<StateMachineComponent>()[0]->changeState("block");
+	}
+
 	auto me = owner->get_components<StateMachineComponent>()[0];
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 
-	//p->setVelocity({ 0.f , 0.f });
-	cout << "attack" << endl;
-
-	//reset attack animation when done
-	if (me_anim->attackImgNo >= 6)
+	if (owner->get_components<PlayerControlerComponent>()[0]->sword == false)
 	{
-		me_anim->attackImgNo = 0;
 
-		//keep moving if you where moving before attacking
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		if (me_anim->attackImgNo >= 6)
 		{
-			me->changeState("walk_left");
+			cout << "fuck" << endl;
+			makeArrow();
+			me_anim->attackImgNo = 0;
+			me->changeState("idle");
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+
+	}
+	else
+	{
+		//reset attack animation when done
+		if (me_anim->attackImgNo >= 6)
 		{
-			me->changeState("walk_right");
+			me_anim->attackImgNo = 0;
+			me->changeState("idle");
 		}
-		//if stood still before attacking stay still
-		me->changeState("idle");
-		
+
+		//lock movement when attacking
+		if (me_anim->attackImgNo == 0)
+		{
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				me->changeState("walk_left");
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			{
+				me->changeState("walk_right");
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			{
+				me->changeState("jump");
+			}
+		}
+		if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() < 0)
+		{
+			me->changeState("dead");
+		}
+	}
+}
+void  Player_DeadState::execute(Entity *owner, double dt) noexcept
+{
+
+	auto me_anim = owner->get_components<AnimationComponent>()[0];
+
+	if (me_anim->currentimage.x >= 5)
+	{
+		me_anim->pause = true;
 	}
 
-	//lock movement when attacking
-	if (me_anim->attackImgNo == 0)
+
+}
+void  Player_BlockState::execute(Entity *owner, double dt) noexcept
+{
+	auto me_anim = owner->get_components<AnimationComponent>()[0];
+
+	me_anim->currentimage.x = 3;
+	
+	me_anim->pause = true;
+	owner->get_components<PlayerControlerComponent>()[0]->immortal = true;
+
+	if(!sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			me->changeState("walk_left");
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			me->changeState("walk_right");
-		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			me->changeState("Attack");
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		{
-			me->changeState("jump");
-		}
+		me_anim->pause = false;
+		owner->get_components<StateMachineComponent>()[0]->changeState("idle");
 	}
 	
 }

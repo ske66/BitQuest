@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Audio.hpp>
 #include <SFML/Audio/Sound.hpp>
-
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <memory>
@@ -19,8 +18,12 @@ namespace Resources {
 	template <> // explicit specialization for T = texture
 	std::shared_ptr<sf::Texture> load(const std::string& name);
 
+<<<<<<< HEAD
 
 	template <> // explicit specialization for T = SoundBuffer
+=======
+	template <> // explicit specialisation for T = SoundBuffer
+>>>>>>> f3de08fd13538f872539c8568dddd807ac750262
 	std::shared_ptr<sf::SoundBuffer> load(const std::string& name);
 
 	template <> // explicit specialization for T = Music

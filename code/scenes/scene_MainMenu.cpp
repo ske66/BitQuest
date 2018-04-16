@@ -5,6 +5,7 @@
 #include "../components/cmp_btn.h"
 #include "../GameState.h"
 #include "../code/Prefabs.h"
+#include "../code/SaveLoad.h"
 #include "engine.h"
 #include "levelsystem.h"
 #include <SFML\Graphics.hpp>
@@ -23,11 +24,15 @@ static shared_ptr<Entity> btnExit;
 
 void MainMenuScene::Load()
 {
-	_music_menu = Resources::get<Music>("menu_music.wav");
-	_music_menu->play();
-	_music_menu->setLoop(true);
 
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
+
+	//Music
+	_music_menu = Resources::get<Music>("Menu_Music.wav");
+	_music_menu->play();
+	_music_menu->setLoop(true);
+	_music_menu->setVolume(musicVolume);
+
 	{
 		//Position the game's Logo
 		auto Logo = makeEntity();
@@ -97,6 +102,7 @@ void MainMenuScene::Load()
 
 
 void MainMenuScene::UnLoad() {
+
 	ls::unload();
 	Scene::UnLoad();
 	_music_menu->stop();
@@ -107,22 +113,16 @@ void MainMenuScene::UnLoad() {
 void MainMenuScene::Update(const double& dt) 
 {
 
-
-
-
 		if (btnNewGame->get_components<BtnComponent>()[0]->isSelected())
 		{
-
-
+			SaveLoad::ResetGame();
 			Engine::ChangeScene((Scene*)&level1);
-			loadGame = false;
 		}
 
 		if (btnLoadGame->get_components<BtnComponent>()[0]->isSelected())
 		{
-
+			SaveLoad::LoadGame();
 			Engine::ChangeScene((Scene*)&level1);
-			loadGame = true;
 		}
 
 		if (btnSettings->get_components<BtnComponent>()[0]->isSelected())
@@ -133,7 +133,7 @@ void MainMenuScene::Update(const double& dt)
 
 		if (btnExit->get_components<BtnComponent>()[0]->isSelected())
 		{
-
+			SaveLoad::ResetGame();
 			Engine::GetWindow().close();
 		}
 

@@ -3,8 +3,12 @@
 #include "engine.h"
 #include "SFML\Audio.hpp"
 
+
 class Level1Scene : public Scene {
 public:
+	double holdTime = 4;
+	double totalTime = 0;
+
 	void Load() override;
 
 	void UnLoad() override;
@@ -13,7 +17,6 @@ public:
 
 	void Render() override;
 
-private:
+	std::shared_ptr<sf::Music>_musicLevel1;
 
-	std::shared_ptr<sf::Music> _music_level1;
 };

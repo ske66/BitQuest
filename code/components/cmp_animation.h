@@ -16,6 +16,7 @@ protected:
 
 public:
 
+	bool pause = false;
 	bool faceRight = true;
 	double switchtime;
 	sf::IntRect animUvRect;

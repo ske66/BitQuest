@@ -18,8 +18,6 @@ public:
 	bool isLoaded() const;
 	std::shared_ptr<Entity> makeEntity();
 
-
-
 	EntityManager ents;
 
 protected:
@@ -31,14 +29,11 @@ private:
 };
 
 
-
-
-
 class Engine {
 public:
 	Engine() = delete;
 	static void Start(unsigned int width, unsigned int height,
-		const std::string& gameName, Scene* scn);
+	const std::string& gameName, Scene* scn, unsigned int frameRate);
 	static void ChangeScene(Scene*);
 	static sf::RenderWindow& GetWindow();
 	static sf::Vector2u getWindowSize();
@@ -51,6 +46,7 @@ private:
 	static std::string _gameName;
 	static void Update();
 	static void Render(sf::RenderWindow& window);
+	static bool _fullscreen;
 
 };
 

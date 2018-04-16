@@ -19,8 +19,6 @@ void TutorialScene::Load()
 
 	makeGavin();
 
-	makeCoins();
-
 	makeEnemies();
 
 	_player = makePlayer(ls::getTilePosition(ls::findTiles(ls::START)[0]));
@@ -28,7 +26,6 @@ void TutorialScene::Load()
 	_view_center = _player->getPosition();
 
 	addUI();
-
 
 	setLoaded(true);
 }

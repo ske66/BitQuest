@@ -6,6 +6,8 @@
 #include "scenes\scene_Settings_Audio.h"
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
+#include "scenes\Scene_Game_Over.h"
+#include "scenes\scene_Shop.h"
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML\Graphics.hpp>
 #include <fstream>
@@ -20,7 +22,8 @@ SettingsAudioScene settingsAudio;
 SettingsGraphicsScene settingsGraphics;
 SettingsGameplayScene settingsGameplay;
 Level1Scene level1;
-bool loadGame;
+GameOverScene gameOver;
+ShopScene shop;
 
 int ResolutionX;
 int ResolutionY;
@@ -31,5 +34,5 @@ int main() {
 	ifstream Graphics("res/savestates/Graphics.txt");
 	(Graphics >> ResolutionX >> ResolutionY >> FPS);
 
-	Engine::Start(ResolutionX,ResolutionY, "Bitquest!", &menu);
+	Engine::Start(game_width, game_heigth, "Bitquest!", &menu, frameRate);
 }

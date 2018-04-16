@@ -1,8 +1,6 @@
 #pragma once
-
 #include "engine.h"
 #include "SFML\Audio.hpp"
-
 
 class MainMenuScene : public Scene {
 public:
@@ -17,6 +15,9 @@ public:
 
 	void Render() override;
 
-	std::shared_ptr<sf::Music> _music_menu;
+
+private:
+
+	std::shared_ptr<sf::Music>_music_menu;
 
 };
