@@ -111,8 +111,6 @@ void SettingsAudioScene::Update(const double& dt)
 	if (btnMusicLow->get_components<BtnComponent>()[0]->isSelected())
 	{
 		musicVolume = 33;
-
-		btnMusicLow->get_components<BtnComponent>()[0]->setHighlighted(true);
 	}
 
 	if (btnMusicMed->get_components<BtnComponent>()[0]->isSelected())

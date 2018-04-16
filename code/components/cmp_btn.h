@@ -9,8 +9,6 @@ class BtnComponent : public Component
 {
 private:
 	bool _isHighlighted = false;
-	bool _isTouching = false;
-	bool selected = false;
 	std::shared_ptr<ShapeComponent> _shapeCmp;
 	std::shared_ptr<TextComponent> _textCmp;
 	std::shared_ptr<ShapeComponent> _underLine;
@@ -23,8 +21,8 @@ public:
 	explicit BtnComponent(Entity* p, std::shared_ptr<ShapeComponent>, std::shared_ptr<TextComponent>, std::shared_ptr<ShapeComponent>);
 	void update(double dt) override;
 	void render() override {}
-	void setHighlighted(bool, bool isClicked = false);
-	void setFilled();
+	void setHighlighted(bool, bool force = false);
 	bool isSelected();
 
+	bool selected = false;
 };

@@ -18,19 +18,31 @@ void BtnComponent::update(double dt)
 	{
 		setHighlighted(true);
 
-		_isTouching = true;
+		if (_isHighlighted == true)
+		{
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				selected = true;
+			}
+		}
 	}
 	else
 	{
 		setHighlighted(false);
-
-		_isTouching = false;
 	}
+
+	if (selected == true)
+	{
+		_textCmp->getText().setFillColor(Color(240, 178, 0));
+		_underLine->getShape().setFillColor(Color(240, 178, 0));
+	}
+
+
 }
 
-void BtnComponent::setHighlighted(bool h, bool isClicked)
+void BtnComponent::setHighlighted(bool h, bool force)
 {
-	if (h != _isHighlighted || isClicked)
+	if (h != _isHighlighted || force)
 	{
 		_isHighlighted = h;
 		if (h)
@@ -45,16 +57,11 @@ void BtnComponent::setHighlighted(bool h, bool isClicked)
 		}
 		else
 		{
+			_underLine->getShape().setFillColor(Color::Transparent);
 			_textCmp->getText().setFillColor(Color(255, 255, 255));
-			_underLine->getShape().setFillColor(Color(128, 128, 128));
+
 		}
 	}
-}
-
-void BtnComponent::setFilled()
-{
-	_textCmp->getText().setFillColor(Color(240, 178, 0));
-	_underLine->getShape().setFillColor(Color(240, 178, 0));
 }
 
 bool BtnComponent::isSelected()
@@ -63,8 +70,6 @@ bool BtnComponent::isSelected()
 	{
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
-			_textCmp->getText().setFillColor(Color(240, 178, 0));
-			_underLine->getShape().setFillColor(Color(240, 178, 0));
 			return true;
 		}
 	}

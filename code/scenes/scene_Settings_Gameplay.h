@@ -27,7 +27,6 @@ private:
 
 	std::vector<std::shared_ptr<Entity>> _btns;
 
-
 	std::map<std::shared_ptr<Entity>, std::string> _controlsBtns;
 
 	std::shared_ptr<Entity> _changingControl = nullptr;

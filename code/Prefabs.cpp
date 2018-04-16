@@ -362,10 +362,6 @@ shared_ptr<Entity> makeCoin()
 
 		return coin;
 }
-	
-
-
-
 
 shared_ptr<Entity> makeButton(string text, Vector2f bounds)
 {
@@ -380,11 +376,12 @@ shared_ptr<Entity> makeButton(string text, Vector2f bounds)
 
 	auto u = button->addComponent<ShapeComponent>();
 	u->setShape<RectangleShape>(Vector2f(bounds.x, 5.f));
-	u->getShape().setFillColor(Color(128, 128, 128));
 	u->getShape().setOrigin(u->getShape().getGlobalBounds().width / 2, u->getShape().getGlobalBounds().height / 2 - 30);
 
 	auto t = button->addComponent<TextComponent>(text);
 	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
+	t->getText().setFillColor(Color(255, 255, 255));
+
 
 	button->addComponent<BtnComponent>(s, t, u);
 

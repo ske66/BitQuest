@@ -13,25 +13,19 @@
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> btnBack;
-static shared_ptr<Entity> btnDone;
-
-static shared_ptr<Entity> ResLow;
-static shared_ptr<Entity> ResMed;
-static shared_ptr<Entity> ResHigh;
-static shared_ptr<Entity> btnOn;
-static shared_ptr<Entity> btnOff;
-static shared_ptr<Entity> btn30;
-static shared_ptr<Entity> btn60;
 
 
 void SettingsGraphicsScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
+	_btns.clear();
+
 	{
-		btnBack = makeButton("Back", Vector2f(150, 60));
-		btnBack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
+		_btnBack.reset();
+		_btnBack = makeButton("Back", Vector2f(150, 60));
+		_btnBack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
+		_btns.push_back(_btnBack);
 	}
 
 	{
@@ -47,14 +41,20 @@ void SettingsGraphicsScene::Load()
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtResolution->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 250.f));
 
-		ResLow = makeButton("1280x720", Vector2f(150, 60));
-		ResLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
+		_ResLow.reset();
+		_ResLow = makeButton("1280x720", Vector2f(150, 60));
+		_ResLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
+		_btns.push_back(_ResLow);
 
-		ResMed = makeButton("1600x900", Vector2f(150, 60));
-		ResMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 250.f));
+		_ResMed.reset();
+		_ResMed = makeButton("1600x900", Vector2f(150, 60));
+		_ResMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 250.f));
+		_btns.push_back(_ResMed);
 
-		ResHigh = makeButton("1920x1080", Vector2f(150, 60));
-		ResHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 460, 250.f));
+		_ResHigh.reset();
+		_ResHigh = makeButton("1920x1080", Vector2f(150, 60));
+		_ResHigh->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 460, 250.f));
+		_btns.push_back(_ResHigh);
 	}
 
 	{
@@ -63,11 +63,15 @@ void SettingsGraphicsScene::Load()
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtFPS->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 350.f));
 
-		btn30 = makeButton("30 FPS", Vector2f(150, 60));
-		btn30->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 350.f));
+		_btn30.reset();
+		_btn30 = makeButton("30 FPS", Vector2f(150, 60));
+		_btn30->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 350.f));
+		_btns.push_back(_btn30);
 
-		btn60 = makeButton("60 FPS", Vector2f(150, 60));
-		btn60->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 350.f));
+		_btn60.reset();
+		_btn60 = makeButton("60 FPS", Vector2f(150, 60));
+		_btn60->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 350.f));
+		_btns.push_back(_btn60);
 	}
 
 
@@ -77,18 +81,27 @@ void SettingsGraphicsScene::Load()
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtMode->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 450.f));
 
-		btnOn = makeButton("Fullscreen", Vector2f(150, 60));
-		btnOn->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
+		_btnOn.reset();
+		_btnOn = makeButton("Fullscreen", Vector2f(150, 60));
+		_btnOn->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
+		_btns.push_back(_btnOn);
 
-		btnOff = makeButton("Windowed", Vector2f(150, 60));
-		btnOff->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 450.f));
+		_btnOff.reset();
+		_btnOff = makeButton("Windowed", Vector2f(150, 60));
+		_btnOff->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 450.f));
+		_btns.push_back(_btnOff);
 
 	}
 
 	{
-		btnDone = makeButton("Done", Vector2f(150, 60));
-		btnDone->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
+		_btnDone.reset();
+		_btnDone = makeButton("Done", Vector2f(150, 60));
+		_btnDone->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 650.f));
+		_btns.push_back(_btnDone);
 	}
+
+	Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
+
 	setLoaded(true);
 }
 
@@ -100,56 +113,65 @@ void SettingsGraphicsScene::UnLoad()
 
 void SettingsGraphicsScene::Update(const double& dt)
 {
-	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
+	if (_btnBack->get_components<BtnComponent>()[0]->isSelected())
 	{
 		Engine::ChangeScene((Scene*)&settings);
 	}
-	Scene::Update(dt);
 
-	if (ResLow->get_components<BtnComponent>()[0]->isSelected())
-	{
-		game_width = 1280;
-		game_heigth = 720;
-	}
-
-	if (ResMed->get_components<BtnComponent>()[0]->isSelected())
-	{
-		game_width = 1600;
-		game_heigth = 900;
-	}
-
-	if (ResHigh->get_components<BtnComponent>()[0]->isSelected())
-	{
-		game_width = 1920;
-		game_heigth = 1080;
-	}
-
-	if (btn60->get_components<BtnComponent>()[0]->isSelected())
-	{
-		frameRate = 60;
-	}
-
-	if (btn30->get_components<BtnComponent>()[0]->isSelected())
-	{
-		frameRate = 30;
-	}
-
-	if (btnOn->get_components<BtnComponent>()[0]->isSelected())
-	{
-		//windowMode = "Fullscreen";
-	}
-
-	if (btnOff->get_components<BtnComponent>()[0]->isSelected())
-	{
-		//windowMode = "Windowed";
-	}
-
-	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
+	if (_btnDone->get_components<BtnComponent>()[0]->isSelected())
 	{
 		Engine::GetWindow().close();
 
 		Engine::Start(game_width, game_heigth, "Bitquest!", &menu, frameRate);
 	}
+
+
+
+	if (_clickCooldown >= 0.0f)_clickCooldown -= dt;
+
+	if (_clickCooldown < 0.0f)
+	{
+
+		if (_ResLow->get_components<BtnComponent>()[0]->isSelected())
+		{
+			game_width = 1280;
+			game_heigth = 720;
+		}
+
+		if (_ResMed->get_components<BtnComponent>()[0]->isSelected())
+		{
+			game_width = 1600;				
+			game_heigth = 900;
+		}
+
+		if (_ResHigh->get_components<BtnComponent>()[0]->isSelected())
+		{	
+			game_width = 1920;			
+			game_heigth = 1080;
+		}
+		
+			if (_btn60->get_components<BtnComponent>()[0]->isSelected())
+			{
+				frameRate = 60;
+			}
+
+			if (_btn30->get_components<BtnComponent>()[0]->isSelected())
+			{
+				frameRate = 30;
+			}
+
+			if (_btnOn->get_components<BtnComponent>()[0]->isSelected())
+			{
+				//windowMode = "Fullscreen";
+			}
+
+			if (_btnOff->get_components<BtnComponent>()[0]->isSelected())
+			{
+				//windowMode = "Windowed";
+			}
+		}
+
+	Scene::Update(dt);
 }
 
 void SettingsGraphicsScene::Render()

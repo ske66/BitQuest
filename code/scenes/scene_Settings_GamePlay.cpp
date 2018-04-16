@@ -24,8 +24,10 @@ void SettingsGameplayScene::Load()
 	_btns.clear();
 	_changingControl.reset();
 
+	_btn_Back.reset();
 	_btn_Back = makeButton("Back", Vector2f(150, 60));
 	_btn_Back->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
+	_btns.push_back(_btn_Back);
 
 	_btn_ControlsAction.reset();
 	_btn_ControlsAction = makeButton("Action", Vector2f(40, 40));
@@ -125,9 +127,14 @@ void SettingsGameplayScene::Update(const double& dt)
 	{
 		for (auto k = Keyboard::Unknown; k != Keyboard::Pause; k = static_cast<Keyboard::Key>(k + 1))
 		{
-			Controls::SetKeyboardButton(_controlsBtns[_changingControl], k);
-			_changingControl->get_components<TextComponent>()[0]->getText().setColor(Color(198, 152, 127));
-			_changingControl = nullptr;
+			if (Keyboard::isKeyPressed(k))
+			{
+				Controls::SetKeyboardButton(_controlsBtns[_changingControl], k);
+				_changingControl->get_components<TextComponent>()[0]->getText().setColor(Color(198, 152, 127));
+
+				cout << _controlsBtns[_changingControl] << endl;
+				_changingControl = nullptr;
+			}
 		}
 	}
 

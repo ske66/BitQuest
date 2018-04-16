@@ -19,4 +19,11 @@ public:
 private:
 
 	std::shared_ptr<sf::Music>_musicMenu;
+
+	std::shared_ptr<Entity> _btnNewGame;
+	std::shared_ptr<Entity> _btnLoadGame;
+	std::shared_ptr<Entity> _btnSettings;
+	std::shared_ptr<Entity> _btnExit;
+
+	std::vector<std::shared_ptr<Entity>> _btns;
 };
