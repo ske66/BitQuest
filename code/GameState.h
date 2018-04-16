@@ -6,6 +6,7 @@
 #include "scenes\scene_Settings_Audio.h"
 #include "scenes\scene_Settings_Gameplay.h"
 #include "scenes\scene_Settings_Graphics.h"
+#include "scenes\scene_Tutorial.h"
 #include "scenes\Scene_Game_Over.h"
 #include "scenes\scene_Shop.h"
 
@@ -14,6 +15,7 @@ extern SettingsScene settings;
 extern SettingsAudioScene settingsAudio;
 extern SettingsGraphicsScene settingsGraphics;
 extern SettingsGameplayScene settingsGameplay;
+extern TutorialScene tutorial;
 extern Level1Scene level1;
 extern GameOverScene gameOver;
 extern ShopScene shop;

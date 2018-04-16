@@ -1,5 +1,6 @@
 #include "Prefabs.h"
 #include "engine.h"
+#include "GameState.h"
 #include <levelsystem.h>
 #include <system_resources.h>
 
@@ -10,6 +11,7 @@
 #include "troll_states.h"
 #include "skeleton_states.h"
 #include "gavin_states.h"
+#include "SaveLoad.h"
 
 #include"ghost_states.h"
 #include "components\cmp_ghost_properties.h"
@@ -436,6 +438,21 @@ vector<shared_ptr<Entity>> makeChests()
 }
 
 
+shared_ptr<Entity> makeEventBox(Vector2f bounds)
+{
+	auto eventBox = Engine::GetActiveScene()->makeEntity();
+	eventBox->addTag("eventBox");
+
+	auto s = eventBox->addComponent<ShapeComponent>();
+	s->setShape<RectangleShape>(Vector2f(bounds));
+	s->getShape().setFillColor(Color::Red);
+	s->getShape().setOrigin(s->getShape().getGlobalBounds().width / 2, s->getShape().getGlobalBounds().height / 2);
+
+	return eventBox;
+
+}
+
+
 shared_ptr<Entity> makeCoin()
 {
 		auto coin = Engine::GetActiveScene()->makeEntity();
@@ -515,31 +532,32 @@ void TilePhysics()
 	}
 }
 
-shared_ptr<Entity>addUI()
+shared_ptr<Entity>addUI(string message)
 {
 	auto e = Engine::GetActiveScene()->makeEntity();
-	e->addComponent<UIComponent>();
 	e->addTag("UI");
 
-	return e;
-}
 
-shared_ptr<Entity>coinAmount()
-{
-	auto e = Engine::GetActiveScene()->makeEntity();
-	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
-	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
-	e->addTag("coinCount");
+	auto c = e->addComponent<TextComponent>(to_string(SaveLoad::coins));
+	c->getText().setOrigin(c->getText().getGlobalBounds().width / 2, c->getText().getGlobalBounds().height / 2);
 
-	return e;
-}
+	auto a = e->addComponent<TextComponent>(to_string(SaveLoad::arrows));
+	a->getText().setOrigin(a->getText().getGlobalBounds().width / 2, a->getText().getGlobalBounds().height / 2);
 
-shared_ptr<Entity>arrowAmount()
-{
-	auto e = Engine::GetActiveScene()->makeEntity();
-	auto t = e->addComponent<TextComponent>("adsfgasdfgsdf");
-	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
-	e->addTag("arrowCount");
+	auto h = e->addComponent<TextComponent>(to_string(SaveLoad::hams));
+	h->getText().setOrigin(h->getText().getGlobalBounds().width / 2, h->getText().getGlobalBounds().height / 2);
+
+
+	auto cutsceneBar = e->addComponent<ShapeComponent>();
+	cutsceneBar->setShape<RectangleShape>(Vector2f(game_width, 150));
+	cutsceneBar->getShape().setFillColor(Color::Black);
+	cutsceneBar->getShape().setOrigin(0, 0);
+
+
+	auto cutsceneText = e->addComponent<TextComponent>(message);
+	cutsceneText->getText().setOrigin(cutsceneText->getText().getGlobalBounds().width / 2, cutsceneText->getText().getGlobalBounds().height / 2);
+	
+	e->addComponent<UIComponent>(c,a,h, cutsceneText, cutsceneBar);
 
 	return e;
 }

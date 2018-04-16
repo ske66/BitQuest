@@ -45,11 +45,7 @@ void Level1Scene::Load() {
 
 	makeEnemies();
 
-	coinAmount();
-
-	arrowAmount();
-
-	addUI();
+	addUI("");
 
 
 	setLoaded(true);

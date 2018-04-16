@@ -21,8 +21,6 @@ static shared_ptr<Entity> btnLoadGame;
 static shared_ptr<Entity> btnSettings;
 static shared_ptr<Entity> btnExit;
 
-
-
 void MainMenuScene::Load()
 {
 
@@ -118,6 +116,7 @@ void MainMenuScene::Update(const double& dt)
 		{
 			SaveLoad::ResetGame();
 			Engine::ChangeScene((Scene*)&level1);
+
 		}
 
 		if (btnLoadGame->get_components<BtnComponent>()[0]->isSelected())
