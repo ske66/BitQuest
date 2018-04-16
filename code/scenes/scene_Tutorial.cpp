@@ -3,6 +3,7 @@
 #include "../code/Prefabs.h"
 #include "../components/cmp_animation.h"
 #include "../components/cmp_text.h"
+#include "../components/cmp_UI.h"
 #include "engine.h"
 #include "levelsystem.h"
 #include <iostream>
@@ -43,11 +44,8 @@ void TutorialScene::Load()
 
 	makeEnemies();
 
-	coinAmount();
 
-	arrowAmount();
-
-	addUI();
+	addUI("");
 
 	eventBox1 = makeEventBox(Vector2f(240, 240));
 	eventBox1->setPosition(Vector2f(1100, 2760));
@@ -70,9 +68,11 @@ void TutorialScene::Update(const double& dt)
 
 	if (eventBox1->get_components<ShapeComponent>()[0]->getShape().getGlobalBounds().contains(playerPos))
 	{
+
+		//enter cutsceneMode
 // apply text to textcomponent
 
-
+		addUI(test);
 
 		totalTime += dt;
 
@@ -89,16 +89,21 @@ void TutorialScene::Update(const double& dt)
 			if (totalTime >= Delay + 6)
 			{
 		case 3: test = "Brilliant";
+		{
+			if (totalTime >= Delay + 9)
+			{
+		case 4: eventBox1->setForDelete();
+			}
+		}
 			}}}}
+			
 			//disable player movement until done
 		}
 	}
 	else
 	{
-
+		addUI("");
 	}
-			
-
 
 	if (ls::getTileAt(player->getPosition()) == ls::END) {
 		Engine::ChangeScene((Scene*)&level1);

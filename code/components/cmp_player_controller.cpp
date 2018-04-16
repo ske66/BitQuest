@@ -3,6 +3,7 @@
 #include "cmp_UI.h"
 #include "cmp_text.h"
 #include "../code/GameState.h"
+#include "../SaveLoad.h"
 
 using namespace std;
 using namespace sf;
@@ -30,7 +31,11 @@ void PlayerControlerComponent::collectCoin()
 {
 	coins++;
 
-	_parent->scene->ents.find("coinCount")[0]->get_components<TextComponent>()[0]->SetText("x" + to_string(coins));
+	SaveLoad::coins = coins++;
+
+	
+
+	//_parent->scene->ents.find("coinCount")[0]->get_components<TextComponent>()[0]->SetText("x" + to_string(coins));
 }
 
 

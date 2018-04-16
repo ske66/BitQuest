@@ -10,15 +10,11 @@
 using namespace std;
 using namespace sf;
 
-UIComponent::UIComponent(Entity* p)
-	:Component(p)
+UIComponent::UIComponent(Entity* p, shared_ptr<TextComponent> c, shared_ptr<TextComponent> a, shared_ptr<TextComponent> h, shared_ptr<TextComponent> cutsceneText, shared_ptr<ShapeComponent> b)
+	: _coinTxt(c), _arrowTxt(a), _hamTxt(h), _cutsceneTxt(cutsceneText), _cutsceneBar(b), Component(p)
 {
 
 	_player = _parent->scene->ents.find("player")[0];
-
-	_coinCount = _parent->scene->ents.find("coinCount")[0];
-	_arrowCount = _parent->scene->ents.find("arrowCount")[0];
-	_hamCount = _parent->scene->ents.find("hamCount")[0];
 
 	_texHeartUI = Resources::load<Texture>("heart.png");
 	_texCoinUI = Resources::load<Texture>("spritesheets/Coin_spritesheet.png");
@@ -41,10 +37,6 @@ UIComponent::UIComponent(Entity* p)
 
 	hamUI = Sprite(*_texHamUI);
 	hamUI.setTextureRect(IntRect(0, 0, 60, 60));
-
-	_coinCount->get_components<TextComponent>()[0]->SetText("x0");
-	_arrowCount->get_components<TextComponent>()[0]->SetText("x0");
-	_hamCount->get_components<TextComponent>()[0]->SetText("X0");
 
 }
 
@@ -93,11 +85,20 @@ void UIComponent::update(double dt)
 		_parent->getPosition().x - Engine::GetWindow().getSize().x / 2.3,
 		_parent->getPosition().y + Engine::GetWindow().getSize().y / 2.7);
 
-	_coinCount->setPosition(Vector2f(coinUI.getPosition().x + 150, coinUI.getPosition().y + 30));
+	_coinTxt->getText().setPosition(
+		coinUI.getPosition().x + 100, coinUI.getPosition().y + 30);
 
-	_arrowCount->setPosition(Vector2f(arrowUI.getPosition().x + 150, arrowUI.getPosition().y + 30));
+	_arrowTxt->getText().setPosition(
+		arrowUI.getPosition().x + 100, arrowUI.getPosition().y + 30);
 
-	_hamCount->setPosition(Vector2f(hamUI.getPosition().x + 150, hamUI.getPosition().y + 30));
+	_hamTxt->getText().setPosition(
+		hamUI.getPosition().x + 100, hamUI.getPosition().y + 30);
+
+	_cutsceneBar->getShape().setPosition(_parent->getPosition().x - Engine::GetWindow().getSize().x / 2,
+		_parent->getPosition().y + Engine::GetWindow().getSize().y / 3);
+
+	_cutsceneTxt->getText().setPosition(
+		hamUI.getPosition().x + 200, hamUI.getPosition().y + 30);
 
 }
 
@@ -114,4 +115,18 @@ void UIComponent::render()
 void UIComponent::setHealthDisplay(sf::IntRect s)
 {
 	heartUI.setTextureRect(s);
+}
+
+void UIComponent::cutSceneMode(bool isCutscene)
+{
+	if (isCutscene == true)
+	{
+		_cutsceneBar->getShape().setFillColor(Color::Black);
+		hamUI.setColor(Color::Transparent);
+		arrowUI.setColor(Color::Transparent);
+	}
+	else
+	{
+		_cutsceneBar->getShape().setFillColor(Color::Transparent);
+	}
 }
