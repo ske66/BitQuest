@@ -15,7 +15,6 @@ public:
 
 	sf::Sound _soundHit;
 
-
 	sf::IntRect rect = sf::IntRect(0, 0, 100, 5);
 	float orcDamage = 1;
 	bool immortal = true;

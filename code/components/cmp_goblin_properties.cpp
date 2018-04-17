@@ -2,6 +2,10 @@
 #include "cmp_physics.h"
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
+#include "../code/Audio.h"
+
+using namespace std;
+using namespace sf;
 
 GoblinPropertiesComponent::GoblinPropertiesComponent(Entity* p)
 	: Component(p)
@@ -13,6 +17,15 @@ void GoblinPropertiesComponent::takeDamage(double h)
 {
 	if (immortal == false)
 	{
+
+		Audio::LoadAudio();
+
+		_bufferHit = *(Resources::get<SoundBuffer>("Goblin_Sounds/Goblin_Hit.wav"));
+		_soundHit.setBuffer(_bufferHit);
+
+		_soundHit.play();
+		_soundHit.setVolume(Audio::sfxVolume);
+
 		immortal = true;
 		_health = _health - h;
 

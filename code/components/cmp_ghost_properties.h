@@ -13,7 +13,6 @@ protected:
 public:
 
 	sf::SoundBuffer _bufferHit;
-
 	sf::Sound _soundHit;
 
 

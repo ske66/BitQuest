@@ -79,7 +79,10 @@ void GavinPropertiesComponent::checkContact()
 			{
 				if (_player->get_components<StateMachineComponent>()[0]->currentState() == "Attack")
 				{
-					takeDamage(ap->playerDamage);
+					if (_player->get_components<AnimationComponent>()[0]->attackImgNo >= 6)
+					{
+						takeDamage(ap->playerDamage);
+					}
 				}
 				
 			}

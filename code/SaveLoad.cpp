@@ -56,9 +56,9 @@ void SaveLoad::ResetGame()
 	positionX = 960;
 	positionY = 15360;
 	health = 5;
-	coins = 400;
-	hams = 0;
-	arrows = 10;
+	coins = 0;
+	hams = 2;
+	arrows = 15;
 	playerDamage = 1;
 	playerMaxHealth = 5;
 }

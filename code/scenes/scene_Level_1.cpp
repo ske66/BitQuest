@@ -25,7 +25,7 @@ void Level1Scene::Load() {
 
 	Audio::LoadAudio();
 
-	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
+	ls::loadLevelFile("res/Tilemaps/Level_1.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
 	_musicLevel1 = Resources::get<Music>("Level_music.ogg");
 	_musicLevel1->play();

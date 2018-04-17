@@ -3,7 +3,10 @@
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
 #include "cmp_orc_properties.h"
+#include "../code/Audio.h"
 
+using namespace std;
+using namespace sf;
 
 OrcPropertiesComponent::OrcPropertiesComponent(Entity* p)
 	: Component(p)
@@ -15,6 +18,15 @@ void OrcPropertiesComponent::takeDamage(double h)
 {
 	if (immortal == false)
 	{
+		Audio::LoadAudio();
+
+		_bufferHit = *(Resources::get<SoundBuffer>("orc_Sounds/orc_Hit.wav"));
+		_soundHit.setBuffer(_bufferHit);
+
+		_soundHit.play();
+		_soundHit.setVolume(Audio::sfxVolume);
+
+
 		if (_player->getPosition().x < _parent->getPosition().x)
 		{
 			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(40.f, 0.f), true);

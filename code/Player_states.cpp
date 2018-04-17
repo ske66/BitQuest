@@ -163,6 +163,8 @@ void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 		//reset attack animation when done
 		if (me_anim->attackImgNo >= 6)
 		{
+
+
 			me_anim->attackImgNo = 0;
 			me->changeState("idle");
 		}

@@ -63,7 +63,7 @@ void PlayerControlerComponent::update(double dt)
 
 	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Ham")))
 	{
-		sleep(milliseconds(40));
+		sleep(milliseconds(100));
 		if (SaveLoad::hams > 0)
 		{
 			SaveLoad::hams--;

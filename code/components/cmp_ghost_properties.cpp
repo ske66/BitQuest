@@ -2,8 +2,12 @@
 #include "cmp_player_physics.h"
 #include "cmp_physics.h"
 #include "cmp_player_controller.h"
+#include "../code/Audio.h"
 #include <iostream>
 
+
+using namespace std;
+using namespace sf;
 
 GhostPropertiesComponent::GhostPropertiesComponent(Entity* p)
 	: Component(p)
@@ -18,6 +22,14 @@ void GhostPropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
+		Audio::LoadAudio();
+
+		_bufferHit = *(Resources::get<SoundBuffer>("Ghost_Sounds/Ghost_Hit.ogg"));
+		_soundHit.setBuffer(_bufferHit);
+
+		_soundHit.play();
+		_soundHit.setVolume(Audio::sfxVolume);
+
 		immortal = true;
 		if (_player->getPosition().x < _parent->getPosition().x)
 		{
