@@ -3,6 +3,7 @@
 #include "../code/Prefabs.h"
 #include "../code/components/cmp_btn.h"
 #include "../code/SaveLoad.h"
+#include "../code/Audio.h"
 #include <levelsystem.h>
 #include <iostream>
 #include <string>
@@ -24,10 +25,12 @@ void BossBattleScene::Load() {
 
 	ls::loadLevelFile("res/Tilemaps/BossBattle.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
+	Audio::LoadAudio();
+
 	_musicLevel1 = Resources::get<Music>("Level_music.wav");
 	_musicLevel1->play();
 	_musicLevel1->setLoop(true);
-	_musicLevel1->setVolume(musicVolume);
+	_musicLevel1->setVolume(Audio::musicVolume);
 
 	TilePhysics();
 

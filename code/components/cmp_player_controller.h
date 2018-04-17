@@ -14,9 +14,11 @@ protected:
 	double damageDelay = 2;
 	double totalTime = 0 ;
 	sf::SoundBuffer _bufferHit;
-	sf::SoundBuffer _bufferDeath;
+	sf::SoundBuffer _bufferEat;
+	sf::SoundBuffer _bufferCoin;
 	sf::Sound _soundHit;
-	sf::Sound _soundDeath;
+	sf::Sound _soundEat;
+	sf::Sound _soundCoin;
 	
 	std::shared_ptr<Entity> _gavin;
 	

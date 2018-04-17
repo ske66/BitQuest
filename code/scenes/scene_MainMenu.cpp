@@ -8,6 +8,7 @@
 #include "../code/SaveLoad.h"
 #include "engine.h"
 #include "levelsystem.h"
+#include "../code/Audio.h"
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include <fstream>
@@ -23,14 +24,15 @@ static shared_ptr<Entity> btnExit;
 
 void MainMenuScene::Load()
 {
-
 	ls::loadLevelFile("res/tilemaps/Backgrounds.txt", 240.f);
 
+	Audio::LoadAudio();
+
 	//Music
-	_music_menu = Resources::get<Music>("Menu_Music.wav");
+	_music_menu = Resources::get<Music>("Menu_Music.ogg");
 	_music_menu->play();
 	_music_menu->setLoop(true);
-	_music_menu->setVolume(musicVolume);
+	_music_menu->setVolume(Audio::musicVolume);
 
 	{
 		//Position the game's Logo

@@ -5,6 +5,7 @@
 #include "../code/GameState.h"
 #include "../SaveLoad.h"
 #include "../code/Controls.h"
+#include "../code/Audio.h"
 
 using namespace std;
 using namespace sf;
@@ -36,6 +37,15 @@ void PlayerControlerComponent::collectCoin()
 {
 	coins = coins + 1;
 	SaveLoad::coins = coins;
+
+	Audio::LoadAudio();
+
+	_bufferCoin = *(Resources::get<SoundBuffer>("Bob_Sounds/Coin_Collect.wav"));
+	_soundCoin.setBuffer(_bufferCoin);
+
+	_soundCoin.play();
+	_soundCoin.setVolume(Audio::sfxVolume);
+
 }
 
 void PlayerControlerComponent::update(double dt)
@@ -59,6 +69,16 @@ void PlayerControlerComponent::update(double dt)
 			SaveLoad::hams--;
 			SaveLoad::health = SaveLoad::playerMaxHealth;
 			_health = SaveLoad::health;
+
+
+			Audio::LoadAudio();
+
+			_bufferEat = *(Resources::get<SoundBuffer>("Bob_Sounds/eat.wav"));
+			_soundEat.setBuffer(_bufferEat);
+
+			_soundEat.play();
+			_soundEat.setVolume(Audio::sfxVolume);
+
 		}
 	}
 	
@@ -145,11 +165,13 @@ void PlayerControlerComponent::takeDamage(double d , double dt)
 
 		SaveLoad::health = _health;
 
+		Audio::LoadAudio();
+
 		_bufferHit = *(Resources::get<SoundBuffer>("Bob_Sounds/Bob_Hit.wav"));
 		_soundHit.setBuffer(_bufferHit);
 
 		_soundHit.play();
-		_soundHit.setVolume(sfxVolume);
+		_soundHit.setVolume(Audio::sfxVolume);
 	}
 		
 }

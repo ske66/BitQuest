@@ -5,6 +5,7 @@
 #include "Prefabs.h"
 #include "GameState.h"
 #include "Engine.h"
+#include "Audio.h"
 
 
 double totalTimeS = 2;
@@ -154,13 +155,13 @@ void  Slime_DeadState::execute(Entity *owner, double dt) noexcept
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	if (me_anim->currentimage.x == 7)
 	{
-
+		Audio::LoadAudio();
 
 		_bufferDeath = *(Resources::get<SoundBuffer>("Slime_Sounds/Slime_Death.wav"));
 		_soundDeath.setBuffer(_bufferDeath);
 
 		_soundDeath.play();
-		_soundDeath.setVolume(sfxVolume);
+		_soundDeath.setVolume(Audio::sfxVolume);
 
 		me_anim->currentimage.x = 0;
 		makeCoin(owner->getPosition());

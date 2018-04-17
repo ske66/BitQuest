@@ -8,6 +8,7 @@
 #include "../code/SaveLoad.h"
 #include "engine.h"
 #include "levelsystem.h"
+#include "../code/Audio.h"
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include <fstream>
@@ -31,16 +32,14 @@ void ShopScene::Load()
 
 	SaveLoad::LoadGame;
 
-	_bufferBuy = *(Resources::get<SoundBuffer>("Game_Sounds/buySound.wav"));
+	_bufferBuy = *(Resources::get<SoundBuffer>("Game_Sounds/buySound.ogg"));
 	_soundBuy.setBuffer(_bufferBuy);
 
-
-
-
 	//Music
-	_musicShop = Resources::get<Music>("Shop_Music.wav");
+	_musicShop = Resources::get<Music>("Shop_Music.ogg");
 	_musicShop->play();
 	_musicShop->setLoop(true);
+	_musicShop->setVolume(Audio::musicVolume);
 
 
 	auto coin= makeEntity();
@@ -160,8 +159,6 @@ void ShopScene::Load()
 		btnArrow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 4, Engine::GetWindow().getSize().y / 2 * 1.6));
 	}
 
-
-
 	Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
 
 	setLoaded(true);
@@ -193,7 +190,8 @@ void ShopScene::Update(const double& dt)
 		{
 
 			_soundBuy.play();
-				_soundBuy.setVolume(sfxVolume);
+			_soundBuy.setVolume(Audio::sfxVolume);
+
 
 			SaveLoad::playerDamage = 2;
 			SaveLoad::coins = SaveLoad::coins - 250;
@@ -209,7 +207,7 @@ void ShopScene::Update(const double& dt)
 		{
 
 			_soundBuy.play();
-			_soundBuy.setVolume(sfxVolume);
+			_soundBuy.setVolume(Audio::sfxVolume);
 
 			SaveLoad::playerMaxHealth = 10;
 			SaveLoad::health = 10;
@@ -226,7 +224,7 @@ void ShopScene::Update(const double& dt)
 		if (SaveLoad::coins >= 25)
 		{
 			_soundBuy.play();
-				_soundBuy.setVolume(sfxVolume);
+				_soundBuy.setVolume(Audio::sfxVolume);
 
 			SaveLoad::hams++;
 
@@ -243,7 +241,7 @@ void ShopScene::Update(const double& dt)
 		{
 
 			_soundBuy.play();
-				_soundBuy.setVolume(sfxVolume);
+				_soundBuy.setVolume(Audio::sfxVolume);
 
 			SaveLoad::arrows++;
 

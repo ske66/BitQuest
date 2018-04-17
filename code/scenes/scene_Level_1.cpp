@@ -3,6 +3,7 @@
 #include "../code/Prefabs.h"
 #include "../code/components/cmp_btn.h"
 #include "../code/SaveLoad.h"
+#include "../code/Audio.h"
 #include <levelsystem.h>
 #include <iostream>
 #include <string>
@@ -22,12 +23,14 @@ Vector2f view_center;
 
 void Level1Scene::Load() {
 
+	Audio::LoadAudio();
+
 	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
-	_musicLevel1 = Resources::get<Music>("Level_music.wav");
+	_musicLevel1 = Resources::get<Music>("Level_music.ogg");
 	_musicLevel1->play();
 	_musicLevel1->setLoop(true);
-	_musicLevel1->setVolume(musicVolume);
+	_musicLevel1->setVolume(Audio::musicVolume);
 
 	TilePhysics();
 
@@ -35,11 +38,9 @@ void Level1Scene::Load() {
 
 	player = makePlayer(Vector2f(SaveLoad::positionX, SaveLoad::positionY));
 
-
 	view_center = player->getPosition();
 
 	makeChests();
-
 	
 	gavin = makeGavin();
 

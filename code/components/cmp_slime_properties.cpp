@@ -4,6 +4,7 @@
 #include <ecm.h>
 #include <SFML/Audio.hpp>
 #include "../GameState.h"
+#include "../code/Audio.h"
 #include <iostream>
 
 using namespace std;
@@ -21,12 +22,13 @@ void SlimePropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
+		Audio::LoadAudio();
 
 		_bufferHit = *(Resources::get<SoundBuffer>("Slime_Sounds/Slime_Hit.wav"));
 		_soundHit.setBuffer(_bufferHit);
 
 		_soundHit.play();
-		_soundHit.setVolume(sfxVolume);
+		_soundHit.setVolume(Audio::sfxVolume);
 
 		immortal = true;
 		this->_health = _health - h;

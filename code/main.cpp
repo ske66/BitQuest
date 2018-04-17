@@ -10,6 +10,7 @@
 #include "scenes\Scene_Game_Over.h"
 #include "scenes\scene_Shop.h"
 #include "scenes\scene_Boss_Battle.h"
+#include "Audio.h"
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML\Graphics.hpp>
 #include <fstream>
@@ -37,6 +38,8 @@ int main() {
 
 	ifstream Graphics("res/savestates/Graphics.txt");
 	(Graphics >> ResolutionX >> ResolutionY >> FPS);
+
+	Audio::ResetAudio();
 
 	Engine::Start(game_width, game_heigth, "Bitquest!", &menu, frameRate);
 }

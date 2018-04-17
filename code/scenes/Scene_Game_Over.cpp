@@ -6,6 +6,7 @@
 #include "engine.h"
 #include "../code/SaveLoad.h"
 #include "levelsystem.h"
+#include "../code/Audio.h"
 #include <SFML\Graphics.hpp>
 #include <iostream>
 
@@ -18,6 +19,15 @@ static shared_ptr<Entity> btnRetry;
 void GameOverScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/DeadBackground.txt", 240.f);
+
+	Audio::LoadAudio();
+
+	//Music
+	_musicDeath= Resources::get<Music>("Death_Music.ogg");
+	_musicDeath->play();
+	_musicDeath->setLoop(true);
+	_musicDeath->setVolume(Audio::musicVolume);
+
 
 	{
 		auto txtDeath = makeEntity();
@@ -45,6 +55,9 @@ void GameOverScene::Load()
 
 void GameOverScene::UnLoad()
 {
+	_musicDeath->stop();
+	_musicDeath.reset();
+
 	ls::unload();
 	Scene::UnLoad();
 }

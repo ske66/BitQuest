@@ -6,6 +6,7 @@
 #include "../code/Prefabs.h"
 #include "SFML\Graphics.hpp"
 #include "../GameState.h"
+#include "../code/Audio.h"
 #include "levelsystem.h"
 
 using namespace std;
@@ -23,13 +24,15 @@ static shared_ptr<Entity> btnSFXHigh;
 void SettingsAudioScene::Load()
 {
 
+	Audio::LoadAudio();
+
 	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
 	//Music
-	_musicMenu = Resources::get<Music>("Menu_Music.wav");
+	_musicMenu = Resources::get<Music>("Menu_Music.ogg");
 	_musicMenu->play();
 	_musicMenu->setLoop(true);
-	_musicMenu->setVolume(musicVolume);
+	_musicMenu->setVolume(Audio::musicVolume);
 
 
 	{
@@ -51,10 +54,10 @@ void SettingsAudioScene::Load()
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtMusic->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 250.f));
 
-		btnMusicLow = makeButton("Low", Vector2f(150, 60));
+		btnMusicLow = makeButton("Off", Vector2f(150, 60));
 		btnMusicLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 250.f));
 
-		btnMusicMed = makeButton("Medium", Vector2f(150, 60));
+		btnMusicMed = makeButton("Low", Vector2f(150, 60));
 		btnMusicMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 250.f));
 
 		btnMusicHigh = makeButton("High", Vector2f(150, 60));
@@ -71,10 +74,10 @@ void SettingsAudioScene::Load()
 		t->getText().setOrigin(0, t->getText().getGlobalBounds().height / 2);
 		txtSFX->setPosition(Vector2f(Engine::GetWindow().getSize().x / 6, 450.f));
 
-		btnSFXLow = makeButton("Low", Vector2f(150, 60));
+		btnSFXLow = makeButton("Off", Vector2f(150, 60));
 		btnSFXLow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2, 450.f));
 
-		btnSFXMed = makeButton("Medium", Vector2f(150, 60));
+		btnSFXMed = makeButton("Low", Vector2f(150, 60));
 		btnSFXMed->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 230, 450.f));
 
 		btnSFXHigh = makeButton("High", Vector2f(150, 60));
@@ -110,38 +113,41 @@ void SettingsAudioScene::Update(const double& dt)
 
 	if (btnMusicLow->get_components<BtnComponent>()[0]->isSelected())
 	{
-		musicVolume = 33;
+
+		Audio::musicVolume = 0;
 
 		btnMusicLow->get_components<BtnComponent>()[0]->setHighlighted(true);
 	}
 
 	if (btnMusicMed->get_components<BtnComponent>()[0]->isSelected())
 	{
-		musicVolume = 66;
+		Audio::musicVolume = 50;
 	}
 
 	if (btnMusicHigh->get_components<BtnComponent>()[0]->isSelected())
 	{
-		musicVolume = 100;
+		Audio::musicVolume = 100;
 	}
 
 	if (btnSFXLow->get_components<BtnComponent>()[0]->isSelected())
 	{
-		sfxVolume = 33;
+		Audio::sfxVolume = 0;
 	}
 
 	if (btnSFXMed->get_components<BtnComponent>()[0]->isSelected())
 	{
-		sfxVolume = 66;
+		Audio::sfxVolume = 50;
 	}
 
 	if (btnSFXHigh->get_components<BtnComponent>()[0]->isSelected())
 	{
-		sfxVolume = 100;
+		Audio::sfxVolume = 100;
 	}
 
 	if (btnDone->get_components<BtnComponent>()[0]->isSelected())
 	{
+		Audio::SaveAudio;
+
 		Engine::ChangeScene(&settings);
 	}
 

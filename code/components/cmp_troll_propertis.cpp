@@ -3,6 +3,7 @@
 #include "cmp_player_controller.h"
 #include <iostream>
 #include "../code/GameState.h"
+#include "../code/Audio.h"
 
 using namespace sf;
 using namespace std;
@@ -20,12 +21,13 @@ void TrollPropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
-
+		Audio::LoadAudio();
+		
 		_bufferHit = *(Resources::get<SoundBuffer>("Troll_Sounds/Troll_Hit.wav"));
 		_soundHit.setBuffer(_bufferHit);
 
 		_soundHit.play();
-		_soundHit.setVolume(sfxVolume);
+		_soundHit.setVolume(Audio::sfxVolume);
 
 		std::cout << _health << std::endl;
 		immortal = true;

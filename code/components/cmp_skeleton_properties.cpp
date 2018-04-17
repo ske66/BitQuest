@@ -2,6 +2,7 @@
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
 #include "../code/GameState.h"
+#include "../code/Audio.h"
 #include <iostream>
 
 using namespace std;
@@ -20,12 +21,13 @@ void SkeletonPropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
+		Audio::LoadAudio();
 
 		_bufferHit = *(Resources::get<SoundBuffer>("Skeleton_Sounds/Skeleton_Hit.wav"));
 		_soundHit.setBuffer(_bufferHit);
 
 		_soundHit.play();
-		_soundHit.setVolume(sfxVolume);
+		_soundHit.setVolume(Audio::sfxVolume);
 
 		if (_player->getPosition().x < _parent->getPosition().x)
 		{

@@ -26,6 +26,3 @@ static bool usingKeyboard = true;
 static uint16_t game_width = 1600;
 static uint16_t game_heigth = 900;
 static uint16_t frameRate = 60;
-
-static uint16_t musicVolume = 80;
-static uint16_t sfxVolume = 100;

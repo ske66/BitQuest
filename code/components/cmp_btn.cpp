@@ -1,5 +1,6 @@
 #include "cmp_btn.h"
 #include "engine.h"
+#include "../code/Audio.h"
 #include <SFML/Window/Mouse.hpp>
 
 using namespace std;
@@ -9,6 +10,8 @@ BtnComponent::BtnComponent(Entity* p, shared_ptr<ShapeComponent> s, shared_ptr<T
 	: _shapeCmp(s), _textCmp(t), _underLine(u), Component(p)
 {
 		setHighlighted(false, true);
+
+		Audio::LoadAudio();
 }
 
 void BtnComponent::update(double dt)
@@ -38,10 +41,11 @@ void BtnComponent::setHighlighted(bool h, bool isClicked)
 			_textCmp->getText().setFillColor(Color(240, 178, 0));
 			_underLine->getShape().setFillColor(Color(240, 178, 0));
 
-			_bufferClick = *(Resources::get<SoundBuffer>("Game_Sounds/Click.wav"));
+			_bufferClick = *(Resources::get<SoundBuffer>("Game_Sounds/Click.ogg"));
 			_soundClick.setBuffer(_bufferClick);
 
 			_soundClick.play();
+			_soundClick.setVolume(Audio::sfxVolume);
 		}
 		else
 		{
