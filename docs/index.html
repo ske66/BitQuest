@@ -6,7 +6,264 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Bitquest!</title>
         <meta name="description" content="A 2D adventure game!">
-        <link rel="stylesheet" href="style.css">
+        
+		
+		<style>
+		@font-face{font-family: "Wonder"; 
+    src: url(fonts/Wonder.ttf);
+}
+
+body
+{
+    margin 0;
+    background: black;
+}
+
+.background_image
+{
+    position:absolute;
+    width:100%;
+    height:200%;
+    background-image:url(images/Background-Image.png);
+    background-size: cover;
+}
+
+.logo-container
+{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    width: 30%;
+}
+
+.torch1
+{    
+    margin-left: 25%;
+    margin-top: 12%;
+    
+    width: 120px;
+    height: 120px;
+    background-image: url(images/Torch.png);
+    
+    -webkit-animation: play .8s steps(8) infinite;
+    -moz-animation: play .8s steps(8) infinite;
+    -ms-animation: play .8s steps(8) infinite;
+    -o-animation: play .8s steps(8) infinite;
+    animation: play .8s steps(8) infinite;
+}
+
+.torch2
+{    
+    margin-left: 75%;
+    margin-top: -6%;
+    
+    width: 120px;
+    height: 120px;
+    background-image: url(images/Torch.png);
+    
+    -webkit-animation: play .8s steps(8) infinite;
+    -moz-animation: play .8s steps(8) infinite;
+    -ms-animation: play .8s steps(8) infinite;
+    -o-animation: play .8s steps(8) infinite;
+    animation: play .8s steps(8) infinite;
+}
+
+@-webkit-keyframes play {
+    from { background-position: 0px;}
+    to { background-position: -960px;}
+}
+
+@-moz-keyframes play {
+   from { background-position:    0px; }
+     to { background-position: -960px; }
+}
+
+@-ms-keyframes play {
+   from { background-position:    0px; }
+     to { background-position: -960px; }
+}
+
+@-o-keyframes play {
+   from { background-position:    0px; }
+     to { background-position: -960px; }
+}
+
+@keyframes play {
+   from { background-position:    0px; }
+     to { background-position: -960px; }
+}
+
+
+.bob
+{
+    margin-left: 45%;
+    margin-top: -1%;
+    width: 240px;
+    height: 240px;
+    background-image: url("images/Bob_spritesheet.png");
+    
+    -webkit-animation: playBob 1s steps(8) infinite;
+    -moz-animation: playBob 1s steps(8) infinite;
+    -ms-animation: playBob 1s steps(8) infinite;
+    -o-animation: playBob 1s steps(8) infinite;
+    animation: playBob 1s steps(8) infinite;
+}
+
+@-webkit-keyframes playBob {
+    from { background-position: 0px;}
+    to { background-position: -1920px;}
+}
+
+@-moz-keyframes playBob {
+   from { background-position:    0px; }
+     to { background-position: -1920px; }
+}
+
+@-ms-keyframes playBob {
+   from { background-position:    0px; }
+     to { background-position: -1920px; }
+}
+
+@-o-keyframes playBob {
+   from { background-position:    0px; }
+     to { background-position: -1920px; }
+}
+
+@keyframes playBob {
+   from { background-position:    0px; }
+     to { background-position: -1920px; }
+}
+
+
+.content
+{
+    position:absolute;
+    width:100%;
+    height: 100%;
+    top:200%;
+    background-image: linear-gradient(rgba(0,0,0,1),rgba(0,0,00,0)),url(images/Background-Wall.png);
+    background-repeat: repeat-y;
+   background-size: cover;
+}
+
+.details-container
+{
+    color: #ffe001;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: -25%;
+
+}
+
+.details-container h1
+{
+    font-family: "Wonder";
+    color: #ffe001;
+    font-size: 32pt;
+    text-align: center;
+}
+
+.info
+{
+    margin-top: 80px;
+    text-align: center;
+}
+
+.details-container p
+{
+    font-size: 16pt;
+    font-family: Sans-Serif;
+    color: white;
+}
+
+.Button-container
+{
+    padding-top: 80px;
+    text-align: center;
+    padding-bottom: 80px;
+}
+
+.btn {
+  background-color: #ffe001;
+  -webkit-border-radius: 2;
+  -moz-border-radius: 2;
+  border-radius: 2px;
+  font-family: Arial;
+  font-size: 20px;
+  padding: 10px 20px;
+font-weight: 600;
+    
+}
+
+.btn:hover {
+  background: #f77823;
+  text-decoration: none;
+}
+
+.Developers-container
+{
+    margin-top: 5%;
+    width: 100%;
+    height: auto;
+}
+
+.Developers-container h1
+{
+    font-family: "Wonder";
+    color: #ffe001;
+    font-size: 32pt;
+    text-align: center;
+    
+}
+
+.img-container
+{
+    margin-top: 6%;
+    text-align: center;
+}
+
+.Dev
+{
+
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left:150px;
+    padding-right:150px;
+    height:auto;
+}
+
+.Name-Container
+{
+    text-align: center;
+}
+
+.name
+{
+    font-family: "Wonder";
+    color: #ffe001;
+    font-size: 14pt;    
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left:175px;
+    padding-right:175px;
+    height:auto;
+}
+
+
+
+		
+		
+		
+		
+		
+		
+		
+		</style>
+		
+		
+		
     </head>
     
     <body>
@@ -67,5 +324,6 @@
             
             </div>
     </body>
-    
+ 
+	
 </html>
