@@ -3,9 +3,16 @@
 #include "components\cmp_physics.h"
 #include "components\cmp_animation.h"
 #include "Prefabs.h"
+#include "GameState.h"
+#include "Engine.h"
+
 
 double totalTimeS = 2;
 double attackDelayS = 2;
+
+
+using namespace sf;
+using namespace std;
 
 void  Slime_IdleState::execute(Entity *owner, double dt) noexcept
 {
@@ -147,11 +154,20 @@ void  Slime_DeadState::execute(Entity *owner, double dt) noexcept
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	if (me_anim->currentimage.x == 7)
 	{
-		me_anim->currentimage.x = 0;
-		me_anim->pause = true;
 
-		makeCoin();
-		owner->scene->ents.find("coin")[0]->setPosition(owner->getPosition());
+
+		_bufferDeath = *(Resources::get<SoundBuffer>("Slime_Sounds/Slime_Death.wav"));
+		_soundDeath.setBuffer(_bufferDeath);
+
+		_soundDeath.play();
+		_soundDeath.setVolume(sfxVolume);
+
+		me_anim->currentimage.x = 0;
+		makeCoin(owner->getPosition());
+		makeCoin(owner->getPosition());
+		makeCoin(owner->getPosition());
+		makeCoin(owner->getPosition());
+		me_anim->pause = true;
 		owner->setForDelete();
 	}
 }

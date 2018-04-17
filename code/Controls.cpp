@@ -10,7 +10,7 @@ map<std::string, Keyboard::Key> Controls::_keyboardLookupTable;
 void Controls::initialise()
 {
 		//If using keyboard is being used
-		Controls::SetKeyboardButton("Action", Keyboard::Return);
+		Controls::SetKeyboardButton("Action", Keyboard::E);
 		Controls::SetKeyboardButton("MoveLeft", Keyboard::A);
 		Controls::SetKeyboardButton("MoveRight", Keyboard::D);
 		Controls::SetKeyboardButton("Jump", Keyboard::Space);
@@ -18,6 +18,7 @@ void Controls::initialise()
 		Controls::SetKeyboardButton("Block", Keyboard::K);
 		Controls::SetKeyboardButton("Sword", Keyboard::Num1);
 		Controls::SetKeyboardButton("Bow", Keyboard::Num2);
+		Controls::SetKeyboardButton("Ham", Keyboard::H);
 }
 
 Keyboard::Key Controls::GetKeyboardButton(string action)

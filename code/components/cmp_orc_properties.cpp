@@ -90,53 +90,24 @@ void OrcPropertiesComponent::checkContact(double dt)
 }
 sf::IntRect OrcPropertiesComponent::checkHealth()
 {
-	if (_health == 10)
+	if (_health == 4)
 	{
 		rect = sf::IntRect(0, 0, 100, 5);
 	}
 
-	if (_health == 9)
-	{
-		sf::IntRect(0, 0, 90, 5);
-
-	}
-	if (_health == 8)
-	{
-		rect = sf::IntRect(0, 0, 80, 5);
-
-	}
-
-	if (_health == 7)
-	{
-		rect = sf::IntRect(0, 0, 70, 5);
-	}
-	if (_health == 6)
-	{
-		rect = sf::IntRect(0, 0, 60, 5);
-	}
-
-	if (_health == 5)
-	{
-		rect = sf::IntRect(0, 0, 50, 5);
-	}
-	if (_health == 4)
-	{
-		rect = sf::IntRect(0, 0, 40, 5);
-	}
-
 	if (_health == 3)
 	{
-		rect = sf::IntRect(0, 0, 30, 5);
+		rect = sf::IntRect(0, 0, 75, 5);
 	}
 
 	if (_health == 2)
 	{
-		rect = sf::IntRect(0, 0, 20, 5);
+		rect = sf::IntRect(0, 0, 50, 5);
 	}
 
 	if (_health == 1)
 	{
-		rect = sf::IntRect(0, 0, 10, 5);
+		rect = sf::IntRect(0, 0, 25, 5);
 	}
 	if (_health == 0)
 	{

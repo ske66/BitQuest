@@ -22,6 +22,7 @@
 #include "components\cmp_orc_properties.h"
 #include "components\cmp_troll_properties.h"
 #include "components\cmp_skeleton_properties.h"
+#include "components\cmp_chest.h"
 
 #include "components\cmp_gavin_properties.h"
 #include "components\cmp_bullet.h"
@@ -33,6 +34,7 @@
 #include "components\cmp_animation.h"
 #include "components\cmp_player_controller.h"
 #include "components\cmp_UI.h"
+#include "components\cmp_shop.h"
 
 using namespace std;
 using namespace sf;
@@ -191,7 +193,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		orc->setPosition(ls::getTilePosition(or));
 		orc->addTag("orc");
 
-		auto p = orc->addComponent<PhysicsComponent>(true, Vector2f(80, 160));
+		auto p = orc->addComponent<PhysicsComponent>(true, Vector2f(100, 160));
 		auto sm = orc->addComponent<StateMachineComponent>();
 		p->getFixture()->GetBody()->SetBullet(true);
 
@@ -240,7 +242,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 		sm->changeState("idle");
 
 
-		troll->addComponent<PhysicsComponent>(true, Vector2f(100, 360));
+		troll->addComponent<PhysicsComponent>(true, Vector2f(160, 340));
 		auto a = troll->addComponent<AnimationComponent>();
 		a->Animation("Spritesheets/Troll_spritesheet.png", Vector2f(120, 240), IntRect(0, 0, 360, 360), Vector2u(8, 8));
 		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
@@ -295,6 +297,7 @@ vector<shared_ptr<Entity>> makeEnemies()
 			filter.categoryBits = 1;
 			c->getFixture()->SetFilterData(filter);
 		}
+
 
 
 		enemies.push_back(skeleton);
@@ -388,6 +391,7 @@ vector<shared_ptr<Entity>> makeShops()
 		auto t = shop->addComponent<TextComponent>("Press 'E' to enter shop!");
 		t->getText().setOrigin(150, 50);
 
+		shop->addComponent<ShopComponent>();
 		Mshops.push_back(shop);
 	}
 	return Mshops;
@@ -426,10 +430,14 @@ vector<shared_ptr<Entity>> makeChests()
 		chest->setPosition(ls::getTilePosition(c));
 		chest->addTag("chest");
 
+		auto t = chest->addComponent<TextComponent>("press E to open chest");
+		t->getText().setOrigin(160, 60);
 
 		auto s = chest->addComponent <SpriteComponent>();
 		s->Sprite("spritesheets/Chest.png", IntRect(0, 0, 120, 120));
 		s->getSprite().setOrigin(0, -140);
+
+		auto a = chest->addComponent<ChestComponent>();
 
 		Mchests.push_back(chest);
 	}
@@ -453,19 +461,21 @@ shared_ptr<Entity> makeEventBox(Vector2f bounds)
 }
 
 
-shared_ptr<Entity> makeCoin()
+shared_ptr<Entity> makeCoin(Vector2f pos)
 {
+
 		auto coin = Engine::GetActiveScene()->makeEntity();
 		coin->addTag("coin");
 
-	//	coin->setPosition(coin->scene->ents.find("troll")[0]->getPosition());
+		coin->setPosition(pos);
 
-		coin->addComponent<PhysicsComponent>(false, Vector2f(30, 15));
+		coin->addComponent<PhysicsComponent>(true, Vector2f(30, 60));
 		auto a = coin->addComponent<ObjectAnimComponent>();
 		a->Animation("spritesheets/Coin_spritesheet.png", Vector2f(0, -60), IntRect(0, 0, 60, 60), Vector2u(6, 1));
-		a->getSprite().setOrigin(0, 0);
+		a->getSprite().setOrigin(a->getSprite().getGlobalBounds().width / 2, a->getSprite().getGlobalBounds().height / 2);
 
 		return coin;
+
 }
 	
 
@@ -550,7 +560,7 @@ shared_ptr<Entity>addUI(string message)
 
 	auto cutsceneBar = e->addComponent<ShapeComponent>();
 	cutsceneBar->setShape<RectangleShape>(Vector2f(game_width, 150));
-	cutsceneBar->getShape().setFillColor(Color::Black);
+	cutsceneBar->getShape().setFillColor(Color::Transparent);
 	cutsceneBar->getShape().setOrigin(0, 0);
 
 
@@ -627,17 +637,17 @@ shared_ptr<Entity>slimeBlast()
 
 	if (gb->scene->ents.find("player")[0]->getPosition().x < gb->scene->ents.find("slime")[0]->getPosition().x)
 	{
-		a->Sprite("magic.png", IntRect(40, 0, -40, 40));
+		a->Sprite("SlimeBall.png", IntRect(80, 0, -80, 80));
 		gb->setPosition(Vector2f(gb->scene->ents.find("slime")[0]->getPosition().x - 50, gb->scene->ents.find("slime")[0]->getPosition().y + 40));
 		gb->setRotation(180.f);
 	}
 	else
 	{
 		gb->setPosition(Vector2f(gb->scene->ents.find("slime")[0]->getPosition().x + 50, gb->scene->ents.find("slime")[0]->getPosition().y + 40));
-		a->Sprite("magic.png", IntRect(0, 0, 40, 40));
+		a->Sprite("SlimeBall.png", IntRect(0, 0, 80, 80));
 	}
 
-	gb->addComponent<PhysicsComponent>(true, Vector2f(10, 40));
+	gb->addComponent<PhysicsComponent>(true, Vector2f(80, 80));
 	gb->addComponent<SlimeBulletComponent>();
 	auto p = gb->get_components<PhysicsComponent>()[0];
 
@@ -657,14 +667,14 @@ shared_ptr<Entity>ghostBlast()
 
 	if (gb->scene->ents.find("player")[0]->getPosition().x < gb->scene->ents.find("ghost")[0]->getPosition().x)
 	{
-		a->Sprite("magic.png", IntRect(40, 0, -40, 40));
+		a->Sprite("Ghostmagic.png", IntRect(40, 0, -40, 40));
 		gb->setPosition(Vector2f(gb->scene->ents.find("ghost")[0]->getPosition().x - 50, gb->scene->ents.find("ghost")[0]->getPosition().y - 40));
 		gb->setRotation(180.f);
 	}
 	else
 	{
 		gb->setPosition(Vector2f(gb->scene->ents.find("ghost")[0]->getPosition().x + 50, gb->scene->ents.find("ghost")[0]->getPosition().y - 40));
-		a->Sprite("magic.png", IntRect(0, 0, 40, 40));
+		a->Sprite("Ghostmagic.png", IntRect(0, 0, 40, 40));
 	}
 
 	gb->addComponent<PhysicsComponent>(true, Vector2f(10, 40));

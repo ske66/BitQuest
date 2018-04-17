@@ -1,11 +1,11 @@
 #include "troll_states.h"
 #include "components\cmp_troll_properties.h"
-#include "components\cmp_physics.h"
 #include "components\cmp_animation.h"
-#include "components\cmp_hurt.h"
 #include "Prefabs.h"
+#include "components\cmp_physics.h"
 
-double totalTimeT = 2;
+
+double totalTimeT = 3;
 double attackDelayT = 3;
 
 void  Troll_IdleState::execute(Entity *owner, double dt) noexcept
@@ -103,7 +103,7 @@ void  Troll_AttackState::execute(Entity *owner, double dt) noexcept
 
 	if (owner->get_components<TrollPropertiesComponent>()[0]->getHealth() <= 0)
 	{
-		owner->get_components<PhysicsComponent>()[0]->setVelocity(sf::Vector2f(0, 0));
+		auto p = owner->get_components<PhysicsComponent>()[0];//->setVelocity(sf::Vector2f(0, 0));
 		owner->get_components<AnimationComponent>()[0]->currentimage.x = 0;
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
@@ -114,12 +114,10 @@ void  Troll_AttackState::execute(Entity *owner, double dt) noexcept
 void  Troll_DeadState::execute(Entity *owner, double dt) noexcept
 {
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
-	if (me_anim->currentimage.x == 7)
-	{
-		me_anim->currentimage.x = 0;
-		me_anim->pause = true;
-		makeCoin();
-		owner->scene->ents.find("coin")[0]->setPosition(owner->getPosition());
-		owner->setForDelete();
-	}
+	me_anim->currentimage.x = 3;
+	auto p = owner->get_components<PhysicsComponent>()[0];
+	
+	me_anim->pause = true;
+	owner->setForDelete();
+	
 }

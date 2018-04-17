@@ -5,6 +5,7 @@
 #include "../components/cmp_btn.h"
 #include "../GameState.h"
 #include "../code/Prefabs.h"
+#include "../code/SaveLoad.h"
 #include "engine.h"
 #include "levelsystem.h"
 #include <SFML\Graphics.hpp>
@@ -21,14 +22,54 @@ static shared_ptr<Entity> btnArrow;
 static shared_ptr<Entity> btnBack;
 
 
+
+
 void ShopScene::Load()
 {
 	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
+
+	SaveLoad::LoadGame;
 
 	//Music
 	_musicShop = Resources::get<Music>("Shop_Music.wav");
 	_musicShop->play();
 	_musicShop->setLoop(true);
+
+
+	auto coin= makeEntity();
+	auto c = coin->addComponent<SpriteComponent>();
+	c->Sprite("Spritesheets/Coin_spritesheet.png", IntRect(0, 0, 60, 60));
+	c->getSprite().setOrigin(c->getSprite().getLocalBounds().width / 2, c->getSprite().getLocalBounds().height / 2);
+	coin->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 650 ,30));
+
+	_txtCoin = makeEntity();
+	auto t = _txtCoin->addComponent<TextComponent>("0");
+	t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
+	_txtCoin->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 720, 30));
+
+
+	auto arrow = makeEntity();
+	auto a = arrow->addComponent<SpriteComponent>();
+	a->Sprite("arrowUI.png", IntRect(0, 0, 60, 60));
+	a->getSprite().setOrigin(c->getSprite().getLocalBounds().width / 2, c->getSprite().getLocalBounds().height / 2);
+	arrow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 650, 100));
+
+	_txtArrow = makeEntity();
+	auto ta = _txtArrow->addComponent<TextComponent>("0");
+	ta->getText().setOrigin(ta->getText().getGlobalBounds().width / 2, ta->getText().getGlobalBounds().height / 2);
+	_txtArrow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 720, 100));
+
+
+	auto ham = makeEntity();
+	auto h = ham->addComponent<SpriteComponent>();
+	h->Sprite("hamUI.png", IntRect(0, 0, 60, 60));
+	h->getSprite().setOrigin(h->getSprite().getLocalBounds().width / 2, h->getSprite().getLocalBounds().height / 2);
+	ham->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 650, 170));
+
+	 _txtHam = makeEntity();
+	auto th = _txtHam->addComponent<TextComponent>("0");
+	th->getText().setOrigin(th->getText().getGlobalBounds().width / 2, th->getText().getGlobalBounds().height / 2);
+	_txtHam->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2 + 720, 170));
 
 
 	{
@@ -42,11 +83,6 @@ void ShopScene::Load()
 		btnBack->setPosition(Vector2f(Engine::GetWindow().getSize().x / 7, 100.f));
 	}
 
-	{
-		auto topBar = RectangleShape({ (float)Engine::GetWindow().getSize().x, 80.f });
-		topBar.setFillColor(Color::Black);
-		topBar.setOrigin(0, 0);
-	}
 
 	{
 		auto Damage = makeEntity();
@@ -59,11 +95,11 @@ void ShopScene::Load()
 		auto dt = txtDamage->addComponent<TextComponent>("250 Gold");
 		dt->getText().setFillColor(Color(240, 178, 0));
 		dt->getText().setOrigin(dt->getText().getGlobalBounds().width / 2, dt->getText().getGlobalBounds().height / 2);
-		txtDamage->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 0.55));
+		txtDamage->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 0.5));
 
 
 		btnDamage = makeButton("Buy Upgrade!", Vector2f(230, 60));
-		btnDamage->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 1.5));
+		btnDamage->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5, Engine::GetWindow().getSize().y / 2 * 1.6));
 	}
 
 	{
@@ -77,10 +113,10 @@ void ShopScene::Load()
 		auto dt = txtHealth->addComponent<TextComponent>("250 Gold");
 		dt->getText().setFillColor(Color(240, 178, 0));
 		dt->getText().setOrigin(dt->getText().getGlobalBounds().width / 2, dt->getText().getGlobalBounds().height / 2);
-		txtHealth->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5*2, Engine::GetWindow().getSize().y / 2 * 0.55));
+		txtHealth->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5*2, Engine::GetWindow().getSize().y / 2 * 0.5));
 
 		btnHealth = makeButton("Buy Upgrade!", Vector2f(230, 60));
-		btnHealth->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 2, Engine::GetWindow().getSize().y / 2 * 1.5));
+		btnHealth->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 2, Engine::GetWindow().getSize().y / 2 * 1.6));
 	}
 
 	{
@@ -94,10 +130,10 @@ void ShopScene::Load()
 		auto dt = txtHam->addComponent<TextComponent>("25 Gold");
 		dt->getText().setFillColor(Color(240, 178, 0));
 		dt->getText().setOrigin(dt->getText().getGlobalBounds().width / 2, dt->getText().getGlobalBounds().height / 2);
-		txtHam->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5*3, Engine::GetWindow().getSize().y / 2 * 0.55));
+		txtHam->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5*3, Engine::GetWindow().getSize().y / 2 * 0.5));
 
 		btnHam = makeButton("Buy Ham!", Vector2f(230, 60));
-		btnHam->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 3, Engine::GetWindow().getSize().y / 2 * 1.5));
+		btnHam->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 3, Engine::GetWindow().getSize().y / 2 * 1.6));
 	}
 
 	{
@@ -111,10 +147,10 @@ void ShopScene::Load()
 		auto dt = txtArrow->addComponent<TextComponent>("5 Gold");
 		dt->getText().setFillColor(Color(240, 178, 0));
 		dt->getText().setOrigin(dt->getText().getGlobalBounds().width / 2, dt->getText().getGlobalBounds().height / 2);
-		txtArrow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5*4, Engine::GetWindow().getSize().y / 2 * 0.55));
+		txtArrow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5*4, Engine::GetWindow().getSize().y / 2 * 0.5));
 
 		btnArrow = makeButton("Buy Arrow!", Vector2f(230, 60));
-		btnArrow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 4, Engine::GetWindow().getSize().y / 2 * 1.5));
+		btnArrow->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 4, Engine::GetWindow().getSize().y / 2 * 1.6));
 	}
 
 
@@ -135,6 +171,67 @@ void ShopScene::UnLoad() {
 
 void ShopScene::Update(const double& dt)
 {
+
+	_txtCoin->get_components<TextComponent>()[0]->getText().setString(to_string(SaveLoad::coins));
+	_txtArrow->get_components<TextComponent>()[0]->getText().setString(to_string(SaveLoad::arrows));
+	_txtHam->get_components<TextComponent>()[0]->getText().setString(to_string(SaveLoad::hams));
+
+
+	if (btnDamage->get_components<BtnComponent>()[0]->isSelected())
+	{
+		if (SaveLoad::coins >= 250)
+		{
+			SaveLoad::playerDamage = 2;
+			SaveLoad::coins = SaveLoad::coins - 250;
+		}
+	}
+
+	if (btnHealth->get_components<BtnComponent>()[0]->isSelected())
+	{
+		if (SaveLoad::coins >= 250)
+		{
+			SaveLoad::playerMaxHealth = 10;
+			SaveLoad::health = 10;
+
+			SaveLoad::coins = SaveLoad::coins - 250;
+		}
+	}
+
+	if (btnHam->get_components<BtnComponent>()[0]->isSelected())
+	{
+
+		sf::sleep(milliseconds(100));
+
+		if (SaveLoad::coins >= 25)
+		{
+			SaveLoad::hams++;
+
+			SaveLoad::coins = SaveLoad::coins - 25;
+		}
+	}
+
+	if (btnArrow->get_components<BtnComponent>()[0]->isSelected())
+	{
+
+		sf::sleep(milliseconds(100));
+
+		if (SaveLoad::coins >= 5)
+		{
+			SaveLoad::arrows++;
+
+			SaveLoad::coins = SaveLoad::coins - 5;
+		}
+	}
+
+	if (btnBack->get_components<BtnComponent>()[0]->isSelected())
+	{
+		SaveLoad::SaveGame;
+
+		SaveLoad::LoadGame;
+		Engine::ChangeScene(&level1);
+	}
+
+
 	Scene::Update(dt);
 }
 

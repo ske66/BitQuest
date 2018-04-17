@@ -9,7 +9,7 @@ TrollPropertiesComponent::TrollPropertiesComponent(Entity* p)
 {
 	_player = _parent->scene->ents.find("player")[0];
 	_trolls = _parent->scene->ents.find("troll");
-}
+};
 
 
 void TrollPropertiesComponent::takeDamage(double h)

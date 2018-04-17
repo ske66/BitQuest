@@ -9,13 +9,11 @@ std::shared_ptr<Entity> makeGavin();
 std::shared_ptr<Entity> addUI(std::string message);
 std::shared_ptr<Entity> GavinBlast();
 std::shared_ptr<Entity> makeArrow();
-<<<<<<< HEAD
+
 std::shared_ptr<Entity> slimeBlast();
 std::shared_ptr<Entity> ghostBlast();
 
-=======
-std::shared_ptr<Entity> makeCoin();
->>>>>>> origin/UI-Hotfix
+std::shared_ptr<Entity> makeCoin(sf::Vector2f pos);
 
 std::vector<std::shared_ptr<Entity>> makeEnemies();
 std::vector<std::shared_ptr<Entity>> makeShops();

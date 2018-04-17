@@ -4,6 +4,7 @@
 #include "System_Renderer.h"
 #include "system_resources.h"
 #include "../code/Prefabs.h"
+#include "../code/SaveLoad.h"
 #include "cmp_text.h"
 #include "../code/GameState.h"
 
@@ -87,6 +88,10 @@ void UIComponent::update(double dt)
 
 	_coinTxt->getText().setPosition(
 		coinUI.getPosition().x + 100, coinUI.getPosition().y + 30);
+
+	_coinTxt->getText().setString(to_string(SaveLoad::coins));
+	_arrowTxt->getText().setString(to_string(SaveLoad::arrows));
+	_hamTxt->getText().setString(to_string(SaveLoad::hams));
 
 	_arrowTxt->getText().setPosition(
 		arrowUI.getPosition().x + 100, arrowUI.getPosition().y + 30);

@@ -9,8 +9,8 @@
 class PlayerControlerComponent : public Component
 {
 protected:
-	float _health = 10;
-	int coins = 0;
+	float _health;
+	int coins;
 	double damageDelay = 2;
 	double totalTime = 0 ;
 	sf::SoundBuffer _bufferHit;
@@ -25,7 +25,7 @@ public:
 	bool sword = false;
 	explicit PlayerControlerComponent(Entity* p);
 	double playerDamage;
-	bool immortal = true;
+	bool immortal = false;
 	sf::IntRect checkHealth();
 	PlayerControlerComponent() = delete;
 	double getHealth();

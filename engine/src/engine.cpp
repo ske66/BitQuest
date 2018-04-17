@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "maths.h"
+#include "../code/Controls.h"
 #include "../code/GameState.h"
 #include "system_physics.h"
 #include "system_Renderer.h"
@@ -151,7 +152,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 
 	//FOR WHEN I HAVE CONTROLS WORKING
 
-	//Controls::initialise();
+	Controls::initialise();
 
 	SaveLoad::ResetGame();
 	ChangeScene(scn);
@@ -180,7 +181,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 			}
 		}
 
-		window.clear(Color(90, 73, 67));
+		window.clear(Color::Black);
 		Update();
 		Render(window);
 		window.display();
@@ -213,7 +214,7 @@ void Engine::ChangeScene(Scene* s) {
 
 	if (!s->isLoaded()) {
 		loadingTime = 0;
-		_activeScene->Load();
+		_activeScene->LoadAsync();
 		loading = true;
 	}
 }

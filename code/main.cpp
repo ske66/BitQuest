@@ -9,6 +9,7 @@
 #include "scenes\scene_Tutorial.h"
 #include "scenes\Scene_Game_Over.h"
 #include "scenes\scene_Shop.h"
+#include "scenes\scene_Boss_Battle.h"
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML\Graphics.hpp>
 #include <fstream>
@@ -26,6 +27,7 @@ TutorialScene tutorial;
 Level1Scene level1;
 GameOverScene gameOver;
 ShopScene shop;
+BossBattleScene bossBattle;
 
 int ResolutionX;
 int ResolutionY;

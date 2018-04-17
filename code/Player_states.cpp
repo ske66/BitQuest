@@ -8,6 +8,8 @@
 #include "components\cmp_player_controller.h"
 #include "components\cmp_hurt.h"
 #include "GameState.h"
+#include "SaveLoad.h"
+#include "Controls.h"
 
 using namespace sf;
 using namespace std;
@@ -18,12 +20,12 @@ void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 	auto me = owner->get_components<StateMachineComponent>()[0]; 
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Attack")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Block")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("block");
 	}
@@ -34,24 +36,24 @@ void  Player_IdleState::execute(Entity *owner, double dt) noexcept
 		p->dampen({ 0.7f , 0 });
 	}
 	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("MoveLeft")))
 	{
 		me->changeState("walk_left");
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("MoveRight")))
 	{
 		me->changeState("walk_right");
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Attack")))
 	{
 		me->changeState("Attack");
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Jump")))
 	{
 		me->changeState("jump");
 	}
 
-	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() < 0)
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() <= 0)
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
@@ -63,12 +65,12 @@ void  Player_MoveLeftState::execute(Entity *owner, double dt) noexcept
 	owner->get_components<AnimationComponent>()[0]->faceRight = false;
 
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Block")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("block");
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Attack")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
 	}
@@ -76,14 +78,14 @@ void  Player_MoveLeftState::execute(Entity *owner, double dt) noexcept
 	auto p = owner->get_components<PlayerPhysicsComponent>()[0];
 	
 
-	if (!Keyboard::isKeyPressed(Keyboard::A))
+	if (!Keyboard::isKeyPressed(Controls::GetKeyboardButton("MoveLeft")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("idle");
 	}
 	p->impulse({ -9.0f , 0.0f });
 	p->dampen({ 1.7f , 1.0f });
 	
-	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() <= 0)
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
@@ -95,17 +97,17 @@ void  Player_MoveRightState::execute(Entity *owner, double dt) noexcept
 	owner->get_components<AnimationComponent>()[0]->faceRight = true;
 
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Block")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("block");
 	}
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Attack")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
 	}
 
-	if (!Keyboard::isKeyPressed(Keyboard::D))
+	if (!Keyboard::isKeyPressed(Controls::GetKeyboardButton("MoveRight")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("idle");
 	}
@@ -115,12 +117,12 @@ void  Player_MoveRightState::execute(Entity *owner, double dt) noexcept
 	p->impulse({ 9.0f , 0.0f });
 	p->dampen({ 1.7f , 1.0f });
 	
-	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() == 0)
+	if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() <= 0)
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("dead");
 	}
 	
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Attack")))
 	{
 		owner->get_components<StateMachineComponent>()[0]->changeState("Attack");
 	}
@@ -144,8 +146,13 @@ void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 
 		if (me_anim->attackImgNo >= 6)
 		{
-			cout << "fuck" << endl;
-			makeArrow();
+			
+			if (SaveLoad::arrows > 0)
+			{
+				makeArrow();
+				SaveLoad::arrows--;
+				
+			}
 			me_anim->attackImgNo = 0;
 			me->changeState("idle");
 		}
@@ -181,7 +188,7 @@ void  Player_AttackState::execute(Entity *owner, double dt) noexcept
 				me->changeState("jump");
 			}
 		}
-		if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() < 0)
+		if (owner->get_components<PlayerControlerComponent>()[0]->getHealth() <= 0)
 		{
 			me->changeState("dead");
 		}
@@ -208,7 +215,7 @@ void  Player_BlockState::execute(Entity *owner, double dt) noexcept
 	me_anim->pause = true;
 	owner->get_components<PlayerControlerComponent>()[0]->immortal = true;
 
-	if(!sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if(!sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Block")))
 	{
 		me_anim->pause = false;
 		owner->get_components<StateMachineComponent>()[0]->changeState("idle");

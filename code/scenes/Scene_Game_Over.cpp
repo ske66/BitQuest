@@ -54,7 +54,7 @@ void GameOverScene::Update(const double& dt)
 
 	if (btnRetry->get_components<BtnComponent>()[0]->isSelected())
 	{
-		SaveLoad::LoadGame();
+		SaveLoad::ResetGame();
 		Engine::ChangeScene((Scene*)&level1);
 	}
 

@@ -2,15 +2,23 @@
 #pragma once
 #include <ecm.h>
 #include "engine.h"
+#include <SFML/Audio.hpp>
 
 class SlimePropertiesComponent : public Component
 {
 protected:
-	float _health = 10;
+	float _health = 4;
 	float damageDelay = 0.5;
 	float totalTime = 0;
 
 public:
+
+	sf::SoundBuffer _bufferHit;
+	sf::SoundBuffer _bufferDeath;
+
+	sf::Sound _soundHit;
+	sf::Sound _soundDeath;
+
 	sf::IntRect rect;
 	bool immortal = true;
 	float slimeDamage = 3;

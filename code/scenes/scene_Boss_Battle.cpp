@@ -17,30 +17,28 @@ static shared_ptr<Entity> Save;
 static shared_ptr<Entity> Quit;
 static shared_ptr<Entity> Resume;
 static shared_ptr<Entity> CoinText;
-Vector2f view_center;
+Vector2f view_center2;
 
 
-void Level1Scene::Load() {
+void BossBattleScene::Load() {
 
-	ls::loadLevelFile("res/Tilemaps/TestEnvironment.txt", 240.f);  //the test environment is designed to push the game to it's limit
+	ls::loadLevelFile("res/Tilemaps/BossBattle.txt", 240.f);  //the test environment is designed to push the game to it's limit
 
 	_musicLevel1 = Resources::get<Music>("Level_music.wav");
 	_musicLevel1->play();
 	_musicLevel1->setLoop(true);
-	_musicLevel1->setVolume(0);
+	_musicLevel1->setVolume(musicVolume);
 
 	TilePhysics();
 
 	makeTorches();
 
-	player = makePlayer(Vector2f(SaveLoad::positionX, SaveLoad::positionY));
+	player = makePlayer(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 
-
-	view_center = player->getPosition();
+	view_center2 = player->getPosition();
 
 	makeChests();
 
-	
 	gavin = makeGavin();
 
 	makeEnemies();
@@ -52,7 +50,7 @@ void Level1Scene::Load() {
 	setLoaded(true);
 }
 
-void Level1Scene::UnLoad() {
+void BossBattleScene::UnLoad() {
 	player.reset();
 	_musicLevel1->stop();
 	_musicLevel1.reset();
@@ -61,18 +59,14 @@ void Level1Scene::UnLoad() {
 	Scene::UnLoad();
 }
 
-void Level1Scene::Update(const double& dt) {
-
-	if (ls::getTileAt(player->getPosition()) == ls::END) {
-		Engine::ChangeScene((Scene*)&menu);
-	}
+void BossBattleScene::Update(const double& dt) {
 
 
 	View view(FloatRect(0, 0, Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y));
-	float view_player_distance = sqrt(((player->getPosition().x - view_center.x) * (player->getPosition().x - view_center.x)) + ((player->getPosition().y - view_center.y) * (player->getPosition().y - view_center.y)));
+	float view_player_distance = sqrt(((player->getPosition().x - view_center2.x) * (player->getPosition().x - view_center2.x)) + ((player->getPosition().y - view_center2.y) * (player->getPosition().y - view_center2.y)));
 	if (view_player_distance > 40.f)
-		view_center += (player->getPosition() - view_center) *(float)dt * 4.f;
-	view.setCenter(view_center);
+		view_center2 += (player->getPosition() - view_center2) *(float)dt * 4.f;
+	view.setCenter(view_center2);
 
 	Engine::GetWindow().setView(view);
 
@@ -131,7 +125,7 @@ void Level1Scene::Update(const double& dt) {
 	}
 }
 
-void Level1Scene::Render() {
+void BossBattleScene::Render() {
 	ls::render(Engine::GetWindow());
 	Scene::Render();
 }

@@ -14,7 +14,7 @@ double attackDelayGH = 2;
 double totalTimeGH = 2;
 double deathDelayGH = 5;
 double chaseRangeGH = 1000;
-double attackRangeGH = 700;
+double attackRangeGH = 600;
 
 // Gavin ----------------------------------------------------------------------
 

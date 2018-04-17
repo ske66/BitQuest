@@ -11,6 +11,7 @@ protected:
 
 public:
 
+	sf::IntRect rect;
 	bool immortal = true;
 	float skeletonDamage = 1;
 	std::shared_ptr<Entity> _player;

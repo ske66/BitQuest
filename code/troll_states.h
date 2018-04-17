@@ -1,4 +1,4 @@
-#pragma once
+
 #pragma once
 #include "components\cmp_state_Machine.h"
 
@@ -48,11 +48,7 @@ public:
 
 class Troll_DeadState : public State
 {
-private:
-
 public:
-
-	double attackRange;
 	Troll_DeadState() {}
 
 	void enterState(Entity*) noexcept override {};

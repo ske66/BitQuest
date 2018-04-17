@@ -57,7 +57,7 @@ void MainMenuScene::Load()
 	
 	{
 
-		btnLoadGame = makeButton("Load Game", Vector2f(230, 60));
+		btnLoadGame = makeButton("Resume Game", Vector2f(230, 60));
 		btnLoadGame->setPosition(Vector2f(Engine::GetWindow().getSize().x / 5 * 2, Engine::GetWindow().getSize().y / 2 * 1.5));
 	
 		auto shield = makeEntity();

@@ -4,6 +4,8 @@
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
 #include "cmp_troll_properties.h"
+#include "cmp_slime_properties.h"
+#include "../SaveLoad.h"
 #include <iostream>
 #include <chrono>
 #include <string>
@@ -11,7 +13,9 @@
 PlayerBulletComponent::PlayerBulletComponent(Entity* p)
 	: Component(p)
 {
+	_bulletDamage = SaveLoad::playerDamage;
 	_trolls = _parent->scene->ents.find("troll");
+	_slimes = _parent->scene->ents.find("slime");
 	_orcs = _parent->scene->ents.find("orc");
 	_player = _parent->scene->ents.find("player")[0];
 	auto d = _player->get_components<AnimationComponent>()[0];
@@ -91,6 +95,14 @@ void PlayerBulletComponent::checkContact(double dt)
 				_parent->setForDelete();
 			}
 		}
-	}
+		for (auto s : _slimes)
+		{
+			if (c->GetFixtureB() == s->get_components<PhysicsComponent>()[0]->getFixture() || c->GetFixtureA() == s->get_components<PhysicsComponent>()[0]->getFixture())
+			{
+				s->get_components<SlimePropertiesComponent>()[0]->takeDamage(_bulletDamage);
+				_parent->setForDelete();
+			}
+		}
 
+	}
 }

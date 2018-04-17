@@ -4,6 +4,7 @@
 #include "cmp_text.h"
 #include "../code/GameState.h"
 #include "../SaveLoad.h"
+#include "../code/Controls.h"
 
 using namespace std;
 using namespace sf;
@@ -11,7 +12,11 @@ using namespace sf;
 PlayerControlerComponent::PlayerControlerComponent(Entity* p)
 	: Component(p)
 {
-	playerDamage = 1;
+	playerDamage = SaveLoad::playerDamage;
+	coins = SaveLoad::coins;
+	checkHealth();
+	_health = SaveLoad::health;
+	
 }
 
 double PlayerControlerComponent::getHealth()
@@ -20,7 +25,7 @@ double PlayerControlerComponent::getHealth()
 }
 void PlayerControlerComponent::setHealth(double b)
 {
-	_health = b;
+	_health = SaveLoad::health;
 }
 
 int PlayerControlerComponent::getCoins()
@@ -29,17 +34,9 @@ int PlayerControlerComponent::getCoins()
 }
 void PlayerControlerComponent::collectCoin()
 {
-	coins++;
-
-	SaveLoad::coins = coins++;
-
-	
-
-	//_parent->scene->ents.find("coinCount")[0]->get_components<TextComponent>()[0]->SetText("x" + to_string(coins));
+	coins = coins + 1;
+	SaveLoad::coins = coins;
 }
-
-
-
 
 void PlayerControlerComponent::update(double dt)
 {
@@ -54,6 +51,16 @@ void PlayerControlerComponent::update(double dt)
 		sword = false;
 	}
 
+	if (sf::Keyboard::isKeyPressed(Controls::GetKeyboardButton("Ham")))
+	{
+		sleep(milliseconds(40));
+		if (SaveLoad::hams > 0)
+		{
+			SaveLoad::hams--;
+			SaveLoad::health = SaveLoad::playerMaxHealth;
+			_health = SaveLoad::health;
+		}
+	}
 	
 		UI->setHealthDisplay(checkHealth());
 		collisionCheck(dt);
@@ -72,7 +79,6 @@ void PlayerControlerComponent::update(double dt)
 
 sf::IntRect PlayerControlerComponent::checkHealth()
 {
-	
 	if (_health == 10)
 	{
 		return sf::IntRect(0, 0, 400, 50);
@@ -136,6 +142,8 @@ void PlayerControlerComponent::takeDamage(double d , double dt)
 	{
 		immortal = true;
 		_health = _health - d;
+
+		SaveLoad::health = _health;
 
 		_bufferHit = *(Resources::get<SoundBuffer>("Bob_Sounds/Bob_Hit.wav"));
 		_soundHit.setBuffer(_bufferHit);

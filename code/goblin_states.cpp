@@ -3,6 +3,7 @@
 #include "components\cmp_physics.h"
 #include "components\cmp_animation.h"
 #include "components\cmp_hurt.h"
+#include "Prefabs.h"
 
 void  Goblin_IdleState::execute(Entity *owner, double dt) noexcept
 {
@@ -126,6 +127,8 @@ void  Goblin_DeadState::execute(Entity *owner, double dt) noexcept
 	auto me_anim = owner->get_components<AnimationComponent>()[0];
 	if (me_anim->currentimage.x == 7)
 	{
+		makeCoin(owner->getPosition());
+		makeCoin(owner->getPosition());
 		
 		me_anim->currentimage.x = 0;
 		me_anim->pause = true;

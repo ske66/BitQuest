@@ -43,8 +43,14 @@ void SkeletonPropertiesComponent::update(double dt)
 	//only check when near player (saves performance evaluation of position Runs in Constant time loop runs in liniar time avoid where possible)
 	if (length(_parent->getPosition() - _player->getPosition()) > 50)
 	{
-		checkContact(dt);
+		this->checkContact(dt);
 	}
+
+
+
+	_parent->get_components<SpriteComponent>()[0]->Sprite("EnemyHealth.png", rect);
+
+
 
 	checkHealth();
 	if (immortal == true)
@@ -80,7 +86,7 @@ void SkeletonPropertiesComponent::checkContact(double dt)
 			{
 				if (_player->get_components<AnimationComponent>()[0]->attackImgNo >= 6)
 				{
-					takeDamage(ap->playerDamage);
+					this->takeDamage(ap->playerDamage);
 				}
 			}	
 			if (_parent->get_components<AnimationComponent>()[0]->attackImgNo >= 5)
@@ -97,57 +103,18 @@ void SkeletonPropertiesComponent::checkContact(double dt)
 
 void SkeletonPropertiesComponent::checkHealth()
 {
-	auto bar = _parent->get_components<SpriteComponent>()[0];
-
-	if (_health == 10)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 100, 5));
-	}
-
-	if (_health == 9)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 90, 5));
-	}
-	if (_health == 8)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 80, 5));
-	}
-
-	if (_health == 7)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 70, 5));
-	}
-	if (_health == 6)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 60, 5));
-	}
-
-	if (_health == 5)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 50, 5));
-	}
-	if (_health == 4)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 40, 5));
-	}
-
-	if (_health == 3)
-	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 30, 5));
-	}
-
 	if (_health == 2)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 20, 5));
+		rect = sf::IntRect(0, 0, 100, 5);
 	}
 
 	if (_health == 1)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 10, 5));
+		rect = sf::IntRect(0, 0, 50, 5);
 	}
 	if (_health == 0)
 	{
-		bar->getSprite().setTextureRect(sf::IntRect(0, 0, 0, 5));
+		rect = sf::IntRect(0, 0, 0, 5);
 	}
 
 }
