@@ -21,7 +21,8 @@ static shared_ptr<Entity> btnHam;
 static shared_ptr<Entity> btnArrow;
 static shared_ptr<Entity> btnBack;
 
-
+using namespace std;
+using namespace sf;
 
 
 void ShopScene::Load()
@@ -29,6 +30,12 @@ void ShopScene::Load()
 	ls::loadLevelFile("res/tilemaps/backgrounds.txt", 240.f);
 
 	SaveLoad::LoadGame;
+
+	_bufferBuy = *(Resources::get<SoundBuffer>("Game_Sounds/buySound.wav"));
+	_soundBuy.setBuffer(_bufferBuy);
+
+
+
 
 	//Music
 	_musicShop = Resources::get<Music>("Shop_Music.wav");
@@ -179,8 +186,15 @@ void ShopScene::Update(const double& dt)
 
 	if (btnDamage->get_components<BtnComponent>()[0]->isSelected())
 	{
+
+		sf::sleep(milliseconds(100));
+
 		if (SaveLoad::coins >= 250)
 		{
+
+			_soundBuy.play();
+				_soundBuy.setVolume(sfxVolume);
+
 			SaveLoad::playerDamage = 2;
 			SaveLoad::coins = SaveLoad::coins - 250;
 		}
@@ -188,8 +202,15 @@ void ShopScene::Update(const double& dt)
 
 	if (btnHealth->get_components<BtnComponent>()[0]->isSelected())
 	{
+
+		sf::sleep(milliseconds(100));
+
 		if (SaveLoad::coins >= 250)
 		{
+
+			_soundBuy.play();
+			_soundBuy.setVolume(sfxVolume);
+
 			SaveLoad::playerMaxHealth = 10;
 			SaveLoad::health = 10;
 
@@ -204,6 +225,9 @@ void ShopScene::Update(const double& dt)
 
 		if (SaveLoad::coins >= 25)
 		{
+			_soundBuy.play();
+				_soundBuy.setVolume(sfxVolume);
+
 			SaveLoad::hams++;
 
 			SaveLoad::coins = SaveLoad::coins - 25;
@@ -217,6 +241,10 @@ void ShopScene::Update(const double& dt)
 
 		if (SaveLoad::coins >= 5)
 		{
+
+			_soundBuy.play();
+				_soundBuy.setVolume(sfxVolume);
+
 			SaveLoad::arrows++;
 
 			SaveLoad::coins = SaveLoad::coins - 5;

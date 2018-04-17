@@ -1,8 +1,11 @@
 #include "cmp_skeleton_properties.h"
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
+#include "../code/GameState.h"
 #include <iostream>
 
+using namespace std;
+using namespace sf;
 
 SkeletonPropertiesComponent::SkeletonPropertiesComponent(Entity* p)
 	: Component(p)
@@ -17,6 +20,13 @@ void SkeletonPropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
+
+		_bufferHit = *(Resources::get<SoundBuffer>("Skeleton_Sounds/Skeleton_Hit.wav"));
+		_soundHit.setBuffer(_bufferHit);
+
+		_soundHit.play();
+		_soundHit.setVolume(sfxVolume);
+
 		if (_player->getPosition().x < _parent->getPosition().x)
 		{
 			_parent->get_components<PhysicsComponent>()[0]->getFixture()->GetBody()->ApplyLinearImpulseToCenter(b2Vec2(40.f, 0.f), true);

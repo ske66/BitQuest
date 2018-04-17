@@ -20,6 +20,10 @@ public:
 
 private:
 
+	sf::SoundBuffer _bufferBuy;
+
+	sf::Sound _soundBuy;
+
 	std::shared_ptr<sf::Music>_musicShop;
 
 	std::shared_ptr<Entity> _txtCoin;

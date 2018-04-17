@@ -2,7 +2,10 @@
 #include "cmp_player_physics.h"
 #include "cmp_player_controller.h"
 #include <iostream>
+#include "../code/GameState.h"
 
+using namespace sf;
+using namespace std;
 
 TrollPropertiesComponent::TrollPropertiesComponent(Entity* p)
 	: Component(p)
@@ -17,6 +20,13 @@ void TrollPropertiesComponent::takeDamage(double h)
 
 	if (immortal == false)
 	{
+
+		_bufferHit = *(Resources::get<SoundBuffer>("Troll_Sounds/Troll_Hit.wav"));
+		_soundHit.setBuffer(_bufferHit);
+
+		_soundHit.play();
+		_soundHit.setVolume(sfxVolume);
+
 		std::cout << _health << std::endl;
 		immortal = true;
 		this->_health = _health - h;

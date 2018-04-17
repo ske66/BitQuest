@@ -27,7 +27,7 @@ void Level1Scene::Load() {
 	_musicLevel1 = Resources::get<Music>("Level_music.wav");
 	_musicLevel1->play();
 	_musicLevel1->setLoop(true);
-	_musicLevel1->setVolume(0);
+	_musicLevel1->setVolume(musicVolume);
 
 	TilePhysics();
 

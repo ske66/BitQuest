@@ -1,6 +1,7 @@
 #pragma once
 #include <ecm.h>
 #include "engine.h"
+#include <SFML\Audio.hpp>
 
 class GhostPropertiesComponent : public Component
 {
@@ -10,6 +11,11 @@ protected:
 	float totalTime = 2;
 
 public:
+
+	sf::SoundBuffer _bufferHit;
+
+	sf::Sound _soundHit;
+
 
 	sf::IntRect rect = sf::IntRect(0, 0, 100, 5);
 	bool immortal = true;

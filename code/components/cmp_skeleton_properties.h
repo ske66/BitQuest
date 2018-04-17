@@ -1,15 +1,21 @@
 #pragma once
 #include <ecm.h>
 #include "engine.h"
+#include <SFML\Audio.hpp>
 
 class SkeletonPropertiesComponent : public Component
 {
 protected:
 	float _health = 2;
-	float damageDelay = 0.5;
+	float damageDelay = 0.2;
 	float totalTime = 0;
 
 public:
+
+	sf::SoundBuffer _bufferHit;
+
+	sf::Sound _soundHit;
+
 
 	sf::IntRect rect;
 	bool immortal = true;

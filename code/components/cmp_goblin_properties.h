@@ -1,6 +1,7 @@
 #pragma once
 #include <ecm.h>
 #include "engine.h"
+#include <SFML\Audio.hpp>
 
 class GoblinPropertiesComponent : public Component
 {
@@ -9,6 +10,11 @@ protected:
 	float damageDelay = 0.2;
 	float totalTime = 0;
 public:
+
+	sf::SoundBuffer _bufferHit;
+
+	sf::Sound _soundHit;
+
 
 	sf::IntRect rect = sf::IntRect(0,0,100,5);
 	float goblinDamage = 1;

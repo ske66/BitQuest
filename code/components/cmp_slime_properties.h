@@ -14,10 +14,8 @@ protected:
 public:
 
 	sf::SoundBuffer _bufferHit;
-	sf::SoundBuffer _bufferDeath;
 
 	sf::Sound _soundHit;
-	sf::Sound _soundDeath;
 
 	sf::IntRect rect;
 	bool immortal = true;

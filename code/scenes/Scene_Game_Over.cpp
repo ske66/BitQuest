@@ -21,9 +21,9 @@ void GameOverScene::Load()
 
 	{
 		auto txtDeath = makeEntity();
-		auto t = txtDeath->addComponent<TextComponent>("Game Over, That was absolutely terrible. The worst thing I have ever seen,");
-		auto t2 = txtDeath->addComponent<TextComponent>("If I had eyeballs I would quit my job as a Death Scene so I would never");
-		auto t3 = txtDeath->addComponent<TextComponent>("have to look at travesties such as you. Just quit the game now...");
+		auto t = txtDeath->addComponent<TextComponent>("Game Over, That was absolutely terrible. The worst thing I have ");
+		auto t2 = txtDeath->addComponent<TextComponent>("ever seen, If I had eyeballs I would quit my job as a Death Scene");
+		auto t3 = txtDeath->addComponent<TextComponent>(" so I would never have to look at travesties such as you.");
 		t->getText().setOrigin(t->getText().getGlobalBounds().width / 2, t->getText().getGlobalBounds().height / 2);
 		t2->getText().setOrigin(t2->getText().getGlobalBounds().width / 2, t2->getText().getGlobalBounds().height / 2 - 50);
 		t3->getText().setOrigin(t3->getText().getGlobalBounds().width / 2, t3->getText().getGlobalBounds().height / 2 - 100);
@@ -60,6 +60,7 @@ void GameOverScene::Update(const double& dt)
 
 	if (btnExit->get_components<BtnComponent>()[0]->isSelected())
 	{
+		SaveLoad::ResetGame();
 		Engine::ChangeScene((Scene*)&menu);
 	}
 
