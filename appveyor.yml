@@ -37,7 +37,7 @@ after_build:
     
     dir
     
-artifact:
+artifacts:
 - path: build/*.zip
   name: Bitquest_zip
 - path: build/installer/*.exe
