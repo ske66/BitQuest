@@ -43,7 +43,7 @@ artifact:
 - path: build/installer/*.exe
   name: Bitquest_installer
   
-deploy
+deploy:
 - provider: Github
   on:
     appveyor_repo_tag: true
