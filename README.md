@@ -3,17 +3,15 @@ Games Engineering Project
 
 A University and personal games dev project called BitQuest
 
-Mark Barton
-- Level Design and Development
-- Level Loading 
-- UI development and design
-- Engine
-- Sound
-
 Thomas Young
-- Game Logic
+- Main Game Logic
 - AI
 - Engine
+Mark Barton
+- Level Design
+- UI Development
+- Engine
+- Sound
 
 https://ske66.github.io/BitQuest/
 
